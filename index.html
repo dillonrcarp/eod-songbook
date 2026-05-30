@@ -34,6 +34,7 @@ header{position:relative;z-index:20;display:flex;align-items:center;justify-cont
 .show-meta b{color:var(--yellow);font-weight:500;}
 .set-tabs{position:relative;z-index:20;display:flex;border-bottom:1px solid var(--line);background:var(--bg-elev);overflow-x:auto;scrollbar-width:none;}
 .set-tabs::-webkit-scrollbar{display:none;}
+.set-tabs.hidden{display:none;}
 .set-tab{flex:1;min-width:90px;padding:7px 14px 5px;background:transparent;border:0;border-right:1px solid var(--line);color:var(--text-dim);font-family:var(--display);font-size:16px;letter-spacing:0.1em;cursor:pointer;position:relative;transition:color .15s;}
 .set-tab:last-child{border-right:0;}
 .set-tab .count{display:block;font-family:var(--mono);font-size:9px;letter-spacing:0.18em;margin-top:2px;opacity:0.7;}
@@ -81,64 +82,21 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
 .chord-chip{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--yellow);letter-spacing:0.1em;padding:1px 4px;border:1px solid rgba(255,206,24,0.3);border-radius:2px;margin-right:4px;}
 .song-body .empty{color:var(--text-dim);font-style:italic;padding:40px 0;text-align:center;font-family:var(--body);font-size:14px;letter-spacing:0.05em;}
 .song-body .empty code{display:block;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:0.1em;font-style:normal;}
-.next-up{position:relative;z-index:20;padding:6px 18px;border-top:1px solid var(--line);background:var(--bg-elev);display:flex;align-items:center;gap:8px;padding-bottom:max(6px,env(safe-area-inset-bottom));}
-.next-up .next-info{min-width:0;margin-right:auto;}
-.next-up .label{font-family:var(--mono);font-size:8px;letter-spacing:0.24em;color:var(--text-dim);text-transform:uppercase;}
-.next-up .next-title{font-family:var(--display);font-size:16px;letter-spacing:0.04em;color:var(--text);margin-top:1px;}
-.next-up .next-title.end{color:var(--orange);}
-.next-up .nav-mini button{background:transparent;border:1px solid var(--line);color:var(--text-dim);padding:5px 10px;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;cursor:pointer;border-radius:2px;}
 .tap-zone{position:absolute;top:0;bottom:0;width:26%;z-index:1;}
 .tap-zone.left{left:0;}
 .tap-zone.right{right:0;}
-footer{position:relative;z-index:20;display:flex;border-top:1px solid var(--line);background:var(--bg-elev);padding-bottom:env(safe-area-inset-bottom);}
-footer button{flex:1;padding:8px 6px;background:transparent;border:0;border-right:1px solid var(--line);color:var(--text-dim);font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;}
-footer button:last-child{border-right:0;}
-footer button:active{background:var(--bg-card);color:var(--text);}
-footer button.primary{color:var(--teal);}
+footer{position:relative;z-index:20;display:flex;align-items:center;gap:8px;padding:5px 14px;border-top:1px solid var(--line);background:var(--bg-elev);padding-bottom:max(5px,env(safe-area-inset-bottom));}
+footer .next-info{min-width:0;margin-right:auto;}
+footer .next-info .label{font-family:var(--mono);font-size:8px;letter-spacing:0.24em;color:var(--text-dim);text-transform:uppercase;}
+footer .next-info .next-title{font-family:var(--display);font-size:14px;letter-spacing:0.04em;color:var(--text);margin-top:1px;}
+footer .next-title.end{color:var(--orange);}
+.foot-btns{display:flex;gap:4px;flex-shrink:0;}
+.foot-btns button{background:transparent;border:1px solid var(--line);color:var(--text-dim);padding:5px 9px;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;border-radius:2px;}
+.foot-btns button:active{background:var(--bg-card);color:var(--text);}
+.foot-btns button.primary{color:var(--teal);border-color:rgba(104,201,206,0.4);}
+button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
 .wake-pill{position:absolute;top:14px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--line);border-radius:100px;background:var(--bg-elev);color:var(--text-dim);pointer-events:none;opacity:0;transition:opacity .3s;}
 .wake-pill.active{color:var(--teal);border-color:rgba(104,201,206,0.4);opacity:0.9;}
-.chip.edited{color:var(--teal);border-color:rgba(104,201,206,0.4);}
-.badge.edited{background:rgba(104,201,206,0.12);color:var(--teal);border-color:rgba(104,201,206,0.35);}
-button.edit-btn.active{color:var(--teal);border-color:rgba(104,201,206,0.4);}
-.song-editor{flex:1;display:none;flex-direction:column;min-height:0;}
-#navEdit{display:none;}
-.song-view.editing .song-body,.song-view.editing .next-up,.song-view.editing .song-notes,.song-view.editing .tap-zone,.song-view.editing #navNormal{display:none!important;}
-.song-view.editing .song-editor{display:flex;}
-.song-view.editing #navEdit{display:flex;}
-#navEdit button.save{color:var(--teal);border-color:rgba(104,201,206,0.4);}
-#navEdit button.revert{color:var(--red);border-color:rgba(207,41,39,0.35);}
-.song-editor textarea{flex:1;width:100%;resize:none;border:0;outline:none;background:var(--bg);color:var(--text);font-family:var(--mono);font-size:17px;line-height:1.6;padding:18px 24px;-webkit-user-select:text;user-select:text;tab-size:2;white-space:pre;overflow:auto;-webkit-overflow-scrolling:touch;}
-.editor-bar{display:flex;border-top:1px solid var(--line);background:var(--bg-elev);padding-bottom:env(safe-area-inset-bottom);}
-.editor-bar button{flex:1;padding:15px 8px;background:transparent;border:0;border-right:1px solid var(--line);color:var(--text-dim);font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;}
-.editor-bar button:last-child{border-right:0;}
-.editor-bar button.save{color:var(--teal);}
-.editor-bar button.revert{color:var(--red);}
-.editor-bar button:active{background:var(--bg-card);}
-.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.72);display:none;align-items:center;justify-content:center;padding:24px;}
-.modal.show{display:flex;}
-.modal-card{width:100%;max-width:420px;background:var(--bg-card);border:1px solid var(--line);border-radius:6px;padding:22px;}
-.modal-card h3{font-family:var(--display);font-size:26px;letter-spacing:0.05em;color:var(--text);margin-bottom:4px;}
-.modal-card p{font-family:var(--body);font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:16px;}
-.modal-card .opt{display:block;width:100%;text-align:left;background:var(--bg-elev);border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;padding:14px 16px;margin-bottom:10px;cursor:pointer;}
-.modal-card .opt:active{background:var(--bg);}
-.modal-card .opt small{display:block;color:var(--text-dim);font-size:10px;letter-spacing:0.04em;margin-top:5px;text-transform:none;}
-.modal-card .opt.danger{color:var(--red);border-color:rgba(207,41,39,0.35);}
-.modal-card .close{width:100%;background:transparent;border:1px solid var(--line);color:var(--text-dim);font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;padding:12px;border-radius:4px;cursor:pointer;margin-top:4px;}
-.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--teal);color:var(--text);font-family:var(--mono);font-size:11px;letter-spacing:0.14em;padding:10px 18px;border-radius:100px;z-index:60;opacity:0;pointer-events:none;transition:opacity .25s;}
-.toast.show{opacity:0.97;}
-/* presentation / stage mode */
-body.present header,body.present .set-tabs,body.present footer,body.present .next-up,body.present #navNormal{display:none!important;}
-body.present .song-head{padding:8px 20px;}
-body.present .song-head h1{font-size:clamp(24px,4vw,38px);}
-body.present .song-head .position{font-size:9px;margin-bottom:3px;}
-body.present .song-head .chips{margin-top:6px;}
-body.present .song-body{font-size:var(--pres-size,22px);line-height:1.6;padding:16px 24px 60px;}
-body.present .song-body .section{font-size:calc(var(--pres-size,22px) * 0.72);}
-.present-bar{position:fixed;top:max(10px,env(safe-area-inset-top));right:12px;z-index:40;display:none;gap:6px;}
-body.present .present-bar{display:flex;}
-.present-bar button{background:rgba(20,20,20,0.9);border:1px solid var(--line);color:var(--text-dim);font-family:var(--mono);font-size:12px;letter-spacing:0.12em;padding:9px 13px;border-radius:4px;cursor:pointer;}
-.present-bar button:active{background:var(--bg-card);}
-.present-bar button.exit{color:var(--teal);border-color:rgba(104,201,206,0.4);}
 </style>
 </head>
 <body>
@@ -157,52 +115,21 @@ body.present .present-bar{display:flex;}
         <span class="position" id="songPosition"></span>
         <h1 id="songTitle"></h1>
         <div class="chips" id="songChips"></div>
-        <div class="nav-mini" id="navEdit">
-          <button id="edSave" class="save">SAVE</button>
-          <button id="edRevert" class="revert">REVERT</button>
-          <button id="edCancel">CANCEL</button>
-        </div>
       </div>
       <div class="song-notes" id="songNotes"></div>
       <div class="song-body" id="songBody"></div>
-      <div class="song-editor" id="songEditor">
-        <textarea id="editorArea" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off"></textarea>
-      </div>
-      <div class="next-up" id="navNormal">
-        <div class="next-info"><div class="label">Up Next</div><div class="next-title" id="nextTitle">-</div></div>
-        <div class="nav-mini">
-          <button id="btnEdit" class="edit-btn">EDIT</button>
-          <button id="btnNotes" class="notes-btn">NOTES</button>
-          <button id="btnPrev">PREV</button>
-          <button id="btnNext">NEXT</button>
-        </div>
-      </div>
     </section>
   </main>
   <footer>
-    <button id="footBack">SET LIST</button>
-    <button id="footWake" class="primary">KEEP AWAKE</button>
-    <button id="footPresent">PRESENT</button>
-    <button id="footExport">EXPORT</button>
-    <button id="footHelp">HELP</button>
-  </footer>
-  <div class="present-bar" id="presentBar">
-    <button id="presSmaller">A&minus;</button>
-    <button id="presBigger">A&plus;</button>
-    <button id="presExit" class="exit">EXIT</button>
-  </div>
-  <div class="modal" id="exportModal">
-    <div class="modal-card">
-      <h3>Export</h3>
-      <p>Edits are saved on this device. Back them up or fold them into the file itself.</p>
-      <button class="opt" id="optFull">Download full songbook<small>Standalone HTML with every edit baked in. This is the one to keep.</small></button>
-      <button class="opt" id="optJson">Download edits only<small>Small JSON backup of just your changes.</small></button>
-      <button class="opt" id="optCopy">Copy edits to clipboard<small>Paste into a note or message.</small></button>
-      <button class="opt danger" id="optClear">Clear local edits<small>Reverts every song to its built-in chart.</small></button>
-      <button class="close" id="optClose">CLOSE</button>
+    <div class="next-info"><div class="label">Up Next</div><div class="next-title" id="nextTitle">-</div></div>
+    <div class="foot-btns">
+      <button id="btnNotes" class="notes-btn">NOTES</button>
+      <button id="btnPrev">PREV</button>
+      <button id="btnNext">NEXT</button>
+      <button id="footBack">SET LIST</button>
+      <button id="footWake" class="primary">WAKE</button>
     </div>
-  </div>
-  <div class="toast" id="toast"></div>
+  </footer>
 </div>
 <div class="wake-pill" id="wakePill">SCREEN LOCKED ON</div>
 <script>
@@ -1470,17 +1397,11 @@ const BANTER = {
 };
 
 
-let state={setIdx:0,view:"list",songSetIdx:0,songIdx:0,wakeLock:null,notesOpen:false,editing:false,present:false,presSize:22};
+let state={setIdx:0,view:"list",songSetIdx:0,songIdx:0,wakeLock:null,notesOpen:false};
 const $=(id)=>document.getElementById(id);
 const setTabsEl=$("setTabs"), listView=$("listView"), songView=$("songView");
 
-/* ---- edit persistence: localStorage with in-memory fallback ---- */
-const STORE_KEY="eod_songbook_edits_v1";
-let EDITS={};
-function loadEdits(){try{const r=localStorage.getItem(STORE_KEY);if(r)EDITS=JSON.parse(r)||{};}catch(e){EDITS={};}}
-function persistEdits(){try{localStorage.setItem(STORE_KEY,JSON.stringify(EDITS));}catch(e){}}
-function getBody(t){return Object.prototype.hasOwnProperty.call(EDITS,t)?EDITS[t]:(BODIES[t]||"");}
-function hasEdit(t){return Object.prototype.hasOwnProperty.call(EDITS,t);}
+function getBody(t){return BODIES[t]||"";}
 
 function renderTabs(){
   setTabsEl.innerHTML="";
@@ -1506,7 +1427,6 @@ function renderList(){
     if(song.tuningFlag)b.push('<span class="badge tuning-flag">Eb SONG</span>');
     const lb=getBody(song.t);
     if(!lb||!lb.trim())b.push('<span class="badge empty">NO CHART</span>');
-    else if(hasEdit(song.t))b.push('<span class="badge edited">EDITED</span>');
     row.innerHTML='<div class="num">'+String(i+1).padStart(2,"0")+'</div><div class="title">'+esc(song.t)+b.join("")+'</div><div class="meta">'+(song.key?esc(song.key):"")+'</div>';
     row.addEventListener("click",()=>openSong(state.setIdx,i));
     rows.appendChild(row);
@@ -1521,7 +1441,6 @@ function renderSong(){
   if(song.key)chips.push('<span class="chip key">KEY '+esc(song.key)+'</span>');
   if(song.original)chips.push('<span class="chip original">ORIGINAL</span>');
   if(song.tuningFlag)chips.push('<span class="chip warn">EB SONG IN STD SET</span>');
-  if(hasEdit(song.t))chips.push('<span class="chip edited">EDITED</span>');
   $("songChips").innerHTML=chips.join("");
   // banter
   const banter=BANTER[song.t];
@@ -1540,7 +1459,7 @@ function renderSong(){
   if(body&&body.trim()){
     bodyEl.innerHTML=fmt(body);
   }else{
-    bodyEl.innerHTML='<div class="empty">No chord chart or lyrics yet.<code>Tap EDIT to add one</code></div>';
+    bodyEl.innerHTML='<div class="empty">No chord chart or lyrics yet.</div>';
   }
   bodyEl.scrollTop=0;
   const next=peekNext();
@@ -1573,7 +1492,7 @@ function fmt(text){
   return out.join("\n").replace(/\n{3,}/g,"\n\n");
 }
 
-function openSong(s,i){state.songSetIdx=s;state.songIdx=i;state.view="song";state.notesOpen=false;state.editing=false;songView.classList.remove("editing");$("btnEdit").classList.remove("active");render();}
+function openSong(s,i){state.songSetIdx=s;state.songIdx=i;state.view="song";state.notesOpen=false;render();}
 function peekNext(){
   const set=SHOW.sets[state.songSetIdx];
   if(state.songIdx+1<set.songs.length)return set.songs[state.songIdx+1];
@@ -1597,13 +1516,12 @@ function backToList(){state.setIdx=state.songSetIdx;state.view="list";render();}
 
 function render(){
   renderTabs();
+  $("setTabs").classList.toggle("hidden",state.view==="song");
   if(state.view==="list"){listView.classList.add("active");songView.classList.remove("active");renderList();}
   else{songView.classList.add("active");listView.classList.remove("active");renderSong();}
 }
 
 document.addEventListener("keydown",(e)=>{
-  if(state.present&&e.key==="Escape"){exitPresent();e.preventDefault();return;}
-  if(state.editing){if(e.key==="Escape"){cancelEdit();e.preventDefault();}return;}
   if(state.view!=="song"){
     if(e.key==="Enter"&&state.view==="list"){openSong(state.setIdx,0);e.preventDefault();}
     return;
@@ -1614,12 +1532,12 @@ document.addEventListener("keydown",(e)=>{
     case "Home":case "Escape":backToList();e.preventDefault();break;
   }
 });
-$("tapLeft").addEventListener("click",()=>{if(!state.editing)goPrev();});
-$("tapRight").addEventListener("click",()=>{if(!state.editing)goNext();});
+$("tapLeft").addEventListener("click",goPrev);
+$("tapRight").addEventListener("click",goNext);
 let tsX=0,tsY=0;
-document.addEventListener("touchstart",(e)=>{if(state.view!=="song"||state.editing)return;tsX=e.touches[0].clientX;tsY=e.touches[0].clientY;},{passive:true});
+document.addEventListener("touchstart",(e)=>{if(state.view!=="song")return;tsX=e.touches[0].clientX;tsY=e.touches[0].clientY;},{passive:true});
 document.addEventListener("touchend",(e)=>{
-  if(state.view!=="song"||state.editing)return;
+  if(state.view!=="song")return;
   const dx=e.changedTouches[0].clientX-tsX, dy=e.changedTouches[0].clientY-tsY;
   if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){if(dx<0)goNext();else goPrev();}
 },{passive:true});
@@ -1627,93 +1545,14 @@ $("btnPrev").addEventListener("click",goPrev);
 $("btnNext").addEventListener("click",goNext);
 $("btnNotes").addEventListener("click",()=>{state.notesOpen=!state.notesOpen;renderSong();});
 $("footBack").addEventListener("click",backToList);
-$("footHelp").addEventListener("click",showHelp);
-
-/* ---- editor ---- */
-function curSong(){return SHOW.sets[state.songSetIdx].songs[state.songIdx];}
-function enterEdit(){
-  state.editing=true;
-  $("editorArea").value=getBody(curSong().t);
-  songView.classList.add("editing");
-  $("btnEdit").classList.add("active");
-  setTimeout(()=>{$("editorArea").focus();},60);
-}
-function exitEdit(){
-  state.editing=false;
-  songView.classList.remove("editing");
-  $("btnEdit").classList.remove("active");
-}
-function saveEdit(){
-  EDITS[curSong().t]=$("editorArea").value;
-  persistEdits();exitEdit();renderSong();toast("Saved");
-}
-function cancelEdit(){exitEdit();renderSong();}
-function revertEdit(){
-  const t=curSong().t;
-  if(hasEdit(t)){delete EDITS[t];persistEdits();}
-  exitEdit();renderSong();toast("Reverted to built-in");
-}
-$("btnEdit").addEventListener("click",()=>{if(state.editing)cancelEdit();else enterEdit();});
-$("edSave").addEventListener("click",saveEdit);
-$("edCancel").addEventListener("click",cancelEdit);
-$("edRevert").addEventListener("click",revertEdit);
-
-/* ---- toast ---- */
-let toastTimer=null;
-function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),1600);}
-
-/* ---- export ---- */
-function download(filename,text,type){
-  const blob=new Blob([text],{type:type||"text/plain"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();
-  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},600);
-}
-function buildFullHtml(){
-  const merged=Object.assign({},BODIES);
-  for(const k in EDITS)if(Object.prototype.hasOwnProperty.call(EDITS,k))merged[k]=EDITS[k];
-  const block="const BODIES = "+JSON.stringify(merged,null,2)+";";
-  return PRISTINE.replace(/const BODIES = \{[\s\S]*?\n\};/,block);
-}
-$("footExport").addEventListener("click",()=>$("exportModal").classList.add("show"));
-$("optClose").addEventListener("click",()=>$("exportModal").classList.remove("show"));
-$("exportModal").addEventListener("click",(e)=>{if(e.target===$("exportModal"))$("exportModal").classList.remove("show");});
-$("optFull").addEventListener("click",()=>{download("eod-songbook.html",buildFullHtml(),"text/html");$("exportModal").classList.remove("show");toast("Songbook downloaded");});
-$("optJson").addEventListener("click",()=>{download("eod-songbook-edits.json",JSON.stringify(EDITS,null,2),"application/json");$("exportModal").classList.remove("show");toast("Edits exported");});
-$("optCopy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(JSON.stringify(EDITS,null,2));toast("Copied");}catch(e){toast("Copy not available");}$("exportModal").classList.remove("show");});
-$("optClear").addEventListener("click",()=>{if(confirm("Clear all local edits and revert every song to its built-in chart?")){EDITS={};persistEdits();$("exportModal").classList.remove("show");render();toast("Edits cleared");}});
-
-/* ---- presentation / stage mode ---- */
-function applyPresSize(){document.documentElement.style.setProperty("--pres-size",state.presSize+"px");}
-function enterPresent(){
-  if(state.view!=="song")openSong(state.setIdx,0);
-  if(state.editing)cancelEdit();
-  state.present=true;document.body.classList.add("present");applyPresSize();
-  const el=document.documentElement, req=el.requestFullscreen||el.webkitRequestFullscreen;
-  if(req){try{const p=req.call(el);if(p&&p.catch)p.catch(()=>{});}catch(e){}}
-  if(("wakeLock" in navigator)&&!state.wakeLock){toggleWake();}
-}
-function exitPresent(){
-  state.present=false;document.body.classList.remove("present");
-  const ex=document.exitFullscreen||document.webkitExitFullscreen;
-  if((document.fullscreenElement||document.webkitFullscreenElement)&&ex){try{ex.call(document);}catch(e){}}
-}
-$("footPresent").addEventListener("click",enterPresent);
-$("presExit").addEventListener("click",exitPresent);
-$("presBigger").addEventListener("click",()=>{state.presSize=Math.min(44,state.presSize+2);applyPresSize();});
-$("presSmaller").addEventListener("click",()=>{state.presSize=Math.max(13,state.presSize-2);applyPresSize();});
-function onFsChange(){if(!(document.fullscreenElement||document.webkitFullscreenElement)&&state.present)exitPresent();}
-document.addEventListener("fullscreenchange",onFsChange);
-document.addEventListener("webkitfullscreenchange",onFsChange);
-applyPresSize();
 
 async function toggleWake(){
-  if(state.wakeLock){await state.wakeLock.release().catch(()=>{});state.wakeLock=null;$("wakePill").classList.remove("active");$("footWake").textContent="KEEP AWAKE";return;}
+  if(state.wakeLock){await state.wakeLock.release().catch(()=>{});state.wakeLock=null;$("wakePill").classList.remove("active");$("footWake").textContent="WAKE";return;}
   if(!("wakeLock" in navigator)){alert("Screen wake lock not supported here. Set Auto-Lock to Never in iPad Settings > Display for the show.");return;}
   try{
     state.wakeLock=await navigator.wakeLock.request("screen");
-    $("wakePill").classList.add("active");$("footWake").textContent="AWAKE ON";
-    state.wakeLock.addEventListener("release",()=>{$("wakePill").classList.remove("active");$("footWake").textContent="KEEP AWAKE";state.wakeLock=null;});
+    $("wakePill").classList.add("active");$("footWake").textContent="AWAKE";
+    state.wakeLock.addEventListener("release",()=>{$("wakePill").classList.remove("active");$("footWake").textContent="WAKE";state.wakeLock=null;});
   }catch(err){alert("Could not lock screen: "+err.message);}
 }
 $("footWake").addEventListener("click",toggleWake);
@@ -1721,14 +1560,8 @@ document.addEventListener("visibilitychange",async()=>{
   if(state.wakeLock!==null&&document.visibilityState==="visible"){try{state.wakeLock=await navigator.wakeLock.request("screen");}catch(e){}}
 });
 
-function showHelp(){
-  alert("EAST ON DIVISION SONGBOOK\n\nPedal / keys:\n  Next: Right / PageDown / Space\n  Prev: Left / PageUp\n  Back: Home / Esc\n\nTouch:\n  Tap right third: next\n  Tap left third: prev\n  Swipe left/right: next/prev\n\nPRESENT: stage mode - hides chrome, big text, A-/A+ to size it. EXIT or Esc to leave.\nEDIT: change a song's chart. Saved on this device.\nEXPORT: back up edits or download a fresh file with edits baked in.\nNOTES: song trivia/banter.\n\nAdd to Home Screen for full-screen mode.\nTap KEEP AWAKE before the set.");
-}
-
 function esc(s){return String(s).replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
-const PRISTINE='<!doctype html>\n'+document.documentElement.outerHTML;
-loadEdits();
 render();
 
 if ('serviceWorker' in navigator) {
