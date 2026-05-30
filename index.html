@@ -69,9 +69,9 @@ main{flex:1;display:flex;min-height:0;}
 .chip.tuning{color:var(--orange);border-color:rgba(229,137,36,0.4);}
 .chip.original{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
 .chip.warn{color:var(--red);border-color:rgba(207,41,39,0.5);}
-.song-head .nav-mini{display:flex;flex-direction:row;align-items:center;gap:4px;flex-shrink:0;}
-.song-head .nav-mini button{background:transparent;border:1px solid var(--line);color:var(--text-dim);padding:6px 10px;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;cursor:pointer;border-radius:2px;}
-.song-head .nav-mini button:active{background:var(--bg-card);}
+.head-btns{display:flex;gap:4px;flex-shrink:0;}
+.head-btns button{background:transparent;border:1px solid var(--line);color:var(--text-dim);padding:4px 8px;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;cursor:pointer;border-radius:2px;}
+.head-btns button:active{background:var(--bg-card);}
 button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
 .song-notes{margin:14px 24px 0;border:1px solid var(--line);border-left:2px solid var(--yellow);border-radius:2px;background:rgba(255,206,24,0.05);font-family:var(--body);font-size:14px;line-height:1.55;color:var(--text);padding:12px 16px;display:none;}
 .song-notes.show{display:block;}
@@ -88,8 +88,9 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
 footer{position:relative;z-index:20;display:flex;align-items:center;gap:8px;padding:5px 14px;border-top:1px solid var(--line);background:var(--bg-elev);padding-bottom:max(5px,env(safe-area-inset-bottom));}
 footer .next-info{min-width:0;margin-right:auto;}
 footer .next-info .label{font-family:var(--mono);font-size:8px;letter-spacing:0.24em;color:var(--text-dim);text-transform:uppercase;}
-footer .next-info .next-title{font-family:var(--display);font-size:14px;letter-spacing:0.04em;color:var(--text);margin-top:1px;}
+footer .next-info .next-title{font-family:var(--display);font-size:18px;letter-spacing:0.04em;color:var(--text);margin-top:1px;}
 footer .next-title.end{color:var(--orange);}
+.foot-clock{font-family:var(--mono);font-size:12px;letter-spacing:0.1em;color:var(--text-dim);text-align:center;flex:1;}
 .foot-btns{display:flex;gap:4px;flex-shrink:0;}
 .foot-btns button{background:transparent;border:1px solid var(--line);color:var(--text-dim);padding:5px 9px;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;border-radius:2px;}
 .foot-btns button:active{background:var(--bg-card);color:var(--text);}
@@ -115,6 +116,10 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
         <span class="position" id="songPosition"></span>
         <h1 id="songTitle"></h1>
         <div class="chips" id="songChips"></div>
+        <div class="head-btns">
+          <button id="btnNotes" class="notes-btn">NOTES</button>
+          <button id="footBack">LIST</button>
+        </div>
       </div>
       <div class="song-notes" id="songNotes"></div>
       <div class="song-body" id="songBody"></div>
@@ -122,11 +127,10 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
   </main>
   <footer>
     <div class="next-info"><div class="label">Up Next</div><div class="next-title" id="nextTitle">-</div></div>
+    <div class="foot-clock" id="footClock"></div>
     <div class="foot-btns">
-      <button id="btnNotes" class="notes-btn">NOTES</button>
       <button id="btnPrev">PREV</button>
       <button id="btnNext">NEXT</button>
-      <button id="footBack">SET LIST</button>
       <button id="footWake" class="primary">WAKE</button>
     </div>
   </footer>
@@ -1545,6 +1549,16 @@ $("btnPrev").addEventListener("click",goPrev);
 $("btnNext").addEventListener("click",goNext);
 $("btnNotes").addEventListener("click",()=>{state.notesOpen=!state.notesOpen;renderSong();});
 $("footBack").addEventListener("click",backToList);
+
+/* ---- clock ---- */
+function tickClock(){
+  const d=new Date();
+  let h=d.getHours(), m=d.getMinutes();
+  const ap=h>=12?"PM":"AM";
+  h=h%12||12;
+  $("footClock").textContent=h+":"+String(m).padStart(2,"0")+" "+ap;
+}
+tickClock();setInterval(tickClock,10000);
 
 async function toggleWake(){
   if(state.wakeLock){await state.wakeLock.release().catch(()=>{});state.wakeLock=null;$("wakePill").classList.remove("active");$("footWake").textContent="WAKE";return;}
