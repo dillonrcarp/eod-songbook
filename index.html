@@ -1504,20 +1504,25 @@ function fmt(text){
   const out=[];
   const isTab=(l)=>/^[EADGBe]\|/.test(l.trim())|| /^[EADGBe]-/.test(l.trim());
   const isChordLine=(l)=>/^\s*(\[[A-G][#b]?\][\s]*)+\s*$/.test(l);
+  let groupStart=null;
   for(let i=0;i<lines.length;i++){
     // chord marker lines like " [D]    [A]    [D]" → inline chips
     if(isChordLine(lines[i])){
       const chords=[...lines[i].matchAll(/\[([A-G][#b]?)\]/g)].map(m=>m[1]);
       out.push('<span class="chord-markers">'+chords.map(c=>'<span class="chord-chip">'+esc(c)+'</span>').join(" ")+'</span>');
-      continue;
+      groupStart=null;continue;
     }
     const m=lines[i].match(/^\s*\[(.+?)\]\s*$/);
-    if(m){out.push('<div class="section">'+esc(m[1])+'</div>');continue;}
-    out.push(esc(lines[i]));
-    if(isTab(lines[i])&&i+1<lines.length&&isTab(lines[i+1])){
-      const cur=lines[i].trim()[0], nxt=lines[i+1].trim()[0];
-      const order="EADGBe";
-      if(order.indexOf(nxt)>=order.indexOf(cur))out.push("");
+    if(m){out.push('<div class="section">'+esc(m[1])+'</div>');groupStart=null;continue;}
+    if(isTab(lines[i])){
+      const s=lines[i].trim()[0];
+      if(groupStart===null)groupStart=s;
+      else if(s===groupStart){out.push("");} // same start letter = new group
+      out.push(esc(lines[i]));
+      if(i+1>=lines.length||!isTab(lines[i+1]))groupStart=null;
+    }else{
+      out.push(esc(lines[i]));
+      groupStart=null;
     }
   }
   // collapse runs of blank lines to a single blank line
