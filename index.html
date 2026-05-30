@@ -1591,11 +1591,20 @@ function renderSong(){
 }
 
 function fmt(text){
-  return text.split("\n").map((line)=>{
-    const m=line.match(/^\s*\[(.+?)\]\s*$/);
-    if(m)return '<div class="section">'+esc(m[1])+'</div>';
-    return esc(line);
-  }).join("\n");
+  const lines=text.split("\n");
+  const out=[];
+  const isTab=(l)=>/^[EADGBe]\|/.test(l.trim());
+  for(let i=0;i<lines.length;i++){
+    const m=lines[i].match(/^\s*\[(.+?)\]\s*$/);
+    if(m){out.push('<div class="section">'+esc(m[1])+'</div>');continue;}
+    out.push(esc(lines[i]));
+    if(isTab(lines[i])&&i+1<lines.length&&isTab(lines[i+1])){
+      const cur=lines[i].trim()[0], nxt=lines[i+1].trim()[0];
+      const order="EADGBe";
+      if(order.indexOf(nxt)>=order.indexOf(cur))out.push("");
+    }
+  }
+  return out.join("\n");
 }
 
 function openSong(s,i){state.songSetIdx=s;state.songIdx=i;state.view="song";state.notesOpen=false;state.editing=false;songView.classList.remove("editing");$("btnEdit").classList.remove("active");render();}
