@@ -126,6 +126,7 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
       <button id="btnPrev">PREV</button>
       <button id="btnNext">NEXT</button>
       <button id="footWake" class="primary">WAKE</button>
+      <button id="btnRequest">REQUEST</button>
     </div>
   </footer>
 </div>
@@ -2422,6 +2423,11 @@ async function toggleWake(){
 $("footWake").addEventListener("click",toggleWake);
 document.addEventListener("visibilitychange",async()=>{
   if(state.wakeLock!==null&&document.visibilityState==="visible"){try{state.wakeLock=await navigator.wakeLock.request("screen");}catch(e){}}
+});
+
+$("btnRequest").addEventListener("click",()=>{
+  const q=prompt("Song name:");
+  if(q&&q.trim())window.open("https://www.google.com/search?q="+encodeURIComponent(q.trim()+" bass tab"),"_blank");
 });
 
 function esc(s){return String(s).replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
