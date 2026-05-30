@@ -1487,7 +1487,22 @@ function peekNext(){
   if(state.songSetIdx+1<SHOW.sets.length)return SHOW.sets[state.songSetIdx+1].songs[0];
   return null;
 }
+function hasOverflow(){
+  const el=$("songBody");
+  return el.scrollHeight>el.clientHeight+2;
+}
+function isAtBottom(){
+  const el=$("songBody");
+  return el.scrollTop+el.clientHeight>=el.scrollHeight-2;
+}
+function isAtTop(){
+  return $("songBody").scrollTop<=2;
+}
 function goNext(){
+  if(hasOverflow()&&!isAtBottom()){
+    $("songBody").scrollTo({top:$("songBody").scrollHeight,behavior:"smooth"});
+    return;
+  }
   const set=SHOW.sets[state.songSetIdx];
   if(state.songIdx+1<set.songs.length){state.songIdx++;}
   else if(state.songSetIdx+1<SHOW.sets.length){state.songSetIdx++;state.songIdx=0;}
@@ -1495,6 +1510,10 @@ function goNext(){
   state.notesOpen=false;render();
 }
 function goPrev(){
+  if(hasOverflow()&&!isAtTop()){
+    $("songBody").scrollTo({top:0,behavior:"smooth"});
+    return;
+  }
   if(state.songIdx>0){state.songIdx--;}
   else if(state.songSetIdx>0){state.songSetIdx--;state.songIdx=SHOW.sets[state.songSetIdx].songs.length-1;}
   else return;
