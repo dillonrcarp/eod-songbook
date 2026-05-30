@@ -258,60 +258,18 @@ G|---------------------|
 D|---------------3-----|
 A|-3-5---3---3-5-------|
 E|-----6---3-------6-3-|`,
-  "American Girl": `[Verse]
-D                E
-Well, she was an American girl
-G         A
-Raised on promises
-D                 E
-She couldn't help thinkin' that there was a
-G                   A
-little more to life somewhere else
- 
-[Pre-Chorus]
-A                  D
-After all it was a great big world
-G                      E
-With lots of places to run to
-A
-And if she had to die tryin' she had one little promise she was gonna keep
- 
-[Chorus]
-G       A          D                   B
-O yeah, all right, take it easy, baby, make it last all night
-G       A           D
-She was an American girl
- 
-[Verse]
-D                  E
-Well, it was kinda cold that night
-G                      A
-She stood alone on the balcony
-D                        E
-Yeah, she could hear the cars roll by
-       G              A
-Out on 441 like waves crashin' on the beach
- 
-[Pre-Chorus]
-A                     D
-And for one desperate moment there
-G                    E
-He crept back in her memory
-A
-God it's so painful when something that's so close is still so far out of reach
- 
-[Chorus]
-G       A          D                   B
-O yeah, all right, take it easy, baby, make it last all night
-G       A           D
-She was an American girl
- 
+  "American Girl": `[Verse]  D  E | G  A   (x2 per verse)
+[Pre-Chorus]  A  D | G  E | A
+[Chorus]  G  A  D  B | G  A  D
+
+[Structure]
+Verse - Pre-Chorus - Chorus
+Verse - Pre-Chorus - Chorus
+Outro
+
 [Outro]
-G  G  G  G  A A D
-G  G  G  G  A A D
-G  G  G  G  A A D
-G  G  G  A A A
- 
+G G G G  A A D   (x3)
+G G G  A A A
 D D  D D
 D E G A`,
   "Gold on the Ceiling": `[Intro] (bass starts at 6 seconds)
@@ -1604,7 +1562,8 @@ function fmt(text){
       if(order.indexOf(nxt)>=order.indexOf(cur))out.push("");
     }
   }
-  return out.join("\n");
+  // collapse runs of blank lines to a single blank line
+  return out.join("\n").replace(/\n{3,}/g,"\n\n");
 }
 
 function openSong(s,i){state.songSetIdx=s;state.songIdx=i;state.view="song";state.notesOpen=false;state.editing=false;songView.classList.remove("editing");$("btnEdit").classList.remove("active");render();}
