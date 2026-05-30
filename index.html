@@ -62,6 +62,7 @@ main{flex:1;display:flex;min-height:0;}
 .song-view{flex-direction:column;background:var(--bg);}
 .song-head{position:relative;z-index:20;padding:12px 18px 10px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
 .song-head .position{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;}
+.set-chip{display:inline-block;font-family:var(--mono);font-size:8px;letter-spacing:0.12em;color:var(--teal);border:1px solid rgba(104,201,206,0.4);border-radius:2px;padding:1px 5px;margin-right:4px;vertical-align:middle;}
 .song-head h1{position:absolute;left:50%;transform:translateX(-50%);font-family:var(--display);font-size:clamp(26px,5vw,40px);line-height:1;letter-spacing:0.03em;color:var(--text);white-space:nowrap;pointer-events:none;}
 .head-btns{display:flex;gap:4px;flex-shrink:0;}
 .head-btns button{background:transparent;border:1px solid var(--line);color:var(--text-dim);padding:4px 8px;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;cursor:pointer;border-radius:2px;}
@@ -1472,7 +1473,7 @@ function renderList(){
 
 function renderSong(){
   const set=SHOW.sets[state.songSetIdx], song=set.songs[state.songIdx];
-  $("songPosition").textContent=String(state.songIdx+1).padStart(2,"0")+" / "+String(set.songs.length).padStart(2,"0");
+  $("songPosition").innerHTML='<span class="set-chip">'+esc(set.name)+'</span> '+String(state.songIdx+1).padStart(2,"0")+" / "+String(set.songs.length).padStart(2,"0");
   $("songTitle").textContent=song.t;
   // banter
   const banter=BANTER[song.t];
