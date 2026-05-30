@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'eod-songbook-v24';
+const CACHE_VERSION = 'eod-songbook-v25';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
