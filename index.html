@@ -59,11 +59,10 @@ main{flex:1;display:flex;min-height:0;}
 .badge.empty{background:transparent;color:var(--text-dim);border-color:var(--line);}
 .song-row .meta{font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-align:right;}
 .song-view{flex-direction:column;background:var(--bg);}
-.song-head{position:relative;z-index:20;padding:6px 18px 4px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;}
-.song-head .left{min-width:0;flex:1;display:flex;align-items:center;gap:10px;overflow:hidden;}
-.song-head .position{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;}
-.song-head h1{font-family:var(--display);font-size:clamp(26px,5vw,40px);line-height:1;letter-spacing:0.03em;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.song-head .chips{display:flex;flex-wrap:nowrap;gap:4px;flex-shrink:0;}
+.song-head{position:relative;z-index:20;padding:6px 18px 4px;border-bottom:1px solid var(--line);display:flex;align-items:center;}
+.song-head .position{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;min-width:60px;}
+.song-head h1{font-family:var(--display);font-size:clamp(26px,5vw,40px);line-height:1;letter-spacing:0.03em;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;text-align:center;}
+.song-head .chips{display:flex;flex-wrap:nowrap;gap:4px;justify-content:flex-end;min-width:60px;}
 .chip{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:2px 6px;border-radius:2px;border:1px solid var(--line);color:var(--text-dim);}
 .chip.key{color:var(--teal);border-color:rgba(104,201,206,0.4);}
 .chip.tuning{color:var(--orange);border-color:rgba(229,137,36,0.4);}
@@ -153,11 +152,9 @@ body.present .present-bar{display:flex;}
       <div class="tap-zone left" id="tapLeft"></div>
       <div class="tap-zone right" id="tapRight"></div>
       <div class="song-head">
-        <div class="left">
-          <span class="position" id="songPosition"></span>
-          <h1 id="songTitle"></h1>
-          <div class="chips" id="songChips"></div>
-        </div>
+        <span class="position" id="songPosition"></span>
+        <h1 id="songTitle"></h1>
+        <div class="chips" id="songChips"></div>
         <div class="nav-mini" id="navEdit">
           <button id="edSave" class="save">SAVE</button>
           <button id="edRevert" class="revert">REVERT</button>
@@ -1560,11 +1557,10 @@ function renderList(){
 
 function renderSong(){
   const set=SHOW.sets[state.songSetIdx], song=set.songs[state.songIdx];
-  $("songPosition").textContent=set.name+" - "+String(state.songIdx+1).padStart(2,"0")+" / "+String(set.songs.length).padStart(2,"0")+" - "+set.tuning.toUpperCase();
+  $("songPosition").textContent=String(state.songIdx+1).padStart(2,"0")+" / "+String(set.songs.length).padStart(2,"0");
   $("songTitle").textContent=song.t;
   const chips=[];
   if(song.key)chips.push('<span class="chip key">KEY '+esc(song.key)+'</span>');
-  chips.push('<span class="chip tuning">'+esc(set.tuning)+'</span>');
   if(song.original)chips.push('<span class="chip original">ORIGINAL</span>');
   if(song.tuningFlag)chips.push('<span class="chip warn">EB SONG IN STD SET</span>');
   if(hasEdit(song.t))chips.push('<span class="chip edited">EDITED</span>');
