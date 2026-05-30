@@ -1,0 +1,1771 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="EoD Songbook">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<title>East On Division - Songbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0a; --bg-elev:#141414; --bg-card:#1a1a1a; --line:#2a2a2a;
+  --text:#e8e6df; --text-dim:#8a8680;
+  --teal:#68c9ce; --yellow:#ffce18; --orange:#e58924; --red:#cf2927;
+  --display:"Bebas Neue","Oswald","Arial Narrow",sans-serif;
+  --mono:"DM Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --body:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--body);overflow:hidden;overscroll-behavior:none;-webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none;touch-action:pan-y;}
+body{background:radial-gradient(ellipse at top,rgba(104,201,206,0.04),transparent 60%),radial-gradient(ellipse at bottom,rgba(229,137,36,0.03),transparent 60%),var(--bg);background-attachment:fixed;}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;z-index:2;}
+header{position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 22px 10px;border-bottom:1px solid var(--line);background:rgba(10,10,10,0.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding-top:max(14px,env(safe-area-inset-top));}
+.brand{display:flex;align-items:baseline;gap:12px;}
+.brand .mark{font-family:var(--display);letter-spacing:0.08em;font-size:22px;color:var(--teal);}
+.brand .sub{font-family:var(--mono);font-size:10px;letter-spacing:0.22em;color:var(--text-dim);text-transform:uppercase;}
+.show-meta{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--text-dim);text-transform:uppercase;text-align:right;line-height:1.5;}
+.show-meta b{color:var(--yellow);font-weight:500;}
+.set-tabs{position:relative;z-index:20;display:flex;border-bottom:1px solid var(--line);background:var(--bg-elev);overflow-x:auto;scrollbar-width:none;}
+.set-tabs::-webkit-scrollbar{display:none;}
+.set-tab{flex:1;min-width:90px;padding:12px 14px 10px;background:transparent;border:0;border-right:1px solid var(--line);color:var(--text-dim);font-family:var(--display);font-size:18px;letter-spacing:0.1em;cursor:pointer;position:relative;transition:color .15s;}
+.set-tab:last-child{border-right:0;}
+.set-tab .count{display:block;font-family:var(--mono);font-size:9px;letter-spacing:0.18em;margin-top:2px;opacity:0.7;}
+.set-tab .tuning{display:block;font-family:var(--mono);font-size:8px;letter-spacing:0.2em;color:var(--text-dim);margin-top:1px;}
+.set-tab.active{color:var(--text);background:var(--bg-card);}
+.set-tab.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--teal);}
+.set-tab.eb.active::after{background:var(--orange);}
+main{flex:1;display:flex;min-height:0;}
+.view{flex:1;min-width:0;display:none;flex-direction:column;}
+.view.active{display:flex;}
+.list-view{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 0 80px;}
+.set-header{padding:0 24px 18px;display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--line);margin-bottom:8px;}
+.set-header h2{font-family:var(--display);font-size:44px;letter-spacing:0.06em;line-height:1;color:var(--text);}
+.set-header .tuning-chip{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--teal);color:var(--teal);border-radius:2px;}
+.set-header.eb .tuning-chip{border-color:var(--orange);color:var(--orange);}
+.song-row{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s;}
+.song-row:active{background:var(--bg-card);}
+.song-row .num{font-family:var(--mono);font-size:12px;color:var(--text-dim);letter-spacing:0.08em;}
+.song-row .title{font-family:var(--display);font-size:22px;letter-spacing:0.04em;color:var(--text);}
+.badge{display:inline-block;vertical-align:middle;margin-left:10px;font-family:var(--mono);font-size:8px;letter-spacing:0.22em;padding:3px 7px;border-radius:2px;background:rgba(255,206,24,0.12);color:var(--yellow);border:1px solid rgba(255,206,24,0.35);}
+.badge.repeat{background:rgba(207,41,39,0.1);color:var(--red);border-color:rgba(207,41,39,0.35);}
+.badge.tuning-flag{background:rgba(229,137,36,0.12);color:var(--orange);border-color:rgba(229,137,36,0.35);}
+.badge.empty{background:transparent;color:var(--text-dim);border-color:var(--line);}
+.song-row .meta{font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-align:right;}
+.song-view{flex-direction:column;background:var(--bg);}
+.song-head{position:relative;z-index:20;padding:18px 24px 14px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-between;gap:14px;}
+.song-head .left{min-width:0;flex:1;}
+.song-head .position{font-family:var(--mono);font-size:10px;letter-spacing:0.22em;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px;}
+.song-head h1{font-family:var(--display);font-size:clamp(40px,7vw,64px);line-height:0.95;letter-spacing:0.03em;color:var(--text);}
+.song-head .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.chip{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;padding:4px 9px;border-radius:2px;border:1px solid var(--line);color:var(--text-dim);}
+.chip.key{color:var(--teal);border-color:rgba(104,201,206,0.4);}
+.chip.tuning{color:var(--orange);border-color:rgba(229,137,36,0.4);}
+.chip.original{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
+.chip.warn{color:var(--red);border-color:rgba(207,41,39,0.5);}
+.song-head .nav-mini{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.song-head .nav-mini button{background:transparent;border:1px solid var(--line);color:var(--text-dim);padding:8px 12px;font-family:var(--mono);font-size:10px;letter-spacing:0.18em;cursor:pointer;border-radius:2px;}
+.song-head .nav-mini button:active{background:var(--bg-card);}
+button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
+.song-notes{margin:14px 24px 0;border:1px solid var(--line);border-left:2px solid var(--yellow);border-radius:2px;background:rgba(255,206,24,0.05);font-family:var(--body);font-size:14px;line-height:1.55;color:var(--text);padding:12px 16px;display:none;}
+.song-notes.show{display:block;}
+.song-notes .lbl{display:block;font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--yellow);margin-bottom:6px;}
+.song-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:22px 24px 120px;font-family:var(--mono);font-size:18px;line-height:1.65;white-space:pre-wrap;word-break:break-word;color:var(--text);}
+.song-body .section{color:var(--teal);font-size:14px;letter-spacing:0.18em;text-transform:uppercase;margin:20px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--line);}
+.song-body .empty{color:var(--text-dim);font-style:italic;padding:40px 0;text-align:center;font-family:var(--body);font-size:14px;letter-spacing:0.05em;}
+.song-body .empty code{display:block;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:0.1em;font-style:normal;}
+.next-up{position:relative;z-index:20;padding:14px 24px;border-top:1px solid var(--line);background:var(--bg-elev);display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:max(14px,env(safe-area-inset-bottom));}
+.next-up .label{font-family:var(--mono);font-size:9px;letter-spacing:0.24em;color:var(--text-dim);text-transform:uppercase;}
+.next-up .next-title{font-family:var(--display);font-size:20px;letter-spacing:0.04em;color:var(--text);margin-top:2px;}
+.next-up .next-title.end{color:var(--orange);}
+.next-up .nav-mini button{background:transparent;border:1px solid var(--line);color:var(--text-dim);padding:8px 12px;font-family:var(--mono);font-size:10px;letter-spacing:0.18em;cursor:pointer;border-radius:2px;}
+.tap-zone{position:absolute;top:0;bottom:0;width:26%;z-index:1;}
+.tap-zone.left{left:0;}
+.tap-zone.right{right:0;}
+footer{position:relative;z-index:20;display:flex;border-top:1px solid var(--line);background:var(--bg-elev);padding-bottom:env(safe-area-inset-bottom);}
+footer button{flex:1;padding:14px 8px;background:transparent;border:0;border-right:1px solid var(--line);color:var(--text-dim);font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;}
+footer button:last-child{border-right:0;}
+footer button:active{background:var(--bg-card);color:var(--text);}
+footer button.primary{color:var(--teal);}
+.wake-pill{position:absolute;top:14px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--line);border-radius:100px;background:var(--bg-elev);color:var(--text-dim);pointer-events:none;opacity:0;transition:opacity .3s;}
+.wake-pill.active{color:var(--teal);border-color:rgba(104,201,206,0.4);opacity:0.9;}
+.chip.edited{color:var(--teal);border-color:rgba(104,201,206,0.4);}
+.badge.edited{background:rgba(104,201,206,0.12);color:var(--teal);border-color:rgba(104,201,206,0.35);}
+button.edit-btn.active{color:var(--teal);border-color:rgba(104,201,206,0.4);}
+.song-editor{flex:1;display:none;flex-direction:column;min-height:0;}
+#navEdit{display:none;}
+.song-view.editing .song-body,.song-view.editing .next-up,.song-view.editing .song-notes,.song-view.editing .tap-zone,.song-view.editing #navNormal{display:none!important;}
+.song-view.editing .song-editor{display:flex;}
+.song-view.editing #navEdit{display:flex;}
+#navEdit button.save{color:var(--teal);border-color:rgba(104,201,206,0.4);}
+#navEdit button.revert{color:var(--red);border-color:rgba(207,41,39,0.35);}
+.song-editor textarea{flex:1;width:100%;resize:none;border:0;outline:none;background:var(--bg);color:var(--text);font-family:var(--mono);font-size:17px;line-height:1.6;padding:18px 24px;-webkit-user-select:text;user-select:text;tab-size:2;white-space:pre;overflow:auto;-webkit-overflow-scrolling:touch;}
+.editor-bar{display:flex;border-top:1px solid var(--line);background:var(--bg-elev);padding-bottom:env(safe-area-inset-bottom);}
+.editor-bar button{flex:1;padding:15px 8px;background:transparent;border:0;border-right:1px solid var(--line);color:var(--text-dim);font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;}
+.editor-bar button:last-child{border-right:0;}
+.editor-bar button.save{color:var(--teal);}
+.editor-bar button.revert{color:var(--red);}
+.editor-bar button:active{background:var(--bg-card);}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.72);display:none;align-items:center;justify-content:center;padding:24px;}
+.modal.show{display:flex;}
+.modal-card{width:100%;max-width:420px;background:var(--bg-card);border:1px solid var(--line);border-radius:6px;padding:22px;}
+.modal-card h3{font-family:var(--display);font-size:26px;letter-spacing:0.05em;color:var(--text);margin-bottom:4px;}
+.modal-card p{font-family:var(--body);font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:16px;}
+.modal-card .opt{display:block;width:100%;text-align:left;background:var(--bg-elev);border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;padding:14px 16px;margin-bottom:10px;cursor:pointer;}
+.modal-card .opt:active{background:var(--bg);}
+.modal-card .opt small{display:block;color:var(--text-dim);font-size:10px;letter-spacing:0.04em;margin-top:5px;text-transform:none;}
+.modal-card .opt.danger{color:var(--red);border-color:rgba(207,41,39,0.35);}
+.modal-card .close{width:100%;background:transparent;border:1px solid var(--line);color:var(--text-dim);font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;padding:12px;border-radius:4px;cursor:pointer;margin-top:4px;}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--teal);color:var(--text);font-family:var(--mono);font-size:11px;letter-spacing:0.14em;padding:10px 18px;border-radius:100px;z-index:60;opacity:0;pointer-events:none;transition:opacity .25s;}
+.toast.show{opacity:0.97;}
+/* presentation / stage mode */
+body.present header,body.present .set-tabs,body.present footer,body.present .next-up,body.present #navNormal{display:none!important;}
+body.present .song-head{padding:8px 20px;}
+body.present .song-head h1{font-size:clamp(24px,4vw,38px);}
+body.present .song-head .position{font-size:9px;margin-bottom:3px;}
+body.present .song-head .chips{margin-top:6px;}
+body.present .song-body{font-size:var(--pres-size,22px);line-height:1.6;padding:16px 24px 60px;}
+body.present .song-body .section{font-size:calc(var(--pres-size,22px) * 0.72);}
+.present-bar{position:fixed;top:max(10px,env(safe-area-inset-top));right:12px;z-index:40;display:none;gap:6px;}
+body.present .present-bar{display:flex;}
+.present-bar button{background:rgba(20,20,20,0.9);border:1px solid var(--line);color:var(--text-dim);font-family:var(--mono);font-size:12px;letter-spacing:0.12em;padding:9px 13px;border-radius:4px;cursor:pointer;}
+.present-bar button:active{background:var(--bg-card);}
+.present-bar button.exit{color:var(--teal);border-color:rgba(104,201,206,0.4);}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="brand"><span class="mark">EAST ON DIVISION</span><span class="sub">Songbook</span></div>
+    <div class="show-meta"><div><b>May 30, 2026</b></div><div>Flavor on Wheels - Portland, IN</div></div>
+  </header>
+  <nav class="set-tabs" id="setTabs"></nav>
+  <main>
+    <section class="view list-view active" id="listView"></section>
+    <section class="view song-view" id="songView">
+      <div class="tap-zone left" id="tapLeft"></div>
+      <div class="tap-zone right" id="tapRight"></div>
+      <div class="song-head">
+        <div class="left">
+          <div class="position" id="songPosition"></div>
+          <h1 id="songTitle"></h1>
+          <div class="chips" id="songChips"></div>
+        </div>
+        <div class="nav-mini" id="navNormal">
+          <button id="btnEdit" class="edit-btn">EDIT</button>
+          <button id="btnNotes" class="notes-btn">NOTES</button>
+          <button id="btnPrev">PREV</button>
+          <button id="btnNext">NEXT</button>
+        </div>
+        <div class="nav-mini" id="navEdit">
+          <button id="edSave" class="save">SAVE</button>
+          <button id="edRevert" class="revert">REVERT</button>
+          <button id="edCancel">CANCEL</button>
+        </div>
+      </div>
+      <div class="song-notes" id="songNotes"></div>
+      <div class="song-body" id="songBody"></div>
+      <div class="song-editor" id="songEditor">
+        <textarea id="editorArea" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off"></textarea>
+      </div>
+      <div class="next-up">
+        <div><div class="label">Up Next</div><div class="next-title" id="nextTitle">-</div></div>
+        <div class="nav-mini"><button id="btnBack">SET LIST</button></div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <button id="footBack">SET LIST</button>
+    <button id="footWake" class="primary">KEEP AWAKE</button>
+    <button id="footPresent">PRESENT</button>
+    <button id="footExport">EXPORT</button>
+    <button id="footHelp">HELP</button>
+  </footer>
+  <div class="present-bar" id="presentBar">
+    <button id="presSmaller">A&minus;</button>
+    <button id="presBigger">A&plus;</button>
+    <button id="presExit" class="exit">EXIT</button>
+  </div>
+  <div class="modal" id="exportModal">
+    <div class="modal-card">
+      <h3>Export</h3>
+      <p>Edits are saved on this device. Back them up or fold them into the file itself.</p>
+      <button class="opt" id="optFull">Download full songbook<small>Standalone HTML with every edit baked in. This is the one to keep.</small></button>
+      <button class="opt" id="optJson">Download edits only<small>Small JSON backup of just your changes.</small></button>
+      <button class="opt" id="optCopy">Copy edits to clipboard<small>Paste into a note or message.</small></button>
+      <button class="opt danger" id="optClear">Clear local edits<small>Reverts every song to its built-in chart.</small></button>
+      <button class="close" id="optClose">CLOSE</button>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+</div>
+<div class="wake-pill" id="wakePill">SCREEN LOCKED ON</div>
+<script>
+/* ============================================================
+   EAST ON DIVISION - STAGE SONGBOOK (single-file standalone)
+   Drop in iCloud Drive / Files, open in Safari, Add to Home Screen.
+   ============================================================ */
+
+const SHOW = {
+  date:"2026-05-30",
+  venue:"Flavor on Wheels Festival - Hudson Park, Portland, IN",
+  sets:[
+    {name:"Set 1",tuning:"Standard",tuningKey:"std",songs:[
+      {t:"Born Under a Bad Sign"},{t:"American Girl"},{t:"Seven Nation Army"},
+      {t:"Gold on the Ceiling"},{t:"Deuce"},
+      {t:"How You Wanna Be",original:true,key:"A G D / A E"},
+      {t:"Red House"},{t:"Gimme Three Steps"},{t:"Creep"},{t:"Sunshine of Your Love"},
+      {t:"Saving Grace",original:true,key:"B"},{t:"Crossroads"}
+    ]},
+    {name:"Set 2",tuning:"Eb / Half-Step Down",tuningKey:"eb",songs:[
+      {t:"Pride and Joy"},{t:"Superstition"},
+      {t:"Wildfire",original:true,key:"A D / A G D"},
+      {t:"In Bloom"},{t:"Little Wing"},{t:"When I Come Around"},{t:"Brain Stew"},
+      {t:"Never Been Happier",original:true,key:"C E A F"},{t:"Voodoo Child"}
+    ]},
+    {name:"Set 3",tuning:"Standard",tuningKey:"std",songs:[
+      {t:"Take the Money and Run"},{t:"Yellow Ledbetter"},
+      {t:"Take Me Away",original:true,key:"D Bb A / D F C Bb A"},
+      {t:"Old Love"},{t:"Bring It On Home"},{t:"Time"},{t:"Rock'n Me"},
+      {t:"Purple Haze"},{t:"Gravity"}
+    ]},
+    {name:"Set 4",tuning:"Standard",tuningKey:"std",songs:[
+      {t:"Hey Joe"},{t:"Joker"},
+      {t:"How You Wanna Be",original:true,repeat:1,key:"A G D / A E"},
+      {t:"Wildfire",original:true,repeat:2,tuningFlag:true,key:"A D / A G D"},
+      {t:"Summertime Voodoo",tuningFlag:true},
+      {t:"Mary Jane's Last Dance"},{t:"Wind Cries Mary"},
+      {t:"Never Been Happier",original:true,repeat:2,tuningFlag:true,key:"C E A F"},
+      {t:"Take Me Away",original:true,repeat:3,key:"D Bb A / D F C Bb A"},
+      {t:"Ohio"},{t:"Twist and Shout"}
+    ]}
+  ]
+};
+
+const BODIES = {
+  "Born Under a Bad Sign": `G|---------3-------------|
+D|-----3-5---5-----3-----|
+A|-3-5---------3-5-------|
+E|-------------------6-3-|
+G|------------------|
+D|------------------|
+A|-2-3-4-5-5-55-4-3-|
+E|------------------|
+G|---------------------|
+D|---------------3-----|
+A|-3-5---3---3-5-------|
+E|-----6---3-------6-3-|`,
+  "American Girl": `[Verse]
+D                E
+Well, she was an American girl
+G         A
+Raised on promises
+D                 E
+She couldn't help thinkin' that there was a
+G                   A
+little more to life somewhere else
+ 
+[Pre-Chorus]
+A                  D
+After all it was a great big world
+G                      E
+With lots of places to run to
+A
+And if she had to die tryin' she had one little promise she was gonna keep
+ 
+[Chorus]
+G       A          D                   B
+O yeah, all right, take it easy, baby, make it last all night
+G       A           D
+She was an American girl
+ 
+[Verse]
+D                  E
+Well, it was kinda cold that night
+G                      A
+She stood alone on the balcony
+D                        E
+Yeah, she could hear the cars roll by
+       G              A
+Out on 441 like waves crashin' on the beach
+ 
+[Pre-Chorus]
+A                     D
+And for one desperate moment there
+G                    E
+He crept back in her memory
+A
+God it's so painful when something that's so close is still so far out of reach
+ 
+[Chorus]
+G       A          D                   B
+O yeah, all right, take it easy, baby, make it last all night
+G       A           D
+She was an American girl
+ 
+[Outro]
+G  G  G  G  A A D
+G  G  G  G  A A D
+G  G  G  G  A A D
+G  G  G  A A A
+ 
+D D  D D
+D E G A`,
+  "Gold on the Ceiling": `[Intro] (bass starts at 6 seconds)
+G|------------|
+D|------------|  (X4)
+A|-------3-1--|
+E|-3-3-3------|
+ 
+G|---------------------------------------------------------|
+D|---------------------------------------------------------|
+A|-----------------3-3-3-1-------1-----------------3-3-3-1-|
+E|-3-3-3-3-1-1-1-1---------3-3-3---3-3-3-3-1-1-1-1---------|
+ 
+[Verse]
+G|-----------------------------------------------------------------|
+D|-----------------------------------------------------------------|
+A|-------------------------3-3-3-1-------------------------3-3-3-1-|
+E|-3-3-3-3-3-3-3-3-1-1-1-1---------3-3-3-3-3-3-3-3-1-1-1-1---------|
+ 
+G|---------------------------------|
+D|---------------------------------|
+A|-----------------------1---------|
+E|-3-3-3-3-1-1-1-1-0-0-0---3-3-3-3-|
+ 
+[Chorus]
+G|---------------------------------------------------------------  1-1 not 11-|
+D|---------------------------------------------------------------  1-3 not 13-|
+A|-------------33-------------33------------33-------------33-----------------|
+E|-3-3-3-3-11------3313---11------13----11------3313---11------13-------------|
+ 
+G|------------------------------------------------------------|
+D|------------------------------------------------------------|
+A|--------------------3-3-3-1-------------------------3-3-3-1-|
+E|----3-3-3-3-1-1-1-1---------3-3-3-3-3-3-3-3-1-1-1-1---------|
+ 
+G|-------------------------------------|
+D|-------------------------------------|     (x2)
+A|-------------------------3-3-3-1-----|
+E|-3-3-3-3-3-3-3-3-1-1-1-1-------------|
+ 
+[Verse]
+[Chorus]`,
+  "Deuce": `   [Intro/Pre-Verse/Solo]
+G|---------------------------|
+D|---------------------------|
+A|-------333-5-333-3p5-3-----| 4x
+E|-5-5-5-----------------5-3-| 
+  [Verse]
+G|---------------|---------------------------|    D|---------------|---------------------------|   
+A|------3~-5~-3~-|-------333-5-333-3p5-3-----| x2
+E|--5~~----------|-5-5-5-----------------5-3-|    
+  
+G|------------------|
+D|------------------|
+A|------3~-5~-3~----|
+E|--5~~----------5\\-|
+[Chorus]
+G|--------------------------------------|
+D|--------------------------------------|
+A|-3~~345--------3~~345-----------------|
+E|--------345-0---------345-0-1~~-3-3-3-|
+
+Get up 
+and get your grandma outta here
+Pick up 
+old jim is workin hard this year
+and baby 
+do the things he says to do
+Baby, 
+if you’re feeling good
+and baby, 
+if you’re feeling nice
+You know your man is workin’ hard
+He’s worth a deuce
+Honey 
+don’t push your man behind his years
+and baby
+stop cryin all your tears
+baby
+do the things he says to do (do it!)`,
+  "How You Wanna Be": `[Verse]
+A         E
+...
+
+[Chorus]
+A   G   D   D/e
+...
+`,
+  "Red House": `[Intro]
+Bb Ab Bb Bb Eb Eb Bb Bb F Eb Bb |Bb F|
+[Verse]
+Bb
+There's a Red House over yonder
+Eb                        Bb    Bb 
+That's where my baby stays
+There's a Red House over yonder, baby
+                         Bb   Bb 
+That's where my baby stays
+       F                            Eb 
+Well, I ain't been home to see my baby,
+                              Bb     |Bb  F |
+in ninety nine and one half days.
+Bb 
+Wait a minute something's wrong here
+The key won't unlock the door.
+Bb 
+Wait a minute something's wrong,
+Eb                                            Bb   Bb 
+Lord, have mercy, this key won't unlock this door,
+(something's goin' on here.)
+F 
+I have a bad bad feeling
+       Eb                         Bb 
+that my baby don't live here no more.
+                                F 
+   That's all right, I still got my guitar
+   Look out now . . .
+[Solo:] Bb major 12 bar blues…
+[Outro]
+Bb                                            Eb 
+Well I might as well uh, go on back down yonder
+                         Bb    Bb 
+way back 'cross yonder hill
+I might as well go back over yonder
+                                  Bb
+way back over yonder 'cross the hill,
+(That's where I came from.)
+            F                          Eb(hard stop)
+'Cause if my baby don't love me no more,
+                      Bb D Eb E F, E Bb
+I know her sister will!`,
+  "Gimme Three Steps": `[Intro]
+(Rest for 16 counts)
+G-----------------|-2-2-------2------|-----------4p2---|
+D-----------------|-----4-2-4---4-0-0|(0)------0----4--|
+A-5-5-5545-45-545-|------------------|---0-0-2-------0-|
+E-----------------|------------------|-----------------|
+[Verse]
+ [D]               [A]                [D]                
+G-----------------|------------------|-----------------|
+D-0------0-0------|-------------2----|-0------0-0------|
+A---2-002---2-0232|-0------0-034-020-|---2-002---2-0232|
+E-----------------|---2-002----------|-----------------|
+[E]              [A]  
+G---------------------|
+D-----------2------7\\-|
+A-------2-4---4-0-----|
+E-0-3-4---------------|
+ [D]               [G]        [E]      [D]              
+G-----------------|------------------|-----------------|
+D-0------0-0------|-----------2222222|-0------0-0------|
+A---2-002---2-0232|-----------------2|---2-002---2-0232|
+E-----------------|-3-3-3210---------|-----------------|
+ [A]            [D]
+G---------------|------------4p2---|
+D-------------0-|(0)------0-----4--|
+A-0--0--0-2-0---|---0-0-2--------0-|
+E---------------|------------------|
+[Chorus]
+ [D]                                 [A]               
+G-----------------|-----------------|-----------------|-----------------|
+D-0-0-----0-0-----|-0-0-----0-0-----|-----------------|---------2-------|
+A-----0h2-----0h2-|-----0h2-----3-2-|-0-0-----0-0-----|-0-0-3-4---0-2-0-|
+E-----------------|-----------------|-----0h2-----0h2-|-----------------|
+ [D]                                 [A]           [D]
+G-----------------|-----------------|-----------------|-----------4p2--|
+D-0-0-----0-0-----|-0-0-----0-0-----|--------------0-0|----7---0-----4-|
+A-----0h2-----0h2-|-----0h2-----3-2-|-0---0----0------|-/9---9--------0|
+E-----------------|-----------------|---0---0----2----|----------------|`,
+  "Creep": `[Intro]
+G B C C
+                           G                              B
+1 When you were here before, couldn't look you in the eyes
+2 I don't care if it hurts, I wanna have control
+3 Whatever makes you happy, whatever you want
+                           C                         C
+1 You're just like an angel, your skin makes me cry
+2 I want a perfect body, I want a perfect soul
+3 You're so very special, I wish I was special
+                          G                      B
+1 You float like a feather in a beautiful world
+2 I want you to notice when I'm not around
+3 But I'm a creep, I'm a weirdo
+                      C                          C
+1 I wish I was special, you're so very special
+2 You're so very special, I wish I was special
+3 What the hell am I doing here? I don't belong here
+
+Intro Verse Chorus Verse Chorus Bridge Verse Chorus
+
+[End Lick]
+G|----------|
+D|-5/7--7/9-|
+A|----------|
+E|----------|
+
+[Chorus]
+                G            B
+But I'm a creep, I'm a weirdo
+                               C
+What the hell am I doing here? 
+                    C
+I don't belong here
+[Bridge]
+                G                     B
+Oooh, oooh, she's running out the door...
+C                      C
+She's running out, she run, run, run...
+G            B
+Ruuuuuuuun...
+C            C
+Ruuuuuuuuuuun...`,
+  "Sunshine of Your Love": `|-7-7-5-7-------------------------|
+|-----------7---6---5-----3-------|
+|-----------------------5-----5---|
+|---------------------------------|
+Riff 1/Verse/Solo
+|---------------------------------|
+|-----------7---6---5-----3-------|
+|-5-5-3-5---------------5-----5---|
+|---------------------------------|
+Riff 2/Verse/Solo
+|---------------------------------|
+|-5-5-3-5-------------------------|
+|-----------5---4---3-----1-------|
+|-----------------------3-----3---|
+Riff 3/Chorus
+|---------------------------------|
+|---------------------------------|
+|-----------------3---------------|
+|-5--55-------------------3-------|
+Riff 4/Chorus
+|---------------------------------|
+|---------------------------------|
+|-----------------------------3-4-|
+|-5--55--55--55--55-5-5-5-5-5-----|
+Outro
+|---------------------------------|
+|---------------------------------|
+|---------------------------------|
+|-5--55--55--55--55--55--55--55---|`,
+  "Saving Grace": `[Intro]
+B (one bar)
+
+[Verse]
+...
+
+[Chorus]
+...won't you be my saving grace
+`,
+  "Crossroads": `G|----2----2----0--------|-----2----2------------|
+D|-----------------------|-----------------------|
+A|------------------x-3b-|--0------------3b---3b-|
+E|-----------------------|--5--------------------|
+G|----2----2------------|-----2--0--2------------|
+D|----------------------|------------------------|
+A|--------------3----3--|--0-------------3----0--|
+E|----------------------|------------------------|
+G|-----7----7--7p0----------|--------------------------|
+D|--0--------------5--3b----|--------------------------|
+A|-----------------------0--|--5--5--3--5--5-----------|
+E|--------------------------|-----------------2--3--4--|
+G|-----2----2-----------|-----2--0--2----2--2p0----|
+D|----------------------|-----------------------3--|
+A|-------------------3b-|--0-----------------------|
+E|--5-------------------|--------------------------|
+G|-------9----9p0------9-------|-----------------------|
+D|-----------------------------|-----------------------|
+A|--7--7----7-----7--7---7--6--|--5--------------------|
+E|-----------------------------|---------2--2--3----4--|
+G|-----2--0--2---0-2--0-----|-----2--0--2---0-2--0-----|
+D|--------------------------|--------------------------|
+A|-----------------------3b-|--0--------------------3b-|
+E|--5-----------------------|--------------------------|
+G|-----2--0--2---0-2--0-----|-----2--0--2---0-2--0--0/2-|
+D|--------------------------|---------------------------|
+A|--0--------------------3--|--5------------------------|
+E|--5-----------------------|---------------------------|`,
+  "Pride and Joy": `[Intro]
+Gb-----------------------------------------------------------------|
+Db---------------------------------7-5-4---7-5-4-------------------|
+Ab-7-5-4---7-5-4---7-5-4---7-5-4---------7-------7-7-5-4---7-5-4---|
+Eb-------7-------7-------7-------7-----------------------7-------7-|
+ 
+Gb---------------------------------|
+Db-------6-7---------6-7-8-9-7-8-9-|
+Ab---6-9-----4-5-6-7---------------|
+Eb-7-------------------------------|
+ 
+ 
+[VERSE AND CHORUS]
+Gb-----------------------------------------------------------------|
+Db---------------------------------------4-7-----------------------|
+Ab-7-5-4---7-----4-7-5-4---7-----4---4-7-----4-5-6-7-----4-7-5-4---|
+Eb-------7---4-7---------7---4-7---5-----------------4-7---------4-|
+ 
+Gb-------------------------------------------------------------------|
+Db-------6-7---------6-7-8-9-7-8-9---------------------------4-5-6-7-|
+Ab---6-9-----4-5-6-7---------------7-----4-7-5-4---7-----4-7---------|
+Eb-7---------------------------------4-7---------7---4-7-------------|
+ 
+Gb---------------------------------------------------------------|
+Db-----4-7-----------------6-7-8-9-----6-7---------6-7-8-9-7-8-9-|
+Ab-4-7-----4-5-6-7-----4-7---------6-9-----4-5-6-7---------------|
+Eb-----------------4-7-------------------------------------------|
+ 
+Gb-----------------------------------------------------------------|
+Db---------------------4-5-6-7-----4-7-----------------6-7-8-9-----|
+Ab-5^7-R-5^7-R-5^7-R-7---------4-7-----4-5-6-7-----4-7---------6-9-|
+Eb---------------------------------------------4-7-----------------|
+ 
+Gb---------------------------|
+Db-6-7---------6-7-8-9-7-8-9-|
+Ab-----4-5-6-7---------------|
+Eb---------------------------|
+ 
+ 
+[GUITAR SOLO]
+Gb-------------------------------------------------------------------------|
+Db----66-77-88-99-11,11-12,12-13,13-14,14-12,12-11,11-99-------------------|
+Ab-77----------------------------------------------------77-55-44----------|
+Eb----------------------------------------------------------------77-55-33-|
+ 
+Gb-------------------------------------------------------------------------|
+Db----------------------------------66-77-88-99-------66-77-------------66-|
+Ab----------44-55-66-77-------44-77-------------66-99-------44-55-66-77----|
+Eb-22-00-55-------------44-77----------------------------------------------|
+ 
+Gb-------------------------------------------------------------------------|
+Db-77-88-9-7-8-9---------------------------------7-----4-7-----------------|
+Ab---------------7-5-4---7-----4-7-5-4---7-----4---4-7-----4-5-6-7-----4-7-|
+Eb---------------------7---4-7---------7---4-7---------------------4-7-----|
+ 
+Gb---------------------------------------|
+Db-6-7-8-9-----6-7---------6-7-8-9-7-8-9-|
+Ab---------6-9-----4-5-6-7---------------|
+Eb---------------------------------------|
+ 
+ 
+[VERSE/CHORUS]
+Gb---------------------------------------------------------------------|
+Db---------------------------------------------6-7-8-9-----6-7---------|
+Ab-5^7-R-5^7-R-5^7-R-----------4-5-6-7-----4-7---------6-9-----4-5-6-7-|
+Eb-------------------5-3-2-0-5---------4-7-----------------------------|
+ 
+Gb---------------|
+Db-6-7-8-9-7-8-9-|
+Ab---------------|
+Eb---------------|`,
+  "Superstition": `[Intro]
+    
+G|----------------|----------------|
+D|----------------|----------------|
+A|-(Rest 3  Bars)-|----------------|  
+D|----------------|----------5-4-3-|
+[Verse part 1]
+G|----------------|----------------|
+D|----------------|----------------|
+A|----------------|----------------|
+D|2---2--22---2---|2---2---2-232-01| x4
+  
+[Verse part 2]
+G|--------------------------2h4--0----|
+D|2-0h2-------0---0h2-2-0h2--------2--|
+A|------0h1h2---2---------------------|  x4
+D|------------------------------------|
+[Chorus]
+G|-----------------------------------4-4-4-4|
+D|------------------------------------------|
+A|-2---2--3---3--2---2--1---1--0------------|
+D|------------------------------------------|
+
+[Intro]
+[Verse P1]
+[Verse P2]
+[Bridge]
+[Verse P1]
+[Verse P2]
+[Bridge]`,
+  "Wildfire": `[Verse]
+A           D
+...
+
+[Chorus]
+A   G   D
+...burnin' up my soul
+`,
+  "In Bloom": `[Intro]
+G|---------------------------|-----------------------------------|
+D|---------------------------|-----------------------------------|
+A|-----------------------2---|----------------------------3------|
+E|--6---6/10\\3---3-3--2-3-3-2|--1---1-1-3-4----4---4-4-3-4---4-5-|
+ 
+G|---------------------------|--------------|--------------------|
+D|---------------------------|--------------|--------------------|
+A|-----------------------2---|--------------|--------------------|
+E|--6---6/10\\3---3-3--2-3-3-2|--1---1-1-3-4-|--------------------|
+ 
+[Verse]
+G|--------------------------------------|-----------------------------------|
+D|--------------------------------------|-----------------------------------|
+A|------1-1-1-1-1-----1-----------------|-/6-6-6-6-6-----6-2-2-2-2--0-0-0-0-|
+E|----------------------2-2-2-2-2-----2-|-----------------------------------|
+ 
+G|--------------------------------------|-----------------------------------|
+D|--------------------------------------|-----------------------------------|
+A|------1-1-1-1-1-----1-----------------|-----------------------------------|
+E|----------------------2-2-2-2-2-----2-|-----------------------------------|
+[Chorus]
+G|--------------------------------|-------------------------|
+D|--------------------------------|-------------------------|
+A|-6-6-6-6-6--6-0-2-2-2-2/5-5-5-0-|--1--1-1-3---------------|
+E|--------------------------------|-------------3-3-3---1-1-|
+ 
+G|-----------------------------|-------------------------|
+D|-----------------------------|-------------------------|
+A|--1--1-1---3------------1----|--1--1-1-3---------------|
+E|--------------3-3-1----3-3---|-------------3-3-3---1-1-|
+ 
+G|-----------------------------|---------------------------6--------|
+D|-----------------------------|---------------------------------8\\-|
+A|--1--1-1---3-----------1-----|-----3----3-3-3---3/6-6-6-----------|
+E|--------------3-3-1---3-3----|------------------------------------|
+ 
+G|---------------------------6--------|---------------------------6--------|
+D|---------------------------------8\\-|---------------------------------8\\-|
+A|-----3----3-3-3---3/6-6-6-----------|-----3----3-3-3---3/6-6-6-----------|
+E|------------------------------------|------------------------------------|
+ 
+G|-----------------------6--------|----------------------------|
+D|-----------------------------8/-|----------------------------|
+A|---3--3-3-3---3/6-6-6-----------|----------------------2-----|
+E|--------------------------------|--6--6/10\\3---3-3-2-3---3-2-|
+ 
+G|-------------------------------|---------------------------|
+D|-------------------------------|---------------------------|
+A|------------------------3------|---------------------2-----|
+E|--1---1-1-3-4---4-4-3-4---4--5-|-6--6/10\\3---3-3-2-3---3-2-|
+ 
+G|------------------------------|
+D|------------------------------|
+A|------------------------------|
+E|--1---1-1-3-4---4-4-4-5--(5)\\-|`,
+  "Little Wing": `      E            G
+WELL SHE'S WALKIN' THROUGH THE CLOUDS
+ 
+    A               E
+WITH A CIRCUS MIND THAT'S RUNNING WILD.
+ 
+B             Bb    A      
+BUTTERFLIES AND ZEBRAS AND MOONBEAMS .
+ 
+    C  
+ AND, UH FAIRY TALES
+G F                  C 
+    THAT'S ALL SHE EVER THINKS ABOUT, 
+          D
+  RIDING WITH THE WIND.
+      E        G
+WHEN I'M SAD, SHE COMES TO ME
+ 
+     A               E
+WITH A THOUSAND SMILES SHE GIVES TO ME FREE.
+ 
+   B          Bb  A C 
+IT'S ALRIGHT, SHE SAYS IT'S ALRIGHT, 
+TAKE ANYTHING YOU WANT FROM ME.
+G F   C D    
+ANYTHING       ANYTHING
+    
+ 
+E    G                  A        E
+      FLY ON LITTLE WING
+ 
+B   Bb  A   C    G   F   C   D   D
+ 
+E                    G
+   YEA, YEA, YEA, YEA   LITTLE BABY
+ 
+A  E`,
+  "When I Come Around": `[Intro] (x2)
+G|----3h4p3-/-----3h4p3---------------3h4------------|
+D|---4------/-4-44----------3h4p3--------------------|
+A|----------/-----------4-44------6-6----2--2-2-22---|
+E|----------/----------------------------------------|
+
+[Verse](x8)
+G|-----3h4p3---------------3h4-----------------------|
+D|-4-44----------3h4p3-------------------------------|
+A|-----------4-44------6-6----2--2-2-22--------------|
+E|---------------------------------------------------|
+[Chorus]
+[Verse](x8) 
+[Chorus]
+[Bridge](x2)
+G|-----3h4p3---------------3h4-----------------------|
+D|-4-44----------3h4p3-------------------------------|
+A|-----------4-44------6-6----2--2-2-22--------------|
+E|---------------------------------------------------|
+
+[Guitar Solo] (x2)
+G|-----3h4p3---------------3h4-----------------------|
+D|-4-44----------3h4p3-------------------------------|
+A|-----------4-44------6-6----2--2-2-22--------------|
+E|---------------------------------------------------|
+[Chorus]
+[Outro](x3)
+G|-----3h4p3---------------3h4-----------------------|
+D|-4-44----------3h4p3-------------------------------|
+A|-----------4-44------6-6----2--2-2-22--------------|
+E|---------------------------------------------------|
+ 
+G|-----3h4p3---------------3h4-----------------------|
+D|-4-44----------3h4p3-------------------------------|
+A|-----------4-44------6-6----2----------------------|
+E|---------------------------------------------------|`,
+  "Brain Stew": `[Main Riff]
+ 
+Gb|-------------------------------------------------|
+Db|-------------------------------------------------|
+Ab|-------------------------------------------------|
+Eb|----5-5----3-3----2-2----1-1--0-0----------------|
+ 
+ 
+[Chorus] (Play the second part on the 
+final repeat going into the verse)
+ 
+Gb|-------------------------------------|--------------------|
+Db|-------------------------------------|-----------------7--|
+Ab|-------------------------------------|--------------------|
+Eb|5-5----3-3----2-2----1-1-----0-0-----|---1-1--0-0--0-5----|
+ 
+ 
+[Outro]
+ 
+Gb|-------------------------------------------------------|
+Db|---7------------5------------4------------3------2-----|
+Ab|-------------------------------------------------------|
+Eb|-5----5--5-5--3----3--3-3--2----2--2-2--1----1-0----0--|`,
+  "Never Been Happier": `[Verse]
+C         E
+...
+
+[Chorus]
+A         F
+...never been happier
+`,
+  "Voodoo Child": `G|--------------------------------|--------------------------------|
+D|--------------------------------|--------0---2---------------2---|
+A|--------------------------------|--------------------0-----------|
+E|--------------------------------|0---0-------------0---0-3-------|
+ 
+G|----------------------------0---|--------------------------------|
+D|0-2-----0---2-------2-----------|--------0---2---------------2---|
+A|------2---------------2---------|--------------------0-----------|
+E|------------------------3-------|0-0---0-----------0---0-3-------|
+ 
+G|--------------------------------|--------4---12------------------|
+D|0-2-----0---2---------------0---|--2-----------------------------|
+A|------------------0---1---2-----|------------------0---1---2-----|
+E|--------------3-----------------|0-------------3-------------3---|
+ 
+G|--------------------------------|--------------------------------|
+D|0-2-----0---2-------2-----------|------------0---------------2---|
+A|------2---------------2-0-------|--------------------0-----------|
+E|--------------------------3-----|0-0---3---0-------0---0-3-------|
+ 
+G|--------------------------------|--------------------------------|
+D|0-2-----2-------------------0---|--------0-----2-------------2---|
+A|------------------0---1-2-------|------------2-------0-----------|
+E|------------3-------------0-----|0---0-------------0---0-3-------|
+ 
+G|--------------------------------|--------------------------------|
+D|0-2-----0---2-------2-------0---|----2---0---2---------------2---|
+A|------2---------------2---2-----|--------------------0-----------|
+E|--------------------------------|0-----------------0---0-3-------|
+ 
+G|--------------------------------|--------------------------------|
+D|0-2-----0---2-------2-----------|------------0---------------2---|
+A|------2---------------2-0-------|--------------------0-----------|
+E|----------------------------3-0-|--0---3---0-------0---0-3-------|
+ 
+G|--------------------------------|--------------------------------|
+D|0-2-----2-------------------0---|--------0---------0---------2---|
+A|------------------0---1-2-------|--------------------------------|
+E|------------3-------------0-----|0-----0-----0-0-----0---3-------|
+ 
+G|--------------------------------|--------------------------------|
+D|--2-----------2-----2-----------|------------0---------------2---|
+A|----------------------2-0-------|--------------------0-----------|
+E|0-----0-3---0---------------3---|0-0---3---0-------0---0-3-------|
+ 
+G|--------------------------------|--------------------------------|
+D|0-2-----2-------------------0---|--------0---------0---------2---|
+A|------------------0---1-2-------|--------------------------------|
+E|------------3-------------0-----|0-----0-----0-0-----0---3-------|`,
+  "Take the Money and Run": `G------------------------------------------------------------------------|
+D------------------------------------------------------------------------|
+A-----------------------3-3-----3-3------3-------------------------------|
+E-3-3---3-1--1-1-----1--------1------------1------3-3----1--1-1--------1-|
+ 
+G---------------------------------------------------------|
+D---------------------------------------------------------|
+A-3-3-------3---3-2----0----------------------------------|
+E--------1------------------3-3--------1---1-1-------1----|
+ 
+G--------------------------------------------------------------|
+D--------------------------------------------------------------|
+A-3---3------3-x--3----3---------------------------------------|
+E-----------------------1--1------3-3--------1--1-1----------1-|
+ 
+G------------------|
+D------------------|
+A-3----3-----1-----|
+E----------------1-|
+ 
+Chorus:
+G-----------------------------------|
+D-----------------------------------|
+A-----------------------------------|
+E---3-3-------1--1-1-------1------x-|
+ 
+G--------------------------------------------------------------|
+D--------------------------------------------------------------|
+A-3-3-------3--------------------------------------------------|
+E------------0----1-----1-2-----2---3---3-----3-1---1---1---1--|
+ 
+G------------------------------------------------------|
+D-----------3------------------------------------------|
+A-3-3-----3-----3--------------------------------------|
+E-----------------1----3-3-------3-3---1-------1-----1-|
+ 
+G----------------------------------------------------------------------------|
+D----------------------------------------------------------------------------|
+A--3-3-------3----3----------------------------------------------------------|
+E-------------1---------1--2------3-----3---------3-1------1-------1-----1-1-|
+ 
+G----------------------|
+D----------------------|
+A-3-3--------1---------|
+E--------------1-------|
+ 
+Second Verse
+2nd Chorus
+Interlude
+Outro`,
+  "Yellow Ledbetter": `[Solo]
+E B A E
+E B
+    A                                               E                                     
+I see. I don't know, there's something else
+                                 B                                                                               
+I wanna drum it all away. Oh, I said I don't, I don't wanna wait
+E
+  on the box or the bag  
+[Chorus]`,
+  "Take Me Away": `[Verse]
+D   Bb   A
+...
+
+[Chorus]
+D   F   C   Bb   A
+...take me away
+`,
+  "Old Love": `G|------||----------------|----------------|----------------|----------------|
+D|--5-7-||----------------|----------------|----2-----------|------------5-7-|
+A|7-----||------5~~~~~----|---------/7-53--|--3---5~~~~~----|----------7-----|
+E|------||5~~~~~----------|3~~~~~3-------53|5---------------|3~~~~~3~~~------|
+ 
+G|----------------|----------------|----------------|----------------||
+D|----------------|----------------|----2-----------|----------------||
+A|------5~~~~~----|---------/7-53--|--3---5~~~~~----|----------------||
+E|5~~~~~----------|3~~~~~3-------53|5---------------|3~~~~~3~~~~~~~~~||
+ 
+  VERSE 1,2:
+G| |----------------|----------------|----------------|----------------|
+D|*|----------------|----------------|----------------|----------------|
+A|*|----------------|----------------|----------------|----------------|
+E| |5~~~~~5~~~~~----|3~~~~~3~~~~~----|5~~~~~1~~~~~----|3~~~~~3~~~~~----|
+ 
+G|----------------|----------------|----------------|----------------|
+D|----------------|----------------|----------------|----------------|
+A|----------------|----------------|----------------|----------------|
+E|5~~~~~5~~~~~----|3~~~~~3~~~~~----|5~~~~~1~~~~~----|3~~~~~3~~~3--2--|
+ 
+G|----------------|----------------|----------------|----------------|
+D|----------------|----------------|7---7-6---------|5-----4~~~~~~~~~|
+A|----------------|----------------|--7-------7-----|----7-----------|
+E|1~~~~~1-1~~~~~~~|0~~~~~0-0~~~~~~~|----------------|----------------|
+ 
+G|----------------|----------------|----------------|----------------||
+D|----------------|----------------|----------------|----------------||
+A|----------------|----------------|----------------|•-•-•-•-•-------||
+E|1~~~~~1-1~~~~~~~|0~~~~~0-0~~~~~~~|1~~~~~1~~~~~~~~~|0-0-0-0-0-------||
+CHORUS 1,2:
+G||----------------|----------------|----------------|----------------|
+D||----------------|----------------|----2-----------|------------5-7-|
+A||------5~~~~~----|---------/7-53--|--3---5~~~~~----|----------7-----|
+E||5~~~~~----------|3~~~~~3-------53|5---------------|3~~~~~3~~~------|
+ 
+G|----------------|----------------|----------------|----------------| |
+D|----------------|----------------|----2-----------|----------------|*|
+A|------5~~~~~----|---------/7-53--|--3---5~~~~~----|----------------|*|
+E|5~~~~~----------|3~~~~~3-------53|5---------------|3~~~~~3~~~------| |
+ 
+  INSTR:
+G||----------------|----------------|----------------|----------------|
+D||----------------|----------------|----------------|------------5-7-|
+A||------5~~~~~----|---------/7-53--|----------------|----------7-----|
+E||5~~~~~----------|3~~~~~3~~-----53|5~~~~~1~~~~~----|3~~~~~3~~~~~----|
+ 
+G|----------------|----------------|----------------|----------------|
+D|----------------|----------------|----------------|----------------|
+A|------5~~~~~----|----------------|----------------|----------------|
+E|5~~~~~----------|3~~~~~3~~~~~----|5~~~~~1~~~~~----|3~~~~~3~~~3--2--|
+ 
+G|----------------|----------------|----------------|----------------|
+D|----------------|----------------|7---7-6---------|5-----4~~~~~~~~~|
+A|----------------|----------------|--7-------7-----|----7-----------|
+E|1~~~~~1-1~~~~~~~|0~~~~~0-0~~~~~~~|----------------|----------------|
+ 
+G|----------------|----------------|----------------|----------------||
+D|----------------|----------------|----------------|----------------||
+A|----------------|----------------|----------------|•-•-•-•-•-------||
+E|1~~~~~1-1~~~~~~~|0~~~~~0-0~~~~~~~|1~~~~~1~~~~~~~~~|0-0-0-0-0-------||`,
+  "Bring It On Home": `G|----------------|----------------|
+D|-------9--7676--|-------9--767---|
+A|--57----------7-|--57------------|
+E|57--0-----------|57--0-----------| 3X
+ 
+G| |----------------|----------------|----------------|----------------|
+D|o|----------------|----------------|----------------|----------------|
+A|o|--------------7-|7--7-7--77------|7--777--------7-|7--7-7-7-7-7----|
+E| |0--0---4-5-7-9-9|----9--9----3-0-|-------4-5-7-9--|----9-------3-0-|
+    Gotta tell you baby...                        Tryin' to love me baby...
+    Tell you pretty baby...                       I'm gonna keep you lovin'...
+G|----------------|----------------|----------------|----------------|
+D|----------------|----------------|----------------|----------------|
+A|7--777--------7-|7--7-7-7-7-7----|7--777-------7--|7--777-4-7------|
+E|-------4-5-7-9--|----9-------3-0-|-------457-79--9|------------3-0-|
+G|---------7-----9|----------------|-----------7---9|----------------|
+D|-------79--9911-|----------------|---------79-911-|----------------|
+A|7--777----------|7--75-----------|7--777-7--------|7--777-5--------|
+E|----------------|-----7-5-4-43-0-|----------------|---------7-53-0-|
+ 
+G|-----------7---9|----------------|----------------|----------------|
+D|---------79-911-|----------------|----------------|-------9--767---|
+A|7--777-7--------|7--777-5--------|7--77--7---775--|--57------------|
+E|----------------|---------7-53-0-|--------------7-|57--0-----------|
+ 
+G|----------------|----------------|----------------|
+D|-------9--7676--|-------9--767---|-------9--7676--|
+A|--57----------7-|--57------------|--57----------7-|
+E|57--0-----------|57--0-----------|57--0-----------|
+ 
+G|----------------|----------------|
+D|-------9--767---|-------9-97676--|
+A|--57------------|--57----------7-|
+E|57--0-----------|57--0-----------|
+  _________________ _________________
+ |1.               |2.
+G|---------------- |----------------|----------------|
+D|-------9-9767---o|-------9--767---|7---------------|
+A|--57------------o|--57------------|----------------|
+E|57--0----------- |57--0-----------|----------------|`,
+  "Time": `[Verse 1]
+F#m                                       A
+Ticking away the moments that make up a dull day
+And you run and you run to catch up with the Sun, but it's sinking;
+E                                          F#m
+Fritter and waste the hours in an offhand way
+Racing around to come up behind you again.
+F#m                                         A
+Kicking around on a piece of ground in your hometown
+The Sun is the same in a relative way, but you're older,
+E                                                 F#m
+Waiting for someone or something to show you the way
+shorter of breath, and one day closer to death.
+ 
+[Chorus]
+D                              A 
+Tired of lying in the sunshine, staying home to watch the rain
+Every year is getting shorter, never seem to find the time.
+D                                  A
+You are young and life is long, and there is time to kill today
+Plans that either come to naught, or half a page of scribbled lines.
+D                              C# 
+     And then one day you find,   ten years have got behind you
+Hanging on in quiet desperation is the English way.
+B                             E
+No one told you when to run ... You missed the starting gun
+ B                               B                     F/B
+The time is gone, the song is over. Thought I'd something more to say.
+ 
+[Guitar Solo] After 1st Chorus
+F#    A    E    F#    x4
+D  A  D  A  D  C# B  E
+  
+[Verse 3]
+E            A
+  Home, home again
+I like to be here when I can
+  When I come home, cold and tired
+It's good to warm my bones beside the fire
+C
+Far away, across the field
+B
+Tolling on the iron bell
+F
+Calls the faithful to their knees
+G                  D      D     B
+To hear the softly spoken magic spell`,
+  "Rock'n Me": `|-----------------|-----------------|-----------------|
+|-----------------|-----------------|-----------------|
+|-----------------|---------------_-|-----------------|
+|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-0-|-5-5-5-5-5-5-5-5-|
+  1 & 2 & 3 & 4 &   1 & 2 & 3 & 4 &   1 & 2 & 3 & 4 &
+ 
+|-----------------|-----------------|-----------------|
+|-----------------|-----------------|-----------------|
+|-----5-------5---|-----------------|-----------------|
+|-5-5---5-5-5---5-|-0-0-0-0-0-0-0-0-|-0-0-0-0-0-0-0-0-|
+  1 & 2 & 3 & 4 &   1 & 2 & 3 & 4 &   1 & 2 & 3 & 4 &
+ 
+|-----------------|-----------------|
+|-----------------|-----------------|
+|-----------------|-----------------|
+|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-7-|
+  1 & 2 & 3 & 4 &   1 & 2 & 3 & 4 &
+ 
+VERSE 2:
+|-----------------|-----------------|-----------------|
+|-----------------|-----------------|-----------------|
+|-----------------|-----------------|-----------------|
+|-5h7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-7-|-5-5-5-5-5-5-5-5-|
+  1 & 2 & 3 & 4 &   1 & 2 & 3 & 4 &   1 & 2 & 3 & 4 &
+ 
+|-----------------|-----------------|-----------------|
+|-----------------|-----------------|-----------------|
+|-----------------|-----------------|-----------------|
+|-5-5-5-5-5-5-5-5-|-0-0-0-0-0-0-0-0-|-0-0-0-0-0-0-0-0-|
+  1 & 2 & 3 & 4 &   1 & 2 & 3 & 4 &   1 & 2 & 3 & 4 &
+ 
+|-----------------|-----------------|
+|-----------------|-----------------|
+|-----------------|-----------------|
+|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-7-|
+  1 & 2 & 3 & 4 &   1 & 2 & 3 & 4 &
+ 
+2ND CHORUS:
+|-----------------|---------------|-----------------|
+|-----------------|-----------6-8-|-----------------|
+|-----------------|---------9-----|-----------------|
+|-5h7-7-7-5h7-7-7-|-5h7-7-7-------|-3h5-5-5-3h5-5-5-|
+  1 & 2 & 3 & 4 &   1 & 2 & 3 & 4   1 & 2 & 3 & 4 &
+ 
+|-----------------|---------------|-----------------|
+|-----------------|---------4-6---|-----------------|
+|-----------------|-------7-------|-----------------|
+|-3h5-5-5-3h5-5-5-|-3h5-5-------4/|-0-0-0-0-0-0-0-0-|
+  1 & 2 & 3 & 4 &   1 & 2 3 & 4 &   1 & 2 & 3 & 4 &
+ 
+|--------------8-|-----------------|---------------|
+|---------9-11---|-----------------|-------6-7-8-9-|
+|----------------|-----------------|---5-7---------|
+|-0-0-0-0--------|-7-7-7-7-7-7-7-7-|-7-------------|
+  1 & 2 & 3 &  4   1 & 2 & 3 & 4 &   1 & 2 & 3 & 4`,
+  "Purple Haze": `[Intro]
+G|---9---9---9---9-|
+D|-----------------|
+A|-7---7---7---7---|
+E|-----------------| x5
+[Verse]
+G|------------------------------------|           |---------------------|
+D|------------------------------------|           |---------------------|
+A|-7-7-7-7-7-7-7/-------------4-5-(7)-|           |-9-7-5--7------7-----|
+E|----------------3-3-3-3-5-5---------| x5        |----------5-5----5-5-| x1
+[Solo]
+ 
+G|-------------------------------------------------|
+D|7-7-7-7-7-7-7-7-9-9-9-9-9-9-9-9------------------|
+A|--------------------------------5-5-5-5-5-5-5-5/-|
+E|-------------------------------------------------| x1
+ 
+G|---------------------------------|
+D|---------------------------------|
+A|-7-7-7-7-7-7-7-7-9-9-9-9-5-5-5-5-|
+E|---------------------------------| x4`,
+  "Gravity": `[Intro/Verse/Solo]
+G|---------------------------------------------------5---------|
+D|-------------------------------------------------5-----------|
+A|--------------------------0-2-3------3----0-3----------------|
+E|--3-------------3-------3--------------3---------------------|
+G|-------------------------------------------------------------|
+D|----------------5--------------------------------------------|
+A|--------------5-------------0-3------3----0-3----------------|
+E|--3---------------------3--------------3---------------------|
+[Chorus]
+G|------------------------------------------7------------------|
+D|----------------7------------------------7-------------------|
+A|--------------7--------------5-------5-7---------5-----------|
+E|--5------------------5---------------------------------------|
+G|-----------------------------------------7-------------------|
+D|------------------------------------7--9------7--------------|
+A|--------------6-----------5-------9-------------5------------|
+E|--6----------------------------------------------------------|`,
+  "Hey Joe": `G|------------|--------------------------|--------7----7------|
+D|------------|--------------------------|----7h9---7h9--9----|
+A|------------|--------------------------|--------------------|
+E|------------|--------------------------|--------------------|
+ 
+ 
+ [1st and 2nd verse]
+G||--------------|-----------------|-------------------|------------------|
+D||--------------|-----------------|-------------------|------------------|
+A||-3---3---2--3-|-5----5-----5--6-|----7-7------5---5-|-7--7--7--7--7-5--|
+E||-------3------|--------5-5------|-----------7---7---|------------------|
+ 
+ 
+ [Guitar Solo]
+G||------------------|-------------------|------------------------|
+D||------------------|-------------------|------------------------|
+A||-3--3-3-----2-3-4-|-5----5-----4-5--6-|-7-7-7-7--7-----5---5h6-|
+E||--------3---------|--------5-5--------|--------------7---7-----|
+ 
+G|----------------------------------||
+D|----------------------------------||
+A|---7--7-7-7-7-7-7-7-7-7-7-7-7-7-7-||
+E|----------------------------------||
+
+ 
+G|----------------|-----------------|------------------|
+D|----------------|-----------------|------------------|
+A|-3--------2-3-4-|-5---------4-5-6-|-7-7--7--5----5-6-|
+E|--0-1-2-3-------|---2-3-4-5-------|--------7---7-----|
+ 
+G|-----------------------------------------|
+D|-----------------------------------------|
+A|----7--7-7-7--7--5/7-7-7-7-5/7--7-7-7----|
+E|-----------------------------------------|
+ 
+G|--------------|-------------------|--------------------------|---------------------|
+D|--------------|-------------------|--------------------------|---------------------|
+A|-3---3---2--3-|-5---5-5-----4-5-6-|--7-7-7--7-7-7----5---5h6-|-7--7--7--7--7-7-7-7-|
+E|-------3------|---------5-5-------|----------------7---7-----|---------------------|
+ 
+G|----------------|------------------|-------------------|---------------------|
+D|----------------|------------------|-------------------|---------------------|
+A|-3---3---2--3-4-|-5----5----5-5--6-|----7-7------5---5-|-7--7--7--7--7-7-----|
+E|-------3--------|---------5--------|-----------7---7---|---------------------|
+ 
+G|---------------|-----------------|----------------------|----------------------------|
+D|---------------|-----------------|----------------------|----------------------------|
+A|-3---3---2--3-|-5----5-----5--6-|---7-7-7------5---5-6-|-7--7--7--7--7--7--7--7------|
+E|-------3-------|--------5-5------|-----------7---7------|----------------------------|
+ 
+G|------------------|
+D|------------------|
+A|-7-7-7-7-7-7-7-7--|
+E|------------------|
+ 
+G|-------------------|-----------------------|----------------------|
+D|-------------------|-----------------------|----------------------|
+A|-3---3-------2-3-4-|-5--5--5/7-------4-5-6-|--7--7--7-7---5---5-6-|
+E|-------3-3-3-------|-----------5-5-5-------|------------7---7-----|
+ 
+G|------------------------------------------|-------------------|--------------------|
+D|------------------------------------------|-------------------|--------------------|
+A|---5/7-7-7-7--5/7--7-7-7-5/7--7-7-7--5/7--|--3---------2-3-4--|-5---------4-5-6----|
+E|------------------------------------------| ---0-1-2-3--------|---2-3-4-5----------|
+ 
+G|---------------------------|--------------------------|-----------------------|
+D|---------------------------|--------------------------|-----------------------|
+A|---7---7-7---7-7---5---5/7-|--7-7-7-5/7--7-7-7-7-7-7-|--3--3-3------2--3/5----|
+E|-----------------7---7-----|--------------------------|----------3-3----------|
+ 
+G|--------------------------|----------------------|--------------------------------|
+D|--------------------------|----------------------|--------------------------------|
+A|----5--5--5/7-----4-5-6/7-|-7-7-7-7-7----5---5-6-|-7-7-7-5/7-7-7-5/7-7-7-5/7-7----|
+E|--------------5-5---------|------------7---7-----|--------------------------------|
+ 
+ 
+[Fade out]
+ 
+G|----------------|-----------------|------------------|
+D|----------------|-----------------|------------------|
+A|-3--------2-3-4-|-5---------4-5-6-|-7-7--7--5----5-6-|
+E|--0-1-2-3-------|---2-3-4-5-------|--------7---7-----|
+ 
+G|-----------------------------------------|
+D|-----------------------------------------|
+A|----7--7-7-7--7--5/7-7-7-7-5/7--7-7-7----|
+E|-----------------------------------------|`,
+  "Joker": `G |-----------------------------------------------------------|
+D |-----------------------0-----------------------------------|
+A |-------------0-1-1---3---3-3-------0--1-1-1-1-1----0-------|
+E |-1-1------3--------------------3---------------------3-----|
+ 
+                    (Intro/Verse Repeat 8X)
+ 
+G |--------------------------------------------|
+D |--------------------------------------------|
+A |---------------1-1--------------------1-1---|
+E |-1-1----------------------1-1---------------|
+ 
+G |--------------------------------------------|
+D |-------------------------3-3----------------|
+A |---------------1-1--------------------1-1---|
+E |-1-1----------------------------------------|
+ 
+           (Chorus: Repeat 3X)
+ 
+G |--------------------------------------------|
+D |-------------------------3-3----------------|
+A |---------------1-1--------------------1-1---|
+E |-1-1----------------------------------------|
+ 
+G |------------------------------------------------------------|
+D |------------------------------------------------------------|
+A |---------------1-1-------3-3----------3-3-3-3-3-3-3-3-3-3-3-|
+E |-1-1--------------------------------------------------------|`,
+  "Summertime Voodoo": `G|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|
+A|-----------------|-----------------|----------5-7----|
+E|-----------------|-----------------|-0-0--0-00-------|
+G|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|
+A|-----------------|-----------------|-----------------|
+E|-0-0-0-0-0-0-0-0-|-3-3-3-3-3-3-3-3-|-2-2-2-2-1-1-1-1-|
+  
+G|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----5-----------|
+A|-----5777---7----|-----5777---7----|-----------------|
+E|-0-0------0------|-0-0------0------|-3—--------------|
+G|-----------------|-----------------|-----------------|
+D|-----4-------3---|-----------------|-----------------|
+A|-----------------|-----7-5-7---7---|-----5-7---10-7--|
+E|-2-----x-x-1-----|-0---------------|-0---------------|
+G|-----------------|-----------------|-----------------|
+D|-----5-----------|-----4--------3--|-----------------|
+A|-----------------|-----------------|-------5-7---7-7-|
+E|-3---------------|-2-----x-x-1-----|-0---0-----------|
+G|-----------------|-----------------|-----------------|
+G|-----------------|-----------------|-----------------|
+A|-----5-7---10-7--|-----------------|-----------------|
+E|-0---------------|-----------------|-----------------|`,
+  "Mary Jane's Last Dance": `[Intro]
+Am   G   D   Am   (x4)
+ 
+[Verses]
+Am                G
+She grew up in an Indiana town
+Well, she moved down here at the age of eighteen
+Well, I don't know, but I've been told
+Oh my my, oh hell yes
+There's pigeons down on Market Square
+      Dsus2                 Am
+Had a good-lookin' mama who never was around
+She blew the boys away, was more than they'd seen
+You never slow down, you never grow old
+Honey, put on that party dress
+She's standin' in her underwear
+        Am                   G
+But she grew up tall and she grew up right
+I was introduced and we both started groovin'
+I'm tired of screwing up, I'm tired of going down
+Buy me a drink, sing me a song,
+Lookin' down from a hotel room
+          Dsus2              Am
+With them Indiana boys on an Indiana night
+She said, "I dig you baby but I got to keep movin'on,keep movin’ on"
+Tired of myself, tired of this town
+Take me as I come 'cause I can't stay long
+Nightfall will be comin' soon
+ 
+Am   G   Dsus2   Am   (x2) w/harmonica
+ 
+ 
+[Chorus]
+Em7
+Last dance with Mary Jane
+Em7                         A
+One more time to kill the pain
+Em7
+I feel summer creepin' in and I'm
+Em7                   A    G
+Tired of this town again
+  
+[Solo]
+Am   G   Dsus2   Am   (x4)`,
+  "Wind Cries Mary": `[Intro]
+G|-------------|----------|
+D|*--1--2--3---|---------*|
+A|*------------|--r------*|
+E|-------------|----------|
+[Verse]                             (3x)                                 (2x)
+G|------------------|-----------------|---0-0-0-0----------|--------------|
+D|------------0--1--|-3---3-r---33-3--|*-------------------|--1-2-3--r---*|
+A|-3--3-2-1---------|-----------------|*-----------1-1-1-1-|-------------*|
+E|------------------|-----------------|--------------------|--------------|
+[Guitar Solo]
+ [F]       [Eb]       [Bb]         [Ab]
+G|--------------------|----------------------------|
+D|*-3-3-3-3--1-1-1-1--|---------3-----------3-----*| [play 3x]
+A|*-------------------|-1-1--/5---5\\-----/5---5\\--*|
+E|--------------------|--------------4-4-----------|
+ [G]                  [Bb]               [Db]                 [F]
+G|-0-0-0-0-0-0-0-0\\-|------------------|--------------------|-------------------|
+D|------------------|------------------|--------------------|*-3-3-3-3-3-3-3-3-*|
+A|------------------|-1-1-1-1-1-1-1-1\\-|-4-4-4-4-4-4-4-4-4\\-|*-----------------*|
+E|------------------|------------------|--------------------|-------------------|`,
+  "Ohio": ` [Intro/Verse]
+G|---------------|| ---7--------- ||
+D|---------------||*-------------*||
+A|--5--5--8------||*-5-----8-----*||
+E|-----------8p5-|| ---------8p5- ||
+ [Chorus] (Noodle in C and G)
+G|-----------------------------------|
+D|-----------------------------------|
+A|------------------3-3-3-3-3-3-3-3--| X4
+E|--3-3-3-3-3-3-3-3------------------|
+
+G|-----------------------------------------------------|
+D|----------------------------12-12-12-12-12-12-12-12--|
+A|--5-5-5-5-5-5-5-5-5-5-5-5----------------------------|
+E|-----------------------------------------------------|
+ [Last Verse/Outro]
+G|---------------|| ----7--7-5--------------- ||
+D|---------------||*-----------7-5-----------*||
+A|--5--5--8------||*-5-------------8-8-------*||
+E|-----------8p5-|| -------------------8-8p5- ||
+
+Tin soldiers and Nixon's coming | We're finally on our own
+This summer I hear the drumming | Four dead in Ohio
+Gotta get down to it
+Soldiers are cutting us down
+Should have been done long ago
+What if you knew her and
+found her dead on the ground?
+How can you run when you know?
+Fa la la la la la la la (x4)
+Verse
+Chorus`,
+  "Twist and Shout": `G|-------- ------- ----4-- -------|------- ------- ------- -------|
+D|---------4-------5-------5---7--|----7---7---7---7---5---4------|
+A|-5-----------5------------------|----------------------------7--|
+E|--------------------------------|5------------------------------|
+ 
+ 
+ 
+G|------- ------- ----4-- -------|------- ------- ------- -------|
+D|--------4-------5-------5---7--|----7---7---7---7---7---7---7--|
+A|5-----------5------------------|-------------------------------|
+E|-------------------------------|5------------------------------|
+ 
+G|------- ------- ------- -------|------- ------- ------- -------|
+D|7---7---7---7---7---7---7---7--|7---7---7---7---7---7---7---7--|
+A|-------------------------------|-------------------------------|
+E|-------------------------------|-------------------------------|
+  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ 
+ 
+G|------- ------- ------- -------|------- ------- ------- -------|
+D|7------------------------------|-------------------------------|
+A|-------------------------------|-------------------------------|
+E|-----5-----6----7----8-----9---|10--------------10-------------|`,
+};
+
+const BANTER = {
+  "American Girl": `Tom Petty wrote it in California, but everyone swears it’s about Florida. He said nope — just wanted a universal story.`,
+  "Seven Nation Army": `Jack White wrote it while bored at a soundcheck and originally wanted it for a Bond theme. Imagine this riff over James Bond sneaking around.`,
+  "Gold on the Ceiling": `Black Keys wrote it about feeling uneasy with fame — but everyone thinks it’s just about money and success.`,
+  "Gimme Three Steps": `True story: Ronnie Van Zant once danced with the wrong guy’s girl at a bar and had to ask for “three steps toward the door” to not get shot.`,
+  "Sunshine of Your Love": `Eric Clapton and Jack Bruce wrote it after seeing Jimi Hendrix live and feeling “we need to step it up.”`,
+  "Crossroads": `Based on Robert Johnson’s “Cross Road Blues” — legend says he met the devil there to get his guitar skills.`,
+  "Pride and Joy": `Stevie Ray Vaughan wrote this as a love song to his girlfriend. He’d joke that if they broke up, he’d have to stop playing it… so hopefully the vibe stays good tonight.`,
+  "Superstition": `Stevie Wonder created the drum groove by messing around with a clavinet riff in the studio — it was originally meant for Jeff Beck.`,
+  "In Bloom": `Nirvana wrote this to poke fun at people who loved their music but didn’t actually get the lyrics.`,
+  "Little Wing": `Hendrix wrote it after seeing an entire festival vibe together at Monterey Pop — said it felt like a little magical fairy floating around.`,
+  "When I Come Around": `Green Day’s first big mainstream hit — Billie Joe Armstrong wrote it about his girlfriend while on tour and homesick.`,
+  "Brain Stew": `Billie Joe said this riff came to him when he couldn’t sleep… fitting since the song’s about insomnia.`,
+  "Voodoo Child": `Jimi Hendrix recorded this in one take after a jam session. Pure wizardry.`,
+  "Take the Money and Run": `Steve Miller wrote this outlaw love story in one night. It was so fun he didn’t even edit it.`,
+  "Yellow Ledbetter": `Eddie Vedder said this song is intentionally hard to understand — it’s basically a mumble jam about a friend who died in the Gulf War.`,
+  "Old Love": `Eric Clapton co-wrote this with Robert Cray about heartbreak after his split from Pattie Boyd (George Harrison’s ex). Tough year for her playlist.`,
+  "Bring It On Home": `Willie Dixon wrote this; Led Zeppelin loved it so much they… borrowed heavily (and later got sued).`,
+  "Time": `Pink Floyd used actual clocks they found in an antique shop to create that opening. Alan Parsons synced them by hand — no DAWs back then!`,
+  "Rock'n Me": `Steve Miller wrote this as a friendly jab back at critics who said he was “too happy” in his songs.`,
+  "Purple Haze": `Hendrix said it was inspired by a vivid dream where he was walking underwater. Psychedelia level: maxed out.`,
+  "Gravity": `John Mayer said this song keeps him from “flying away” — a reminder not to let success mess you up.`,
+  "Hey Joe": `Fun fact: Jimi Hendrix’s first single ever. It didn’t hit the charts until after he moved to London and blew up.`,
+  "Joker": `Steve Miller said the famous “pompatus of love” lyric? Totally made up. Doesn’t mean anything.`,
+  "Summertime Voodoo": `Great summer jam — the term “voodoo” got popular in blues music because it sounded dangerous and cool, not because anyone was actually doing magic.`,
+  "Mary Jane's Last Dance": `Recorded during a greatest hits session. Tom Petty said it wasn’t about weed, but… everyone else says sure, Tom.`,
+  "Wind Cries Mary": `Hendrix wrote it after a fight with his girlfriend Kathy Etchingham (nickname “Mary”). Flowers, apology… and one of his best ballads.`,
+  "Ohio": `Neil Young wrote this just days after the Kent State shootings. Crosby, Stills, Nash & Young recorded and released it in less than two weeks.`,
+  "Twist and Shout": `John Lennon shredded his voice recording this in one take — he had a cold and couldn’t do another.`,
+};
+
+
+let state={setIdx:0,view:"list",songSetIdx:0,songIdx:0,wakeLock:null,notesOpen:false,editing:false,present:false,presSize:22};
+const $=(id)=>document.getElementById(id);
+const setTabsEl=$("setTabs"), listView=$("listView"), songView=$("songView");
+
+/* ---- edit persistence: localStorage with in-memory fallback ---- */
+const STORE_KEY="eod_songbook_edits_v1";
+let EDITS={};
+function loadEdits(){try{const r=localStorage.getItem(STORE_KEY);if(r)EDITS=JSON.parse(r)||{};}catch(e){EDITS={};}}
+function persistEdits(){try{localStorage.setItem(STORE_KEY,JSON.stringify(EDITS));}catch(e){}}
+function getBody(t){return Object.prototype.hasOwnProperty.call(EDITS,t)?EDITS[t]:(BODIES[t]||"");}
+function hasEdit(t){return Object.prototype.hasOwnProperty.call(EDITS,t);}
+
+function renderTabs(){
+  setTabsEl.innerHTML="";
+  SHOW.sets.forEach((set,i)=>{
+    const btn=document.createElement("button");
+    btn.className="set-tab"+(set.tuningKey==="eb"?" eb":"")+(i===state.setIdx?" active":"");
+    btn.innerHTML=set.name+'<span class="count">'+set.songs.length+' SONGS</span><span class="tuning">'+set.tuning+'</span>';
+    btn.addEventListener("click",()=>{state.setIdx=i;state.view="list";render();});
+    setTabsEl.appendChild(btn);
+  });
+}
+
+function renderList(){
+  const set=SHOW.sets[state.setIdx], isEb=set.tuningKey==="eb";
+  listView.innerHTML='<div class="set-header '+(isEb?"eb":"")+'"><h2>'+set.name+'</h2><span class="tuning-chip">'+set.tuning+'</span></div><div id="songRows"></div>';
+  const rows=$("songRows");
+  set.songs.forEach((song,i)=>{
+    const row=document.createElement("div");
+    row.className="song-row";
+    const b=[];
+    if(song.original)b.push('<span class="badge">ORIGINAL</span>');
+    if(song.repeat)b.push('<span class="badge repeat">REPEAT x'+(song.repeat+1)+'</span>');
+    if(song.tuningFlag)b.push('<span class="badge tuning-flag">Eb SONG</span>');
+    const lb=getBody(song.t);
+    if(!lb||!lb.trim())b.push('<span class="badge empty">NO CHART</span>');
+    else if(hasEdit(song.t))b.push('<span class="badge edited">EDITED</span>');
+    row.innerHTML='<div class="num">'+String(i+1).padStart(2,"0")+'</div><div class="title">'+esc(song.t)+b.join("")+'</div><div class="meta">'+(song.key?esc(song.key):"")+'</div>';
+    row.addEventListener("click",()=>openSong(state.setIdx,i));
+    rows.appendChild(row);
+  });
+}
+
+function renderSong(){
+  const set=SHOW.sets[state.songSetIdx], song=set.songs[state.songIdx];
+  $("songPosition").textContent=set.name+" - "+String(state.songIdx+1).padStart(2,"0")+" / "+String(set.songs.length).padStart(2,"0")+" - "+set.tuning.toUpperCase();
+  $("songTitle").textContent=song.t;
+  const chips=[];
+  if(song.key)chips.push('<span class="chip key">KEY '+esc(song.key)+'</span>');
+  chips.push('<span class="chip tuning">'+esc(set.tuning)+'</span>');
+  if(song.original)chips.push('<span class="chip original">ORIGINAL</span>');
+  if(song.tuningFlag)chips.push('<span class="chip warn">EB SONG IN STD SET</span>');
+  if(hasEdit(song.t))chips.push('<span class="chip edited">EDITED</span>');
+  $("songChips").innerHTML=chips.join("");
+  // banter
+  const banter=BANTER[song.t];
+  const notesBtn=$("btnNotes"), notesEl=$("songNotes");
+  if(banter){
+    notesBtn.style.display="";
+    notesEl.innerHTML='<span class="lbl">Show Notes</span>'+esc(banter);
+    notesEl.classList.toggle("show",state.notesOpen);
+    notesBtn.classList.toggle("active",state.notesOpen);
+  }else{
+    notesBtn.style.display="none";
+    notesEl.classList.remove("show");
+  }
+  // body
+  const body=getBody(song.t), bodyEl=$("songBody");
+  if(body&&body.trim()){
+    bodyEl.innerHTML=fmt(body);
+  }else{
+    bodyEl.innerHTML='<div class="empty">No chord chart or lyrics yet.<code>Tap EDIT to add one</code></div>';
+  }
+  bodyEl.scrollTop=0;
+  const next=peekNext();
+  $("nextTitle").textContent=next?next.t:"End of show";
+  $("nextTitle").classList.toggle("end",!next);
+}
+
+function fmt(text){
+  return text.split("\n").map((line)=>{
+    const m=line.match(/^\s*\[(.+?)\]\s*$/);
+    if(m)return '<div class="section">'+esc(m[1])+'</div>';
+    return esc(line);
+  }).join("\n");
+}
+
+function openSong(s,i){state.songSetIdx=s;state.songIdx=i;state.view="song";state.notesOpen=false;state.editing=false;songView.classList.remove("editing");$("btnEdit").classList.remove("active");render();}
+function peekNext(){
+  const set=SHOW.sets[state.songSetIdx];
+  if(state.songIdx+1<set.songs.length)return set.songs[state.songIdx+1];
+  if(state.songSetIdx+1<SHOW.sets.length)return SHOW.sets[state.songSetIdx+1].songs[0];
+  return null;
+}
+function goNext(){
+  const set=SHOW.sets[state.songSetIdx];
+  if(state.songIdx+1<set.songs.length){state.songIdx++;}
+  else if(state.songSetIdx+1<SHOW.sets.length){state.songSetIdx++;state.songIdx=0;}
+  else return;
+  state.notesOpen=false;render();
+}
+function goPrev(){
+  if(state.songIdx>0){state.songIdx--;}
+  else if(state.songSetIdx>0){state.songSetIdx--;state.songIdx=SHOW.sets[state.songSetIdx].songs.length-1;}
+  else return;
+  state.notesOpen=false;render();
+}
+function backToList(){state.setIdx=state.songSetIdx;state.view="list";render();}
+
+function render(){
+  renderTabs();
+  if(state.view==="list"){listView.classList.add("active");songView.classList.remove("active");renderList();}
+  else{songView.classList.add("active");listView.classList.remove("active");renderSong();}
+}
+
+document.addEventListener("keydown",(e)=>{
+  if(state.present&&e.key==="Escape"){exitPresent();e.preventDefault();return;}
+  if(state.editing){if(e.key==="Escape"){cancelEdit();e.preventDefault();}return;}
+  if(state.view!=="song"){
+    if(e.key==="Enter"&&state.view==="list"){openSong(state.setIdx,0);e.preventDefault();}
+    return;
+  }
+  switch(e.key){
+    case "ArrowRight":case "PageDown":case " ":goNext();e.preventDefault();break;
+    case "ArrowLeft":case "PageUp":goPrev();e.preventDefault();break;
+    case "Home":case "Escape":backToList();e.preventDefault();break;
+  }
+});
+$("tapLeft").addEventListener("click",()=>{if(!state.editing)goPrev();});
+$("tapRight").addEventListener("click",()=>{if(!state.editing)goNext();});
+let tsX=0,tsY=0;
+document.addEventListener("touchstart",(e)=>{if(state.view!=="song"||state.editing)return;tsX=e.touches[0].clientX;tsY=e.touches[0].clientY;},{passive:true});
+document.addEventListener("touchend",(e)=>{
+  if(state.view!=="song"||state.editing)return;
+  const dx=e.changedTouches[0].clientX-tsX, dy=e.changedTouches[0].clientY-tsY;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){if(dx<0)goNext();else goPrev();}
+},{passive:true});
+$("btnPrev").addEventListener("click",goPrev);
+$("btnNext").addEventListener("click",goNext);
+$("btnBack").addEventListener("click",backToList);
+$("btnNotes").addEventListener("click",()=>{state.notesOpen=!state.notesOpen;renderSong();});
+$("footBack").addEventListener("click",()=>{if(state.view==="song"&&!state.editing)backToList();});
+$("footHelp").addEventListener("click",showHelp);
+
+/* ---- editor ---- */
+function curSong(){return SHOW.sets[state.songSetIdx].songs[state.songIdx];}
+function enterEdit(){
+  state.editing=true;
+  $("editorArea").value=getBody(curSong().t);
+  songView.classList.add("editing");
+  $("btnEdit").classList.add("active");
+  setTimeout(()=>{$("editorArea").focus();},60);
+}
+function exitEdit(){
+  state.editing=false;
+  songView.classList.remove("editing");
+  $("btnEdit").classList.remove("active");
+}
+function saveEdit(){
+  EDITS[curSong().t]=$("editorArea").value;
+  persistEdits();exitEdit();renderSong();toast("Saved");
+}
+function cancelEdit(){exitEdit();renderSong();}
+function revertEdit(){
+  const t=curSong().t;
+  if(hasEdit(t)){delete EDITS[t];persistEdits();}
+  exitEdit();renderSong();toast("Reverted to built-in");
+}
+$("btnEdit").addEventListener("click",()=>{if(state.editing)cancelEdit();else enterEdit();});
+$("edSave").addEventListener("click",saveEdit);
+$("edCancel").addEventListener("click",cancelEdit);
+$("edRevert").addEventListener("click",revertEdit);
+
+/* ---- toast ---- */
+let toastTimer=null;
+function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),1600);}
+
+/* ---- export ---- */
+function download(filename,text,type){
+  const blob=new Blob([text],{type:type||"text/plain"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},600);
+}
+function buildFullHtml(){
+  const merged=Object.assign({},BODIES);
+  for(const k in EDITS)if(Object.prototype.hasOwnProperty.call(EDITS,k))merged[k]=EDITS[k];
+  const block="const BODIES = "+JSON.stringify(merged,null,2)+";";
+  return PRISTINE.replace(/const BODIES = \{[\s\S]*?\n\};/,block);
+}
+$("footExport").addEventListener("click",()=>$("exportModal").classList.add("show"));
+$("optClose").addEventListener("click",()=>$("exportModal").classList.remove("show"));
+$("exportModal").addEventListener("click",(e)=>{if(e.target===$("exportModal"))$("exportModal").classList.remove("show");});
+$("optFull").addEventListener("click",()=>{download("eod-songbook.html",buildFullHtml(),"text/html");$("exportModal").classList.remove("show");toast("Songbook downloaded");});
+$("optJson").addEventListener("click",()=>{download("eod-songbook-edits.json",JSON.stringify(EDITS,null,2),"application/json");$("exportModal").classList.remove("show");toast("Edits exported");});
+$("optCopy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(JSON.stringify(EDITS,null,2));toast("Copied");}catch(e){toast("Copy not available");}$("exportModal").classList.remove("show");});
+$("optClear").addEventListener("click",()=>{if(confirm("Clear all local edits and revert every song to its built-in chart?")){EDITS={};persistEdits();$("exportModal").classList.remove("show");render();toast("Edits cleared");}});
+
+/* ---- presentation / stage mode ---- */
+function applyPresSize(){document.documentElement.style.setProperty("--pres-size",state.presSize+"px");}
+function enterPresent(){
+  if(state.view!=="song")openSong(state.setIdx,0);
+  if(state.editing)cancelEdit();
+  state.present=true;document.body.classList.add("present");applyPresSize();
+  const el=document.documentElement, req=el.requestFullscreen||el.webkitRequestFullscreen;
+  if(req){try{const p=req.call(el);if(p&&p.catch)p.catch(()=>{});}catch(e){}}
+  if(("wakeLock" in navigator)&&!state.wakeLock){toggleWake();}
+}
+function exitPresent(){
+  state.present=false;document.body.classList.remove("present");
+  const ex=document.exitFullscreen||document.webkitExitFullscreen;
+  if((document.fullscreenElement||document.webkitFullscreenElement)&&ex){try{ex.call(document);}catch(e){}}
+}
+$("footPresent").addEventListener("click",enterPresent);
+$("presExit").addEventListener("click",exitPresent);
+$("presBigger").addEventListener("click",()=>{state.presSize=Math.min(44,state.presSize+2);applyPresSize();});
+$("presSmaller").addEventListener("click",()=>{state.presSize=Math.max(13,state.presSize-2);applyPresSize();});
+function onFsChange(){if(!(document.fullscreenElement||document.webkitFullscreenElement)&&state.present)exitPresent();}
+document.addEventListener("fullscreenchange",onFsChange);
+document.addEventListener("webkitfullscreenchange",onFsChange);
+applyPresSize();
+
+async function toggleWake(){
+  if(state.wakeLock){await state.wakeLock.release().catch(()=>{});state.wakeLock=null;$("wakePill").classList.remove("active");$("footWake").textContent="KEEP AWAKE";return;}
+  if(!("wakeLock" in navigator)){alert("Screen wake lock not supported here. Set Auto-Lock to Never in iPad Settings > Display for the show.");return;}
+  try{
+    state.wakeLock=await navigator.wakeLock.request("screen");
+    $("wakePill").classList.add("active");$("footWake").textContent="AWAKE ON";
+    state.wakeLock.addEventListener("release",()=>{$("wakePill").classList.remove("active");$("footWake").textContent="KEEP AWAKE";state.wakeLock=null;});
+  }catch(err){alert("Could not lock screen: "+err.message);}
+}
+$("footWake").addEventListener("click",toggleWake);
+document.addEventListener("visibilitychange",async()=>{
+  if(state.wakeLock!==null&&document.visibilityState==="visible"){try{state.wakeLock=await navigator.wakeLock.request("screen");}catch(e){}}
+});
+
+function showHelp(){
+  alert("EAST ON DIVISION SONGBOOK\n\nPedal / keys:\n  Next: Right / PageDown / Space\n  Prev: Left / PageUp\n  Back: Home / Esc\n\nTouch:\n  Tap right third: next\n  Tap left third: prev\n  Swipe left/right: next/prev\n\nPRESENT: stage mode - hides chrome, big text, A-/A+ to size it. EXIT or Esc to leave.\nEDIT: change a song's chart. Saved on this device.\nEXPORT: back up edits or download a fresh file with edits baked in.\nNOTES: song trivia/banter.\n\nAdd to Home Screen for full-screen mode.\nTap KEEP AWAKE before the set.");
+}
+
+function esc(s){return String(s).replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
+const PRISTINE='<!doctype html>\n'+document.documentElement.outerHTML;
+loadEdits();
+render();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
