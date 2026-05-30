@@ -2427,7 +2427,7 @@ document.addEventListener("visibilitychange",async()=>{
 
 $("btnRequest").addEventListener("click",()=>{
   const q=prompt("Song name:");
-  if(q&&q.trim())window.open("https://www.google.com/search?q="+encodeURIComponent(q.trim()+" bass tab"),"_blank");
+  if(q&&q.trim())window.open("https://www.ultimate-guitar.com/search.php?search_type=title&value="+encodeURIComponent(q.trim()+" bass"),"_blank");
 });
 
 function esc(s){return String(s).replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
