@@ -71,10 +71,11 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
 .song-notes{margin:14px 24px 0;border:1px solid var(--line);border-left:2px solid var(--yellow);border-radius:2px;background:rgba(255,206,24,0.05);font-family:var(--body);font-size:14px;line-height:1.55;color:var(--text);padding:12px 16px;display:none;}
 .song-notes.show{display:block;}
 .song-notes .lbl{display:block;font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--yellow);margin-bottom:6px;}
-.song-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 18px 16px;font-family:var(--mono);font-size:14px;line-height:1.3;white-space:pre-wrap;word-break:break-word;color:var(--text);}
-.song-body .section{color:var(--teal);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;margin:5px 0 1px;padding-bottom:1px;border-bottom:1px solid var(--line);}
+.song-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 18px 16px;font-family:var(--mono);color:var(--text);}
+.song-inner{font-size:14px;line-height:1.3;white-space:pre-wrap;word-break:break-word;}
+.song-body .section{color:var(--teal);font-size:0.8em;letter-spacing:0.18em;text-transform:uppercase;margin:5px 0 1px;padding-bottom:1px;border-bottom:1px solid var(--line);}
 .chord-markers{display:block;line-height:1;margin:2px 0 0;}
-.chord-chip{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--yellow);letter-spacing:0.1em;padding:1px 4px;border:1px solid rgba(255,206,24,0.3);border-radius:2px;margin-right:4px;}
+.chord-chip{display:inline-block;font-family:var(--mono);font-size:0.72em;color:var(--yellow);letter-spacing:0.1em;padding:1px 4px;border:1px solid rgba(255,206,24,0.3);border-radius:2px;margin-right:4px;}
 .song-body .empty{color:var(--text-dim);font-style:italic;padding:40px 0;text-align:center;font-family:var(--body);font-size:14px;letter-spacing:0.05em;}
 .song-body .empty code{display:block;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:0.1em;font-style:normal;}
 .tap-zone{position:absolute;top:0;bottom:0;width:26%;z-index:1;}
@@ -2510,18 +2511,19 @@ function renderSong(){
   // body
   const body=getBody(song.t), bodyEl=$("songBody");
   if(body&&body.trim()){
-    bodyEl.innerHTML=fmt(body);
+    bodyEl.innerHTML='<div id="songInner" class="song-inner">'+fmt(body)+'</div>';
   }else{
     bodyEl.innerHTML='<div class="empty">No chord chart or lyrics yet.</div>';
   }
   bodyEl.scrollTop=0;
+  autoFit();
   const next=peekNext();
   $("nextTitle").textContent=next?next.t:"End of show";
   $("nextTitle").classList.toggle("end",!next);
 }
 
 function fmt(text){
-  const lines=text.split("\n");
+  const lines=text.split("\n").map((l)=>l.replace(/\s+$/,""));
   const out=[];
   const isTab=(l)=>/^[EADGBe]\|/.test(l.trim())|| /^[EADGBe]-/.test(l.trim());
   const isChordLine=(l)=>/^\s*(\[[A-G][#b]?\][\s]*)+\s*$/.test(l);
@@ -2556,6 +2558,31 @@ function peekNext(){
   if(state.songIdx+1<set.songs.length)return set.songs[state.songIdx+1];
   if(state.songSetIdx+1<SHOW.sets.length)return SHOW.sets[state.songSetIdx+1].songs[0];
   return null;
+}
+const FIT={MIN:11,MAX:20,REF:16};
+function autoFit(){
+  const box=$("songBody"), inner=$("songInner");
+  if(!inner)return;
+  const cs=getComputedStyle(box);
+  const availW=box.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+  const availH=box.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+  if(availW<=0||availH<=0)return;
+  // measure natural content at a reference size (inline-block+pre = shrink-wrap, no wrap)
+  inner.style.fontSize=FIT.REF+"px";
+  inner.style.display="inline-block";inner.style.whiteSpace="pre";
+  const cW=inner.offsetWidth, cH=inner.offsetHeight;
+  inner.style.display="";inner.style.whiteSpace="";
+  if(!cW||!cH)return;
+  const scale=Math.min(availW/cW,availH/cH);
+  let fs=Math.max(FIT.MIN,Math.min(FIT.MAX,FIT.REF*scale));
+  inner.style.fontSize=fs.toFixed(2)+"px";
+  // section margins/borders are fixed px (don't scale with font), so correct any
+  // residual height overflow by nudging down to the floor — keeps borderline charts one page
+  let guard=0;
+  while(fs>FIT.MIN && box.scrollHeight>box.clientHeight+2 && guard++<12){
+    fs=Math.max(FIT.MIN,fs-0.5);
+    inner.style.fontSize=fs.toFixed(2)+"px";
+  }
 }
 function hasOverflow(){
   const el=$("songBody");
@@ -2628,6 +2655,10 @@ $("btnPrev").addEventListener("click",goPrev);
 $("btnNext").addEventListener("click",goNext);
 $("btnNotes").addEventListener("click",()=>{state.notesOpen=!state.notesOpen;renderSong();});
 $("footBack").addEventListener("click",backToList);
+let fitTimer=null;
+function scheduleRefit(){clearTimeout(fitTimer);fitTimer=setTimeout(()=>{if(state.view==="song")autoFit();},120);}
+window.addEventListener("resize",scheduleRefit);
+window.addEventListener("orientationchange",scheduleRefit);
 
 /* ---- clock ---- */
 function tickClock(){
