@@ -99,7 +99,7 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
 <div id="app">
   <header>
     <div class="brand"><span class="mark">EAST ON DIVISION</span><span class="sub">Songbook</span></div>
-    <div class="show-meta"><div><b>May 30, 2026</b></div><div>Flavor on Wheels - Portland, IN</div></div>
+    <div class="show-meta"><div><b>June 24, 2026</b></div><div>Working Set (3 Sets + Eb Close)</div></div>
   </header>
   <nav class="set-tabs" id="setTabs"></nav>
   <main>
@@ -138,37 +138,37 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
    ============================================================ */
 
 const SHOW = {
-  date:"2026-05-30",
-  venue:"Flavor on Wheels Festival - Hudson Park, Portland, IN",
+  date:"2026-06-24",
+  venue:"Working Set (3 Sets + Eb Close)",
   sets:[
     {name:"Set 1",tuning:"Standard",tuningKey:"std",songs:[
-      {t:"Born Under a Bad Sign"},{t:"American Girl"},{t:"Seven Nation Army"},
-      {t:"Gold on the Ceiling"},{t:"Deuce"},
-      {t:"How You Wanna Be",original:true,key:"A G D / A E"},
-      {t:"Red House"},{t:"Gimme Three Steps"},{t:"Creep"},{t:"Sunshine of Your Love"},
-      {t:"Saving Grace",original:true,key:"B"},{t:"Crossroads"}
+      {t:"Hey Joe"},{t:"Take the Money and Run"},{t:"A Little Less Conversation"},
+      {t:"Never Been Happier",original:true,tuningFlag:true,key:"C E A F"},
+      {t:"Yellow Ledbetter"},{t:"Purple Haze"},{t:"Rock'n Me"},{t:"Gravity"},
+      {t:"Crossroads"},
+      {t:"I'm Older but I'm Not Grown",original:true,key:"G / D C Em G"},
+      {t:"Ohio"},
+      {t:"Saving Grace",original:true,key:"B"}
     ]},
-    {name:"Set 2",tuning:"Eb / Half-Step Down",tuningKey:"eb",songs:[
-      {t:"Pride and Joy"},{t:"Superstition"},
-      {t:"Wildfire",original:true,key:"A D / A G D"},
-      {t:"In Bloom"},{t:"Little Wing"},{t:"When I Come Around"},{t:"Brain Stew"},
-      {t:"Never Been Happier",original:true,key:"C E A F"},{t:"Voodoo Child"}
+    {name:"Set 2",tuning:"Standard",tuningKey:"std",songs:[
+      {t:"Sunshine of Your Love"},
+      {t:"How You Wanna Be",original:true,key:"A G D / A E"},
+      {t:"Time"},{t:"Seven Nation Army"},{t:"American Girl"},{t:"Gimme Three Steps"},
+      {t:"Wildfire",original:true,tuningFlag:true,key:"A D / A G D"},
+      {t:"Creep"},
+      {t:"Take Me Away",original:true,key:"D Bb A / D F C Bb A"},
+      {t:"Bring It On Home"}
     ]},
     {name:"Set 3",tuning:"Standard",tuningKey:"std",songs:[
-      {t:"Take the Money and Run"},{t:"Yellow Ledbetter"},
-      {t:"Take Me Away",original:true,key:"D Bb A / D F C Bb A"},
-      {t:"Old Love"},{t:"Bring It On Home"},{t:"Time"},{t:"Rock'n Me"},
-      {t:"Purple Haze"},{t:"Gravity"}
+      {t:"Sunflower Eyes",original:true},
+      {t:"Joker"},{t:"Deuce"},{t:"Gold on the Ceiling"},
+      {t:"All Summer Long"},{t:"Sweet Home Alabama"},
+      {t:"Biting My Tongue",original:true,key:"G#m"},
+      {t:"Old Love"},
+      {t:"Let Me Sleep",original:true}
     ]},
-    {name:"Set 4",tuning:"Standard",tuningKey:"std",songs:[
-      {t:"Hey Joe"},{t:"Joker"},
-      {t:"How You Wanna Be",original:true,repeat:1,key:"A G D / A E"},
-      {t:"Wildfire",original:true,repeat:2,tuningFlag:true,key:"A D / A G D"},
-      {t:"Summertime Voodoo",tuningFlag:true},
-      {t:"Mary Jane's Last Dance"},{t:"Wind Cries Mary"},
-      {t:"Never Been Happier",original:true,repeat:2,tuningFlag:true,key:"C E A F"},
-      {t:"Take Me Away",original:true,repeat:3,key:"D Bb A / D F C Bb A"},
-      {t:"Ohio"},{t:"Twist and Shout"}
+    {name:"Eb Close",tuning:"Eb / Half-Step Down",tuningKey:"eb",songs:[
+      {t:"Superstition"},{t:"Pride and Joy"},{t:"Little Wing"},{t:"Voodoo Child"}
     ]},
     {name:"Extras",tuning:"Various",tuningKey:"std",songs:[
       {t:"Interstate Love Song"},{t:"Slow Dancing in a Burning Room"},
@@ -2199,6 +2199,12 @@ G|-----------------------------------------------------
 D|-----------------------------------------------------
 A|-----------------------------------------------------
 E|-7-7-7-7-7-7-7-7---7-7-7-7-7-7-7-7---7-7-7-7-7-7-7-7-`,
+  "Let Me Sleep": `[New original - chart TBD]
+
+[Verse]
+
+[Chorus]
+`,
 };
   
 const BANTER = {
