@@ -2568,9 +2568,14 @@ function isAtBottom(){
 function isAtTop(){
   return $("songBody").scrollTop<=2;
 }
+function pageStep(el){
+  // advance ~one screen, keeping a little overlap so no line is skipped
+  return Math.max(el.clientHeight-64,Math.round(el.clientHeight*0.6));
+}
 function goNext(){
   if(hasOverflow()&&!isAtBottom()){
-    $("songBody").scrollTo({top:$("songBody").scrollHeight,behavior:"smooth"});
+    const el=$("songBody");
+    el.scrollTo({top:Math.min(el.scrollTop+pageStep(el),el.scrollHeight),behavior:"smooth"});
     return;
   }
   const set=SHOW.sets[state.songSetIdx];
@@ -2581,7 +2586,8 @@ function goNext(){
 }
 function goPrev(){
   if(hasOverflow()&&!isAtTop()){
-    $("songBody").scrollTo({top:0,behavior:"smooth"});
+    const el=$("songBody");
+    el.scrollTo({top:Math.max(el.scrollTop-pageStep(el),0),behavior:"smooth"});
     return;
   }
   if(state.songIdx>0){state.songIdx--;}
