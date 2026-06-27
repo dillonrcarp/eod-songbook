@@ -2611,7 +2611,8 @@ function autoFit(){
   const box=$("songBody"), inner=$("songInner");
   if(!inner)return;
   const cs=getComputedStyle(box);
-  const availW=box.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+  // -16: small right-side margin so width-limited charts don't butt the edge / wrap by a char
+  const availW=box.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)-16;
   const availH=box.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
   if(availW<=0||availH<=0)return;
   // measure natural content at a reference size (inline-block+pre = shrink-wrap, no wrap)
