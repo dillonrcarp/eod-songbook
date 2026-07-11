@@ -76,6 +76,7 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
 .song-body .section{color:var(--teal);font-size:0.8em;letter-spacing:0.18em;text-transform:uppercase;margin:5px 0 1px;padding-bottom:1px;border-bottom:1px solid var(--line);}
 .chord-markers{display:block;line-height:1;margin:2px 0 0;}
 .chord-chip{display:inline-block;font-family:var(--mono);font-size:0.72em;color:var(--yellow);letter-spacing:0.1em;padding:1px 4px;border:1px solid rgba(255,206,24,0.3);border-radius:2px;margin-right:4px;}
+.song-body .hl{background:var(--text);color:var(--bg);border-radius:2px;padding:0 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone;}
 .song-body .empty{color:var(--text-dim);font-style:italic;padding:40px 0;text-align:center;font-family:var(--body);font-size:14px;letter-spacing:0.05em;}
 .song-body .empty code{display:block;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:0.1em;font-style:normal;}
 .tap-zone{position:absolute;top:0;bottom:0;width:26%;z-index:1;}
@@ -180,7 +181,7 @@ const SHOW = {
       {t:"Comfortably Numb"},{t:"Long Way to the Top"},
       {t:"Moby Dick / Rock and Roll"},{t:"Sky Is Crying"},
       {t:"Simple Man"},{t:"Sweet Home Alabama"},{t:"Set You Free"},
-      {t:"Big Balls"},{t:"Fire"},{t:"Let Them Talk"},
+      {t:"Big Balls"},{t:"The Jack"},{t:"Fire"},{t:"Let Them Talk"},
       {t:"Feel Like Makin' Love"},{t:"A Little Less Conversation"},
       {t:"All Summer Long"},{t:"Hell Is Empty",original:true,key:"G#m"}
     ]}
@@ -2082,6 +2083,107 @@ They're such big balls | And they're dirty big balls
 And he's got big balls | And she's got big balls
      C             D       A             B  N.C.
 (But we've got the biggest balls of them all)`,
+  "The Jack": `[Intro]
+B  A  B  A
+B  A  E
+A Bb B
+
+[Verses]
+(V1 plain / V2 highlighted — same chords)
+                E
+She gave me the Queen
+{{Poker face was her name}}
+                E
+She gave me the King
+{{Poker face was her nature}}
+                     E
+She was wheelin' and dealin'
+{{Poker straight was her game}}
+               E
+Just doin' her thing
+{{If she knew she could get you}}
+                  A
+She was holdin' a pair
+{{She played 'em fast}}
+             A
+But I had to try
+{{And she played 'em hard}}
+              A
+Her Deuce was wild
+{{She could close her eyes}}
+               A
+But my Ace was high
+{{And feel every card}}
+
+[Pre-Choruses]
+(PC1 plain / PC2 highlighted)
+    E
+But how was I to know
+{{But how was I to know}}
+                E
+That she'd been dealt with before?
+{{That she'd been shuffled before?}}
+           E
+Said she'd never had a Full House
+{{Said she'd never had a Royal Flush}}
+E
+ But I should have known
+{{ But I should have known}}
+         A
+From the tattoo on her left leg
+{{That all the cards were coming}}
+        A
+And the garter on her right
+{{From the bottom of the pack}}
+      A
+She'd have the card to bring me down
+{{And if I'd known what she was dealing out}}
+A
+ If she played it right
+{{ I'd have dealt it back}}
+
+[Chorus]
+              E
+She's got the jack, she's got the jack
+              E
+She's got the jack, she's got the jack
+              A
+She's got the jack, she's got the jack
+              E
+She's got the jack, she's got the jack
+              B                       A
+She's got the jack, jack, jack, jack, jack, jack, jack
+              E         A Bb B
+She's got the jack
+
+[Solo]
+E  A  E
+B  A  E
+A Bb B
+
+[Breakdown]
+               E
+She's got the (jack)
+She's got the (jack)
+                       E
+Ooh it was a bad deal (jack)
+She gave me the (jack) Eh
+               A
+She's got the (jack)
+She's got the (jack)
+               E
+She's got the (jack)
+Ooh can't you tell she's got the (jack)
+B                       A
+Jack, jack, jack, jack, jack, jack, jack
+              E              A Bb B
+She's got the jack
+
+[Outro]
+F   E    (Boo!)
+Thank you, thank you people... I'm glad you liked the show
+          E
+Good night and God bless`,
   "All Summer Long": `[Intro]
 D  C  G    x4
 [Verse 1]
@@ -2576,6 +2678,9 @@ function fmt(text){
   const isChordLine=(l)=>/^\s*(\[[A-G][#b]?\][\s]*)+\s*$/.test(l);
   let groupStart=null;
   for(let i=0;i<lines.length;i++){
+    // {{...}} → highlighted line (interleaved alternate verse, distinct color)
+    const hl=lines[i].match(/^\{\{(.*)\}\}$/);
+    if(hl){out.push('<span class="hl">'+esc(hl[1])+'</span>');groupStart=null;continue;}
     // chord marker lines like " [D]    [A]    [D]" → inline chips
     if(isChordLine(lines[i])){
       const chords=[...lines[i].matchAll(/\[([A-G][#b]?)\]/g)].map(m=>m[1]);
