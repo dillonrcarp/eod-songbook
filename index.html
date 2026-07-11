@@ -77,6 +77,7 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
 .chord-markers{display:block;line-height:1;margin:2px 0 0;}
 .chord-chip{display:inline-block;font-family:var(--mono);font-size:0.72em;color:var(--yellow);letter-spacing:0.1em;padding:1px 4px;border:1px solid rgba(255,206,24,0.3);border-radius:2px;margin-right:4px;}
 .song-body .hl{background:var(--text);color:var(--bg);border-radius:2px;padding:0 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone;}
+.song-body .hl2{background:var(--teal);color:var(--bg);border-radius:2px;padding:0 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone;}
 .song-body .empty{color:var(--text-dim);font-style:italic;padding:40px 0;text-align:center;font-family:var(--body);font-size:14px;letter-spacing:0.05em;}
 .song-body .empty code{display:block;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:0.1em;font-style:normal;}
 .tap-zone{position:absolute;top:0;bottom:0;width:26%;z-index:1;}
@@ -178,7 +179,7 @@ const SHOW = {
       {t:"Nutshell"},{t:"Nutshell (Tabs)"},{t:"Let The Band Play (Tab)"},
       {t:"King of the Hill Theme"},{t:"Chicken Fried"},
       {t:"Folsom Prison Blues"},{t:"Wagon Wheel"},
-      {t:"Comfortably Numb"},{t:"Long Way to the Top"},
+      {t:"Comfortably Numb"},{t:"Drive"},{t:"Long Way to the Top"},
       {t:"Moby Dick / Rock and Roll"},
       {t:"Simple Man"},{t:"Sweet Home Alabama"},{t:"Set You Free"},
       {t:"Big Balls"},{t:"The Jack"},{t:"Fire"},{t:"Let Them Talk"},
@@ -388,22 +389,23 @@ A-----0h2-----0h2-|-----0h2-----3-2-|-0---0----0------|-/9---9--------0|
 E-----------------|-----------------|---0---0----2----|----------------|`,
   "Creep": `[Intro]
 G B C C
+(V1 plain / V2 white / V3 teal)
                            G                              B
 1 When you were here before, couldn't look you in the eyes
-2 I don't care if it hurts, I wanna have control
-3 Whatever makes you happy, whatever you want
+{{2 I don't care if it hurts, I wanna have control}}
+[[3 Whatever makes you happy, whatever you want]]
                            C                         C
 1 You're just like an angel, your skin makes me cry
-2 I want a perfect body, I want a perfect soul
-3 You're so very special, I wish I was special
+{{2 I want a perfect body, I want a perfect soul}}
+[[3 You're so very special, I wish I was special]]
                           G                      B
 1 You float like a feather in a beautiful world
-2 I want you to notice when I'm not around
-3 But I'm a creep, I'm a weirdo
+{{2 I want you to notice when I'm not around}}
+[[3 But I'm a creep, I'm a weirdo]]
                       C                          C
 1 I wish I was special, you're so very special
-2 You're so very special, I wish I was special
-3 What the hell am I doing here? I don't belong here
+{{2 You're so very special, I wish I was special}}
+[[3 What the hell am I doing here? I don't belong here]]
 
 Intro Verse Chorus Verse Chorus Bridge Verse Chorus
 
@@ -430,6 +432,59 @@ G|----------|
 D|-5/7--7/9-|
 A|----------|
 E|----------|`,
+  "Drive": `[Intro]
+Em  G  C  Am  x4
+
+[Verse 1 + 2]
+(V1 plain / V2 highlighted)
+Em     G        C                Am
+   Sometimes, I feel the fear of
+     Em        G              C  Am
+   uncertainty stinging clear.
+{{   So if I decide to waiver my chance to be one of the hive}}
+Em     G       C              Am
+   And I can't help but ask myself
+                 Em           G                  C     Am
+   how much I'll let the fear take the wheel and steer
+{{   will I choose water over wine and hold my own and drive?}}
+
+[Pre-Chorus 1 + 2]
+(PC1 plain / PC2 highlighted)
+C                   A7                           C
+   It's driven me before, and it seems to have a vague,
+{{   It's driven me before and it seems to be the way}}
+   A7
+   haunting mass appeal
+{{   that everyone else gets around}}
+C             A7                         C
+   But lately I'm beginning to find that I
+{{   But lately I'm beginning to find that when}}
+                 A7
+   should be the one behind the wheel.
+{{   I drive myself my light is found}}
+
+[Chorus]
+Em     G       C     Am           Em       G
+   Whatever tomorrow brings, I'll be there
+             C             Am
+   with open arms and open eyes, yeah
+Em     G       C     Am           Em       G
+   Whatever tomorrow brings, I'll be there
+        C        Am
+   I'll be there
+
+[Interlude]
+Em  G  C  Am  x4
+
+[Pre-Chorus 3]
+C            A7                C
+   Would you choose water over wine...
+A7                        A7
+Hold the wheel and drive?
+
+[Outro]
+Em  G  C  Am  x4
+C   A7`,
   "Sunshine of Your Love": `
 [Intro]
 |-7-7-5-7-------------------------|
@@ -1002,18 +1057,19 @@ D|-------9-9767---o|-------9--767---|7---------------|
 A|--57------------o|--57------------|----------------|
 E|57--0----------- |57--0-----------|----------------|`,
   "Time": `[Verse 1]
+(V1 plain / V2 highlighted)
 F#m                                       A
 Ticking away the moments that make up a dull day
-And you run and you run to catch up with the Sun, but it's sinking;
+{{And you run and you run to catch up with the Sun, but it's sinking;}}
 E                                          F#m
 Fritter and waste the hours in an offhand way
-Racing around to come up behind you again.
+{{Racing around to come up behind you again.}}
 F#m                                         A
 Kicking around on a piece of ground in your hometown
-The Sun is the same in a relative way, but you're older,
+{{The Sun is the same in a relative way, but you're older,}}
 E                                                 F#m
 Waiting for someone or something to show you the way
-shorter of breath, and one day closer to death.
+{{shorter of breath, and one day closer to death.}}
 
  [Chorus]
 D                              A 
@@ -1447,15 +1503,20 @@ C#|---------------------------------------------------------------------5----7--
 G#|----3------------------0-------------0-----3------------------0---7-----7-------|
 D#|---------0--3----3--0-------0--3--0-------------3--0----3--0--------------------|`,
   "Sweet Home Alabama": `[Intro] D C G  x4
-[Verse]
+[Verse 1 + 2]
+(V1 plain / V2 highlighted)
 D     C            G
   Big wheels keep on turning
+{{  In Birmingham they love the Gov'nor, boo-hoo-hoo (F C D)}}
 D          C              G
   Carry me home to see my kin
+{{  Now we all did what we could do}}
 D         C               G
   Singing songs about the south land
+{{  Now watergate does not bother me}}
 D               C          G
   I miss 'ole' 'bamy once again and I think it's a sin
+{{  Does your conscience bother you (tell the truth!)}}
 
 [Interlude] D C G x2
 
@@ -1470,15 +1531,8 @@ F C
 D C G
 D C G
 
-[Verse]
-D           C                 G        F   C   D
-  In Birmingham they love the Gov'nor, boo-hoo-hoo
-(D)          C                 G
-  Now we all did what we could do
-D          C                 G
-  Now watergate does not bother me
-D          C                     G
-  Does your conscience bother you (tell the truth!)
+[Verse 2]
+(the highlighted lines from Verse 1 + 2 above)
 
 [Chorus]
 D         C     G    D          C             G
@@ -1570,33 +1624,34 @@ D|----------------|----------------|-------4----------|----------------|
 A|-----4-1----1-2-|-4-------4-----4|-3-2-------2-1----|----1-2-4-2-1---|
 E|-2-------2-4----|-----4-------4--|---------------4-2|-2-4----------4-|`,
   "Jester (BF)": `[Verse 1]
+(V1 plain / V2 highlighted)
 F#m
 Like a jester at the ball
-Lord, I live to entertain
+{{Lord, I live to entertain}}
                                A
 Rub my shoulders with the kings
-All my pride is in my praise
+{{All my pride is in my praise}}
            E
 And I was draped in gold and velvet
-I hum along with this vibration
+{{I hum along with this vibration}}
 Bathing in applause
              F#m
 While I was jumping through the rings
-And hope to God I make it, mmh
+{{And hope to God I make it, mmh}}
 
 And then the cooks would sound a bell
-If any chord that I could strum
+{{If any chord that I could strum}}
                                    A
 And all the kings would lick their lips
-Made me feel less like a man
+{{Made me feel less like a man}}
       E
 But I couldn't find a placemat
-I'd slam my fingers in the doorway
+{{I'd slam my fingers in the doorway}}
 The dinner table's full
-And shatter all the bones
+{{And shatter all the bones}}
                F#m
 And there's no room for me to sit
-So I could never strum again
+{{So I could never strum again}}
 
 [Chorus]
  D                           E                    F#m
@@ -1862,9 +1917,9 @@ It's a long way to the top if you wanna rock 'n' roll
 It's a long way to the top if you wanna rock 'n' roll
       A                                       D
 If you think it's easy doing one night stands
-If you wanna be a star of stage and screen
+{{If you wanna be a star of stage and screen}}
 Try playing in a rock 'n' roll band
-Look out, it's rough and mean
+{{Look out, it's rough and mean}}
       G               D                            A
 It's a long way to the top if you wanna to rock 'n' roll [x4]
 
@@ -2549,18 +2604,19 @@ E|5--5-5-5--7-7-7--7-7-7--7-7-7---------|
   "All Summer Long": `[Intro]
 D  C  G    x4
 [Verse 1]
+(V1 plain / V2 highlighted)
        D  C                   G
 It was 1989, my thoughts were short, my hair was long
-Splashin' through the sandbar, talkin' by the campfire
+{{Splashin' through the sandbar, talkin' by the campfire}}
 D                  C               G
 Caught somewhere between a boy and man
-It's the simple things in life like when and where
+{{It's the simple things in life like when and where}}
 D        C             G
 She was 17 and she was far from in between
-We didn't have no internet, but man, I never will forget
+{{We didn't have no internet, but man, I never will forget}}
        D             C        G
 It was summertime in Northern Michigan
-The way the moonlight shined upon her hair
+{{The way the moonlight shined upon her hair}}
 
 [Instrumental]
 D  C  G    x2
@@ -2578,18 +2634,19 @@ Singin' Sweet Home Alabama all summer long
 Singin' Sweet Home Alabama all summer long
 
 [Verse 3]
+(V3 plain / V4 highlighted)
          D                C                  G
 Catchin' walleye from the dock, watchin' the waves roll off the rocks
-Now nothin' seems as strange as when the leaves began to change
+{{Now nothin' seems as strange as when the leaves began to change}}
           D             C             G
 She'll forever hold a spot inside my soul
-Or how we thought those days would never end
+{{Or how we thought those days would never end}}
       D             C                G
 We'd blister in the sun, we couldn't wait for night to come
-Sometimes I hear that song and I'll start to sing along
+{{Sometimes I hear that song and I'll start to sing along}}
    D                 C                  G
 To hit that sand and play some rock and roll
-And think man, I'd love to see that girl again
+{{And think man, I'd love to see that girl again}}
 
 [Chorus]
 [Verse 4]
@@ -2702,15 +2759,20 @@ Chorus: F#m  D  Bm  F#m  E  D  E
 Bridge: F#m  E  D  E  F#m
 Solo: F#m  E  B  F#m  E
 
-[Verse 1]
+[Verse 1 + 2]
+(V1 plain / V2 highlighted)
 F#m                            D
 I used to measure my worth in what strangers thought
+{{You dressed your critiques up as "just being kind"}}
       Bm                       F#m
 Fed on validation like it could be bought
+{{But your kindness was acid in a valentine}}
 F#m                            D
 You called me "too much," said I should shrink a bit
+{{Tried to tune out the noise and keep myself small}}
       Bm                            F#m
 But I'm a wildfire now, you can choke on the smoke of it
+{{But you lost all your power when I stopped listening at all}}
 
 [Pre-Chorus]
 D                      E
@@ -2731,14 +2793,7 @@ I cannot bear what you've made me become
 I'm done biting my tongue
 
 [Verse 2]
-               F#m             D
-You dressed your critiques up as "just being kind"
-Bm                     F#m
-But your kindness was acid in a valentine
-             F#m              D
-Tried to tune out the noise and keep myself small
- Bm                                F#m
-But you lost all your power when I stopped listening at all
+(the highlighted lines from Verse 1 + 2 above)
 
 [Pre-Chorus]
 You wanted quiet, you wanted control
@@ -3040,9 +3095,11 @@ function fmt(text){
   const isChordLine=(l)=>/^\s*(\[[A-G][#b]?\][\s]*)+\s*$/.test(l);
   let groupStart=null;
   for(let i=0;i<lines.length;i++){
-    // {{...}} → highlighted line (interleaved alternate verse, distinct color)
+    // {{...}} / [[...]] → highlighted line (interleaved alternate verse, distinct color)
     const hl=lines[i].match(/^\{\{(.*)\}\}$/);
     if(hl){out.push('<span class="hl">'+esc(hl[1])+'</span>');groupStart=null;continue;}
+    const hl2=lines[i].match(/^\[\[(.*)\]\]$/);
+    if(hl2){out.push('<span class="hl2">'+esc(hl2[1])+'</span>');groupStart=null;continue;}
     // chord marker lines like " [D]    [A]    [D]" → inline chips
     if(isChordLine(lines[i])){
       const chords=[...lines[i].matchAll(/\[([A-G][#b]?)\]/g)].map(m=>m[1]);
