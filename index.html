@@ -159,6 +159,7 @@ const SHOW = {
       {t:"Biting My Tongue",original:true,key:"G#m"},
       {t:"Ohio"},
       {t:"Saving Grace",original:true,key:"B"},
+      {t:"Little Wing"},
       {t:"Sunshine of Your Love"},
       {t:"How You Wanna Be",original:true,key:"A G D / A E"},
       {t:"Seven Nation Army"},{t:"American Girl"},{t:"Gimme Three Steps"},
@@ -180,7 +181,7 @@ const SHOW = {
       {t:"Big Balls"},{t:"The Jack"},{t:"Fire"},{t:"Let Them Talk"},
       {t:"Feel Like Makin' Love"},{t:"A Little Less Conversation"},
       {t:"All Summer Long"},{t:"Hell Is Empty",original:true,key:"G#m"},
-      {t:"Little Wing"},{t:"Let Me Sleep",original:true},
+      {t:"Let Me Sleep",original:true},
       {t:"Born Under a Bad Sign"},{t:"Red House"},{t:"In Bloom"},
       {t:"When I Come Around"},{t:"Brain Stew"},{t:"Summertime Voodoo"},
       {t:"Mary Jane's Last Dance"},{t:"Wind Cries Mary"}
@@ -3120,6 +3121,27 @@ const $=(id)=>document.getElementById(id);
 const setTabsEl=$("setTabs"), listView=$("listView"), songView=$("songView");
 
 function getBody(t){return BODIES[t]||"";}
+
+/* Catalog integrity check: every chart must live in at least one set, and
+   every set song must have a chart. Orphaned charts aren't reachable in the
+   app; charts-less set songs render empty. Logs loudly so nothing slips in
+   silently when songs are added. Returns the report for window.__catalogCheck. */
+function checkCatalog(){
+  const inSet=new Set();
+  SHOW.sets.forEach(s=>s.songs.forEach(sg=>inSet.add(sg.t)));
+  const orphanCharts=Object.keys(BODIES).filter(t=>!inSet.has(t));
+  const chartlessSongs=[];
+  SHOW.sets.forEach(s=>s.songs.forEach(sg=>{if(!(sg.t in BODIES))chartlessSongs.push(s.name+" → "+sg.t);}));
+  const report={orphanCharts,chartlessSongs,ok:!orphanCharts.length&&!chartlessSongs.length};
+  if(orphanCharts.length)
+    console.warn("[Songbook] "+orphanCharts.length+" chart(s) not in any set (add to Extras):\n  "+orphanCharts.join("\n  "));
+  if(chartlessSongs.length)
+    console.error("[Songbook] "+chartlessSongs.length+" set song(s) have no chart:\n  "+chartlessSongs.join("\n  "));
+  if(report.ok)console.info("[Songbook] Catalog OK — "+Object.keys(BODIES).length+" charts, all reachable.");
+  window.__catalogCheck=report;
+  return report;
+}
+checkCatalog();
 
 function renderTabs(){
   setTabsEl.innerHTML="";
