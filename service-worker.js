@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'eod-songbook-v33';
+const CACHE_VERSION = 'eod-songbook-v34';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
@@ -33,6 +33,16 @@ self.addEventListener('activate', (event) => {
 // Fetch: network-first for navigation, cache-first for Google Fonts, stale-while-revalidate for assets
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
+
+  // Live gig feed: always network, never cache (so the header never freezes)
+  if (url.hostname === 'eastondivision.com' && url.pathname.startsWith('/data/')) {
+    event.respondWith(
+      fetch(event.request).catch(() =>
+        new Response('[]', { headers: { 'Content-Type': 'application/json' } })
+      )
+    );
+    return;
+  }
 
   // Google Fonts: cache-first (stylesheets + woff2 files)
   if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {

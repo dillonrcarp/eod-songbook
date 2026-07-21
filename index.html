@@ -102,7 +102,7 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
 <div id="app">
   <header>
     <div class="brand"><span class="mark">EAST ON DIVISION</span><span class="sub">Songbook</span></div>
-    <div class="show-meta"><div><b>June 24, 2026</b></div><div>Working Set (3 Sets + Eb Close)</div></div>
+    <div class="show-meta" id="showMeta"><div><b>Jul 25, 2026</b></div><div>B&amp;B Farms Chuckwagon Races · Bryant, IN</div></div>
   </header>
   <nav class="set-tabs" id="setTabs"></nav>
   <main>
@@ -3251,6 +3251,45 @@ $("btnRequest").addEventListener("click",()=>{
 function esc(s){return String(s).replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
 render();
+
+/* Header gig info: next upcoming show, pulled live from the band site's
+   Facebook-fed feed (eastondivision.com/data/events.json). Cached to
+   localStorage so it still shows offline; the static markup in #showMeta is
+   the last-resort fallback. Cache-busted so the service worker can't freeze it. */
+(function(){
+  const el=document.getElementById("showMeta");
+  if(!el||!window.fetch) return;
+  const M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function fmt(ev){
+    const d=new Date(ev.start_time);
+    const date=M[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
+    let v=String(ev.name||"").replace(/^East on Division\s*@\s*/i,"").split(" | ")[0];
+    let city=""; const m=v.match(/^(.*?)\s+in\s+(.+)$/);
+    if(m){v=m[1].trim();city=m[2].trim();}
+    if(v.length>28)v=v.slice(0,27)+"…";
+    return {date:date, line2:city?v+" · "+city:v};
+  }
+  function paint(info){
+    el.innerHTML="";
+    const a=document.createElement("div"), b=document.createElement("b");
+    b.textContent=info.date; a.appendChild(b);
+    const c=document.createElement("div"); c.textContent=info.line2;
+    el.appendChild(a); el.appendChild(c);
+  }
+  try{const cache=JSON.parse(localStorage.getItem("eod_nextgig")||"null"); if(cache&&cache.date)paint(cache);}catch(e){}
+  fetch("https://eastondivision.com/data/events.json?_="+Date.now(),{cache:"no-store"})
+    .then((r)=>r.ok?r.json():Promise.reject())
+    .then((list)=>{
+      const now=Date.now();
+      const up=(list||[])
+        .filter((e)=>e&&e.start_time&&new Date(e.end_time||e.start_time).getTime()>=now)
+        .sort((a,b)=>new Date(a.start_time)-new Date(b.start_time));
+      if(!up.length)return;
+      const info=fmt(up[0]); paint(info);
+      try{localStorage.setItem("eod_nextgig",JSON.stringify(info));}catch(e){}
+    })
+    .catch(()=>{});
+})();
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
