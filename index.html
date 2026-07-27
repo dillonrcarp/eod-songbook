@@ -50,7 +50,7 @@ main{flex:1;display:flex;min-height:0;}
 .set-header h2{font-family:var(--display);font-size:44px;letter-spacing:0.06em;line-height:1;color:var(--text);}
 .set-header .tuning-chip{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--teal);color:var(--teal);border-radius:2px;}
 .set-header.eb .tuning-chip{border-color:var(--orange);color:var(--orange);}
-.song-row{position:relative;display:grid;grid-template-columns:44px 1fr auto 34px;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s;}
+.song-row{position:relative;display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s;}
 .song-row:active{background:var(--bg-card);}
 .song-row .num{font-family:var(--mono);font-size:12px;color:var(--text-dim);letter-spacing:0.08em;}
 .song-row .title{font-family:var(--display);font-size:22px;letter-spacing:0.04em;color:var(--text);}
@@ -68,14 +68,11 @@ main{flex:1;display:flex;min-height:0;}
 .list-view.editing .song-row{padding-left:34px;cursor:default;}
 .list-view.editing .song-row .grip{opacity:1;pointer-events:auto;}
 .song-row.dragging{background:var(--bg-card);opacity:0.95;box-shadow:0 8px 24px rgba(0,0,0,0.55);border-radius:4px;}
-.song-row.drop-hint{box-shadow:inset 0 2px 0 var(--teal);}
-.row-menu-btn{width:30px;height:30px;border:0;background:transparent;color:var(--text-dim);font-size:20px;line-height:1;cursor:pointer;border-radius:4px;padding:0;justify-self:end;}
-.row-menu-btn:hover{color:var(--text);background:var(--bg-card);}
-.menu-backdrop{position:fixed;inset:0;z-index:99;}
-.row-menu-pop{position:fixed;z-index:100;background:var(--bg-card);border:1px solid var(--line);border-radius:6px;box-shadow:0 12px 34px rgba(0,0,0,0.6);padding:6px;min-width:190px;max-width:280px;}
-.row-menu-pop .hdr{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-dim);padding:7px 12px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.row-menu-pop button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--text);font-family:var(--body);font-size:14px;padding:10px 12px;border-radius:4px;cursor:pointer;}
-.row-menu-pop button:hover{background:var(--bg-elev);}
+.song-row.to-move{opacity:0.6;box-shadow:inset 3px 0 0 var(--teal);}
+.set-tab.drop-target{background:rgba(104,201,206,0.18);color:var(--text);box-shadow:inset 0 0 0 2px var(--teal);}
+.set-tab.eb.drop-target{background:rgba(229,137,36,0.18);box-shadow:inset 0 0 0 2px var(--orange);}
+.edit-hint{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--text-dim);padding:0 24px 12px;line-height:1.5;}
+.edit-hint span{color:var(--teal);}
 .song-view{flex-direction:column;background:var(--bg);}
 .song-head{position:relative;z-index:20;padding:12px 18px 10px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
 .song-head .position{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;}
@@ -3906,7 +3903,6 @@ function resetArrangement(){
   if(!confirm("Reset every set to the default order? Your custom moves and ordering will be cleared."))return;
   try{localStorage.removeItem(ARRANGE_KEY);}catch(e){}
   SHOW.sets.forEach((s,i)=>{s.songs=DEFAULT_SETS[i].songs.map(x=>({...x}));});
-  closeRowMenu();
   render();
 }
 function moveSongToSet(fromIdx,songIdx,toIdx){
@@ -3918,45 +3914,25 @@ function moveSongToSet(fromIdx,songIdx,toIdx){
   render();
 }
 
-/* ---- three-dot move menu ---- */
-function closeRowMenu(){
-  if(window.__rowMenu){window.__rowMenu.back.remove();window.__rowMenu.pop.remove();window.__rowMenu=null;}
-}
-function openRowMenu(btn,songIdx){
-  closeRowMenu();
-  const cur=state.setIdx, song=SHOW.sets[cur].songs[songIdx];
-  if(!song)return;
-  const back=document.createElement("div");back.className="menu-backdrop";
-  const pop=document.createElement("div");pop.className="row-menu-pop";
-  const hdr=document.createElement("div");hdr.className="hdr";
-  hdr.textContent='Move “'+song.t+'” to';
-  pop.appendChild(hdr);
-  let targets=0;
-  SHOW.sets.forEach((s,idx)=>{
-    if(idx===cur)return;
-    targets++;
-    const b=document.createElement("button");
-    b.textContent=s.name;
-    b.addEventListener("click",()=>{closeRowMenu();moveSongToSet(cur,songIdx,idx);});
-    pop.appendChild(b);
-  });
-  if(!targets){const e=document.createElement("div");e.className="hdr";e.textContent="No other sets";pop.appendChild(e);}
-  document.body.appendChild(back);document.body.appendChild(pop);
-  const r=btn.getBoundingClientRect();
-  const top=Math.min(window.innerHeight-pop.offsetHeight-10, r.bottom+6);
-  const left=Math.max(10, Math.min(window.innerWidth-pop.offsetWidth-10, r.right-pop.offsetWidth));
-  pop.style.top=top+"px";pop.style.left=left+"px";
-  back.addEventListener("click",closeRowMenu);
-  window.__rowMenu={back,pop};
-}
-
-/* ---- pointer-based drag reorder (works on touch + mouse) ---- */
+/* ---- pointer-based drag: reorder within a set, or drop onto a set tab
+        to move a song to another set (works on touch + mouse) ---- */
 let drag=null;
+function clearTabTargets(){
+  setTabsEl.querySelectorAll(".set-tab.drop-target").forEach(t=>t.classList.remove("drop-target"));
+}
+function tabIndexAt(x,y){
+  const tabs=[...setTabsEl.querySelectorAll(".set-tab")];
+  for(let i=0;i<tabs.length;i++){
+    const b=tabs[i].getBoundingClientRect();
+    if(x>=b.left&&x<=b.right&&y>=b.top&&y<=b.bottom)return i;
+  }
+  return -1;
+}
 function startDrag(e,row){
   if(!state.editList)return;
   e.preventDefault();e.stopPropagation();
   const rows=$("songRows");
-  drag={row,rows,id:e.pointerId};
+  drag={row,rows,id:e.pointerId,overSet:null};
   row.classList.add("dragging");
   try{row.setPointerCapture(e.pointerId);}catch(_){}
   document.addEventListener("pointermove",onDragMove);
@@ -3965,7 +3941,18 @@ function startDrag(e,row){
 }
 function onDragMove(e){
   if(!drag)return;
-  const y=e.clientY;
+  const x=e.clientX, y=e.clientY;
+  // over a different set tab? -> mark as a cross-set move, don't reorder rows
+  const ti=tabIndexAt(x,y);
+  clearTabTargets();
+  if(ti>=0&&ti!==state.setIdx){
+    drag.overSet=ti;
+    setTabsEl.querySelectorAll(".set-tab")[ti].classList.add("drop-target");
+    drag.row.classList.add("to-move");
+    return;
+  }
+  drag.overSet=null;
+  drag.row.classList.remove("to-move");
   const others=[...drag.rows.querySelectorAll(".song-row")].filter(r=>r!==drag.row);
   let ref=null;
   for(const r of others){const box=r.getBoundingClientRect();if(y<box.top+box.height/2){ref=r;break;}}
@@ -3978,7 +3965,13 @@ function endDrag(e){
   document.removeEventListener("pointermove",onDragMove);
   document.removeEventListener("pointerup",endDrag);
   document.removeEventListener("pointercancel",endDrag);
-  d.row.classList.remove("dragging");
+  d.row.classList.remove("dragging","to-move");
+  clearTabTargets();
+  if(d.overSet!=null&&d.overSet!==state.setIdx){
+    // cross-set move: splice from original index (set.songs untouched during drag)
+    moveSongToSet(state.setIdx,+d.row.dataset.idx,d.overSet);
+    return;
+  }
   const order=[...d.rows.querySelectorAll(".song-row")].map(r=>+r.dataset.idx);
   const set=SHOW.sets[state.setIdx];
   const changed=order.some((v,i)=>v!==i);
@@ -4029,7 +4022,8 @@ function renderList(){
     +'<button id="editToggle" class="list-tool-btn'+(state.editList?' active':'')+'">'+(state.editList?'Done':'Reorder')+'</button>'
     +(state.editList?'<button id="resetOrder" class="list-tool-btn">Reset</button>':'')
     +'</div>';
-  listView.innerHTML='<div class="set-header '+(isEb?"eb":"")+'"><h2>'+esc(set.name)+'</h2><span class="tuning-chip">'+esc(set.tuning)+'</span>'+tools+'</div><div id="songRows"></div>';
+  const hint=state.editList?'<div class="edit-hint">Drag <span>&#9776;</span> to reorder — or drop a song onto a set tab above to move it there.</div>':'';
+  listView.innerHTML='<div class="set-header '+(isEb?"eb":"")+'"><h2>'+esc(set.name)+'</h2><span class="tuning-chip">'+esc(set.tuning)+'</span>'+tools+'</div>'+hint+'<div id="songRows"></div>';
   const rows=$("songRows");
   set.songs.forEach((song,i)=>{
     const row=document.createElement("div");
@@ -4044,15 +4038,13 @@ function renderList(){
     row.innerHTML='<div class="grip" aria-hidden="true">&#9776;</div>'
       +'<div class="num">'+String(i+1).padStart(2,"0")+'</div>'
       +'<div class="title">'+esc(song.t)+b.join("")+'</div>'
-      +'<div class="meta">'+(song.key?esc(song.key):"")+'</div>'
-      +'<button class="row-menu-btn" aria-label="Move song">&#8942;</button>';
+      +'<div class="meta">'+(song.key?esc(song.key):"")+'</div>';
     row.addEventListener("click",()=>{if(state.editList)return;openSong(state.setIdx,i);});
-    row.querySelector(".row-menu-btn").addEventListener("click",(e)=>{e.stopPropagation();openRowMenu(e.currentTarget,i);});
     row.querySelector(".grip").addEventListener("pointerdown",(e)=>startDrag(e,row));
     rows.appendChild(row);
   });
   const et=$("editToggle");
-  if(et)et.addEventListener("click",()=>{state.editList=!state.editList;closeRowMenu();renderList();});
+  if(et)et.addEventListener("click",()=>{state.editList=!state.editList;renderList();});
   const ro=$("resetOrder");
   if(ro)ro.addEventListener("click",resetArrangement);
 }
