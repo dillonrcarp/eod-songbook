@@ -50,7 +50,7 @@ main{flex:1;display:flex;min-height:0;}
 .set-header h2{font-family:var(--display);font-size:44px;letter-spacing:0.06em;line-height:1;color:var(--text);}
 .set-header .tuning-chip{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--teal);color:var(--teal);border-radius:2px;}
 .set-header.eb .tuning-chip{border-color:var(--orange);color:var(--orange);}
-.song-row{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s;}
+.song-row{position:relative;display:grid;grid-template-columns:44px 1fr auto 34px;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s;}
 .song-row:active{background:var(--bg-card);}
 .song-row .num{font-family:var(--mono);font-size:12px;color:var(--text-dim);letter-spacing:0.08em;}
 .song-row .title{font-family:var(--display);font-size:22px;letter-spacing:0.04em;color:var(--text);}
@@ -59,6 +59,23 @@ main{flex:1;display:flex;min-height:0;}
 .badge.tuning-flag{background:rgba(229,137,36,0.12);color:var(--orange);border-color:rgba(229,137,36,0.35);}
 .badge.empty{background:transparent;color:var(--text-dim);border-color:var(--line);}
 .song-row .meta{font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-align:right;}
+/* ---- edit / reorder / move-menu ---- */
+.list-tools{margin-left:auto;display:flex;gap:8px;align-items:center;align-self:center;}
+.list-tool-btn{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;padding:6px 12px;border:1px solid var(--line);background:transparent;color:var(--text-dim);border-radius:3px;cursor:pointer;transition:color .12s,border-color .12s;}
+.list-tool-btn:hover{color:var(--text);}
+.list-tool-btn.active{border-color:var(--teal);color:var(--teal);}
+.song-row .grip{position:absolute;left:0;top:0;bottom:0;width:30px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:17px;line-height:1;cursor:grab;opacity:0;pointer-events:none;touch-action:none;transition:opacity .12s;}
+.list-view.editing .song-row{padding-left:34px;cursor:default;}
+.list-view.editing .song-row .grip{opacity:1;pointer-events:auto;}
+.song-row.dragging{background:var(--bg-card);opacity:0.95;box-shadow:0 8px 24px rgba(0,0,0,0.55);border-radius:4px;}
+.song-row.drop-hint{box-shadow:inset 0 2px 0 var(--teal);}
+.row-menu-btn{width:30px;height:30px;border:0;background:transparent;color:var(--text-dim);font-size:20px;line-height:1;cursor:pointer;border-radius:4px;padding:0;justify-self:end;}
+.row-menu-btn:hover{color:var(--text);background:var(--bg-card);}
+.menu-backdrop{position:fixed;inset:0;z-index:99;}
+.row-menu-pop{position:fixed;z-index:100;background:var(--bg-card);border:1px solid var(--line);border-radius:6px;box-shadow:0 12px 34px rgba(0,0,0,0.6);padding:6px;min-width:190px;max-width:280px;}
+.row-menu-pop .hdr{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-dim);padding:7px 12px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.row-menu-pop button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--text);font-family:var(--body);font-size:14px;padding:10px 12px;border-radius:4px;cursor:pointer;}
+.row-menu-pop button:hover{background:var(--bg-elev);}
 .song-view{flex-direction:column;background:var(--bg);}
 .song-head{position:relative;z-index:20;padding:12px 18px 10px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
 .song-head .position{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;}
@@ -3859,7 +3876,115 @@ const BANTER = {
 };
 
 
-let state={setIdx:0,view:"list",songSetIdx:0,songIdx:0,wakeLock:null,notesOpen:false};
+let state={setIdx:0,view:"list",songSetIdx:0,songIdx:0,wakeLock:null,notesOpen:false,editList:false};
+
+/* ---- arrangement persistence (survives reloads; it's a PWA) ----
+   The hardcoded SHOW is the default. User moves/reorders are saved to
+   localStorage and re-applied on load. Songs added to the code later
+   (missing from the saved arrangement) are appended so nothing is lost. */
+const DEFAULT_SETS=SHOW.sets.map(s=>({name:s.name,songs:s.songs.map(x=>({...x}))}));
+const ARRANGE_KEY="eod_arrangement";
+function saveArrangement(){
+  try{const sets={};SHOW.sets.forEach(s=>{sets[s.name]=s.songs;});
+    localStorage.setItem(ARRANGE_KEY,JSON.stringify({v:1,sets}));}catch(e){}
+}
+function loadArrangement(){
+  let saved=null;
+  try{saved=JSON.parse(localStorage.getItem(ARRANGE_KEY)||"null");}catch(e){}
+  if(!saved||!saved.sets)return;
+  const seen=new Set();
+  SHOW.sets.forEach(s=>{
+    const arr=saved.sets[s.name];
+    if(Array.isArray(arr))s.songs=arr.filter(x=>x&&typeof x.t==="string").map(x=>({...x}));
+    s.songs.forEach(x=>seen.add(x.t));
+  });
+  DEFAULT_SETS.forEach((d,i)=>d.songs.forEach(x=>{
+    if(!seen.has(x.t)){SHOW.sets[i].songs.push({...x});seen.add(x.t);}
+  }));
+}
+function resetArrangement(){
+  if(!confirm("Reset every set to the default order? Your custom moves and ordering will be cleared."))return;
+  try{localStorage.removeItem(ARRANGE_KEY);}catch(e){}
+  SHOW.sets.forEach((s,i)=>{s.songs=DEFAULT_SETS[i].songs.map(x=>({...x}));});
+  closeRowMenu();
+  render();
+}
+function moveSongToSet(fromIdx,songIdx,toIdx){
+  const from=SHOW.sets[fromIdx];
+  if(!from||songIdx<0||songIdx>=from.songs.length)return;
+  const [song]=from.songs.splice(songIdx,1);
+  SHOW.sets[toIdx].songs.push(song);
+  saveArrangement();
+  render();
+}
+
+/* ---- three-dot move menu ---- */
+function closeRowMenu(){
+  if(window.__rowMenu){window.__rowMenu.back.remove();window.__rowMenu.pop.remove();window.__rowMenu=null;}
+}
+function openRowMenu(btn,songIdx){
+  closeRowMenu();
+  const cur=state.setIdx, song=SHOW.sets[cur].songs[songIdx];
+  if(!song)return;
+  const back=document.createElement("div");back.className="menu-backdrop";
+  const pop=document.createElement("div");pop.className="row-menu-pop";
+  const hdr=document.createElement("div");hdr.className="hdr";
+  hdr.textContent='Move “'+song.t+'” to';
+  pop.appendChild(hdr);
+  let targets=0;
+  SHOW.sets.forEach((s,idx)=>{
+    if(idx===cur)return;
+    targets++;
+    const b=document.createElement("button");
+    b.textContent=s.name;
+    b.addEventListener("click",()=>{closeRowMenu();moveSongToSet(cur,songIdx,idx);});
+    pop.appendChild(b);
+  });
+  if(!targets){const e=document.createElement("div");e.className="hdr";e.textContent="No other sets";pop.appendChild(e);}
+  document.body.appendChild(back);document.body.appendChild(pop);
+  const r=btn.getBoundingClientRect();
+  const top=Math.min(window.innerHeight-pop.offsetHeight-10, r.bottom+6);
+  const left=Math.max(10, Math.min(window.innerWidth-pop.offsetWidth-10, r.right-pop.offsetWidth));
+  pop.style.top=top+"px";pop.style.left=left+"px";
+  back.addEventListener("click",closeRowMenu);
+  window.__rowMenu={back,pop};
+}
+
+/* ---- pointer-based drag reorder (works on touch + mouse) ---- */
+let drag=null;
+function startDrag(e,row){
+  if(!state.editList)return;
+  e.preventDefault();e.stopPropagation();
+  const rows=$("songRows");
+  drag={row,rows,id:e.pointerId};
+  row.classList.add("dragging");
+  try{row.setPointerCapture(e.pointerId);}catch(_){}
+  document.addEventListener("pointermove",onDragMove);
+  document.addEventListener("pointerup",endDrag);
+  document.addEventListener("pointercancel",endDrag);
+}
+function onDragMove(e){
+  if(!drag)return;
+  const y=e.clientY;
+  const others=[...drag.rows.querySelectorAll(".song-row")].filter(r=>r!==drag.row);
+  let ref=null;
+  for(const r of others){const box=r.getBoundingClientRect();if(y<box.top+box.height/2){ref=r;break;}}
+  if(ref)drag.rows.insertBefore(drag.row,ref);
+  else drag.rows.appendChild(drag.row);
+}
+function endDrag(e){
+  if(!drag)return;
+  const d=drag;drag=null;
+  document.removeEventListener("pointermove",onDragMove);
+  document.removeEventListener("pointerup",endDrag);
+  document.removeEventListener("pointercancel",endDrag);
+  d.row.classList.remove("dragging");
+  const order=[...d.rows.querySelectorAll(".song-row")].map(r=>+r.dataset.idx);
+  const set=SHOW.sets[state.setIdx];
+  const changed=order.some((v,i)=>v!==i);
+  if(changed){set.songs=order.map(i=>set.songs[i]);saveArrangement();}
+  renderList();
+}
 const $=(id)=>document.getElementById(id);
 const setTabsEl=$("setTabs"), listView=$("listView"), songView=$("songView");
 
@@ -3899,21 +4024,37 @@ function renderTabs(){
 
 function renderList(){
   const set=SHOW.sets[state.setIdx], isEb=set.tuningKey==="eb";
-  listView.innerHTML='<div class="set-header '+(isEb?"eb":"")+'"><h2>'+set.name+'</h2><span class="tuning-chip">'+set.tuning+'</span></div><div id="songRows"></div>';
+  listView.classList.toggle("editing",!!state.editList);
+  const tools='<div class="list-tools">'
+    +'<button id="editToggle" class="list-tool-btn'+(state.editList?' active':'')+'">'+(state.editList?'Done':'Reorder')+'</button>'
+    +(state.editList?'<button id="resetOrder" class="list-tool-btn">Reset</button>':'')
+    +'</div>';
+  listView.innerHTML='<div class="set-header '+(isEb?"eb":"")+'"><h2>'+esc(set.name)+'</h2><span class="tuning-chip">'+esc(set.tuning)+'</span>'+tools+'</div><div id="songRows"></div>';
   const rows=$("songRows");
   set.songs.forEach((song,i)=>{
     const row=document.createElement("div");
     row.className="song-row";
+    row.dataset.idx=i;
     const b=[];
     if(song.original)b.push('<span class="badge">ORIGINAL</span>');
     if(song.repeat)b.push('<span class="badge repeat">REPEAT x'+(song.repeat+1)+'</span>');
     if(song.tuningFlag)b.push('<span class="badge tuning-flag">Eb SONG</span>');
     const lb=getBody(song.t);
     if(!lb||!lb.trim())b.push('<span class="badge empty">NO CHART</span>');
-    row.innerHTML='<div class="num">'+String(i+1).padStart(2,"0")+'</div><div class="title">'+esc(song.t)+b.join("")+'</div><div class="meta">'+(song.key?esc(song.key):"")+'</div>';
-    row.addEventListener("click",()=>openSong(state.setIdx,i));
+    row.innerHTML='<div class="grip" aria-hidden="true">&#9776;</div>'
+      +'<div class="num">'+String(i+1).padStart(2,"0")+'</div>'
+      +'<div class="title">'+esc(song.t)+b.join("")+'</div>'
+      +'<div class="meta">'+(song.key?esc(song.key):"")+'</div>'
+      +'<button class="row-menu-btn" aria-label="Move song">&#8942;</button>';
+    row.addEventListener("click",()=>{if(state.editList)return;openSong(state.setIdx,i);});
+    row.querySelector(".row-menu-btn").addEventListener("click",(e)=>{e.stopPropagation();openRowMenu(e.currentTarget,i);});
+    row.querySelector(".grip").addEventListener("pointerdown",(e)=>startDrag(e,row));
     rows.appendChild(row);
   });
+  const et=$("editToggle");
+  if(et)et.addEventListener("click",()=>{state.editList=!state.editList;closeRowMenu();renderList();});
+  const ro=$("resetOrder");
+  if(ro)ro.addEventListener("click",resetArrangement);
 }
 
 function renderSong(){
@@ -4121,6 +4262,7 @@ $("btnRequest").addEventListener("click",()=>{
 
 function esc(s){return String(s).replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
+loadArrangement();
 render();
 
 /* Header gig info: next upcoming show, pulled live from the band site's
