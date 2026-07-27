@@ -50,7 +50,7 @@ main{flex:1;display:flex;min-height:0;}
 .set-header h2{font-family:var(--display);font-size:44px;letter-spacing:0.06em;line-height:1;color:var(--text);}
 .set-header .tuning-chip{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--teal);color:var(--teal);border-radius:2px;}
 .set-header.eb .tuning-chip{border-color:var(--orange);color:var(--orange);}
-.song-row{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s;}
+.song-row{position:relative;display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s;}
 .song-row:active{background:var(--bg-card);}
 .song-row .num{font-family:var(--mono);font-size:12px;color:var(--text-dim);letter-spacing:0.08em;}
 .song-row .title{font-family:var(--display);font-size:22px;letter-spacing:0.04em;color:var(--text);}
@@ -59,6 +59,20 @@ main{flex:1;display:flex;min-height:0;}
 .badge.tuning-flag{background:rgba(229,137,36,0.12);color:var(--orange);border-color:rgba(229,137,36,0.35);}
 .badge.empty{background:transparent;color:var(--text-dim);border-color:var(--line);}
 .song-row .meta{font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-align:right;}
+/* ---- edit / reorder / move-menu ---- */
+.list-tools{margin-left:auto;display:flex;gap:8px;align-items:center;align-self:center;}
+.list-tool-btn{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;padding:6px 12px;border:1px solid var(--line);background:transparent;color:var(--text-dim);border-radius:3px;cursor:pointer;transition:color .12s,border-color .12s;}
+.list-tool-btn:hover{color:var(--text);}
+.list-tool-btn.active{border-color:var(--teal);color:var(--teal);}
+.song-row .grip{position:absolute;left:0;top:0;bottom:0;width:30px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:17px;line-height:1;cursor:grab;opacity:0;pointer-events:none;touch-action:none;transition:opacity .12s;}
+.list-view.editing .song-row{padding-left:34px;cursor:default;}
+.list-view.editing .song-row .grip{opacity:1;pointer-events:auto;}
+.song-row.dragging{background:var(--bg-card);opacity:0.95;box-shadow:0 8px 24px rgba(0,0,0,0.55);border-radius:4px;}
+.song-row.to-move{opacity:0.6;box-shadow:inset 3px 0 0 var(--teal);}
+.set-tab.drop-target{background:rgba(104,201,206,0.18);color:var(--text);box-shadow:inset 0 0 0 2px var(--teal);}
+.set-tab.eb.drop-target{background:rgba(229,137,36,0.18);box-shadow:inset 0 0 0 2px var(--orange);}
+.edit-hint{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--text-dim);padding:0 24px 12px;line-height:1.5;}
+.edit-hint span{color:var(--teal);}
 .song-view{flex-direction:column;background:var(--bg);}
 .song-head{position:relative;z-index:20;padding:12px 18px 10px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
 .song-head .position{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;}
@@ -145,29 +159,29 @@ const SHOW = {
   venue:"Working Set (2 Sets)",
   sets:[
     {name:"Set 1",tuning:"Standard",tuningKey:"std",songs:[
-      {t:"Wildfire",original:true,key:"A D / A G D"},
+      {t:"Wildfire",original:true},
       {t:"Superstition"},{t:"Pride and Joy"},{t:"Folsom Prison Blues"},{t:"Yellow Ledbetter"},
       {t:"Take the Money and Run"},{t:"Hey Joe"},{t:"A Little Less Conversation"},
       {t:"Gravity"},{t:"Purple Haze"},
-      {t:"I'm Older but I'm Not Grown",original:true,key:"G / D C Em G"},
+      {t:"I'm Older but I'm Not Grown",original:true},
       {t:"Rock'n Me"},{t:"Old Love"},{t:"Time"},{t:"All Summer Long"},
       {t:"Sweet Home Alabama"},{t:"Joker"},
-      {t:"Hell Is Empty",original:true,key:"G#m"},
+      {t:"Hell Is Empty",original:true},
       {t:"Voodoo Child"}
     ]},
     {name:"Set 2",tuning:"Standard",tuningKey:"std",songs:[
-      {t:"Never Been Happier",original:true,key:"C E A F"},
+      {t:"Never Been Happier",original:true},
       {t:"Crossroads"},
       {t:"Feel Like Makin' Love"},
-      {t:"Biting My Tongue",original:true,key:"G#m"},
+      {t:"Biting My Tongue",original:true},
       {t:"Ohio"},
-      {t:"Saving Grace",original:true,key:"B"},
+      {t:"Saving Grace",original:true},
       {t:"Little Wing"},
       {t:"Sunshine of Your Love"},
-      {t:"How You Wanna Be",original:true,key:"A G D / A E"},
+      {t:"How You Wanna Be",original:true},
       {t:"Seven Nation Army"},{t:"American Girl"},{t:"Gimme Three Steps"},
       {t:"Creep"},
-      {t:"Take Me Away",original:true,key:"D Bb A / D F C Bb A"},
+      {t:"Take Me Away",original:true},
       {t:"Bring It On Home"},
       {t:"Sunflower Eyes",original:true},
       {t:"Deuce"},{t:"Gold on the Ceiling"},{t:"Twist and Shout"},
@@ -175,8 +189,8 @@ const SHOW = {
     ]},
     {name:"Extras",tuning:"Various",tuningKey:"std",songs:[
       {t:"Interstate Love Song"},{t:"Slow Dancing in a Burning Room"},
-      {t:"Possum Kingdom"},{t:"Tennessee Whiskey"},{t:"Jester (BF)"},
-      {t:"Nutshell"},{t:"Nutshell (Tabs)"},{t:"Let The Band Play (Tab)"},
+      {t:"Possum Kingdom"},{t:"Tennessee Whiskey"},{t:"Jester (Chords)"},
+      {t:"Nutshell (Chords)"},{t:"Nutshell"},{t:"Let The Band Play"},
       {t:"King of the Hill Theme"},{t:"Chicken Fried"},
       {t:"Wagon Wheel"},
       {t:"Comfortably Numb"},{t:"Drive"},{t:"Beaches in Tennessee"},{t:"Long Way to the Top"},
@@ -186,11 +200,11 @@ const SHOW = {
       {t:"Maggie's Farm"},
       {t:"Killing In The Name"},
       {t:"Bulls on Parade"},
+      {t:"Eleanor Rigby (Chords)"},
       {t:"Eleanor Rigby"},
-      {t:"Eleanor Rigby (Bass)"},
-      {t:"Have a Cigar (Bass)"},
-      {t:"Welcome Home (Bass)"},
-      {t:"Slow Ride (Bass)"},
+      {t:"Have a Cigar"},
+      {t:"Welcome Home"},
+      {t:"Slow Ride"},
       {t:"Let Me Sleep",original:true},
       {t:"Born Under a Bad Sign"},{t:"Red House"},{t:"In Bloom"},
       {t:"When I Come Around"},{t:"Brain Stew"},{t:"Summertime Voodoo"},
@@ -430,7 +444,7 @@ D|-----x-x-----x-x-x-x-------|
 A|-----x-x-----x-x-x-x-------|
 E|-2-2-x-x-2-2-x-x-x-x-0--0--|`,
 
-  "Have a Cigar (Bass)": `Foo Fighters / Brian May  -  (Pink Floyd cover, from the Mission: Impossible 2 soundtrack)
+  "Have a Cigar": `Foo Fighters / Brian May  -  (Pink Floyd cover, from the Mission: Impossible 2 soundtrack)
 Tab by Paul Simpson
 
 [Intro]
@@ -498,7 +512,7 @@ D----------5--4--2---------------2-------------
 A--5--5--5---------5--4--2-3-4-5---------------
 E----------------------------------------0-----`,
 
-  "Welcome Home (Bass)": `Coheed and Cambria  -  from "Good Apollo I'm Burning Star IV, Vol. 1"
+  "Welcome Home": `Coheed and Cambria  -  from "Good Apollo I'm Burning Star IV, Vol. 1"
 Tuning: Eb Ab Db Gb  |  Tabber: Brendan McLarty
 (Intro is acoustic)
 
@@ -556,7 +570,7 @@ Eb|000-000-000-000------------------------------------------------|
 
 Fades out to the violin outro.`,
 
-  "Slow Ride (Bass)": `Foghat  -  Bass (Intermediate)  -  Tuning: E A D G  -  No capo
+  "Slow Ride": `Foghat  -  Bass (Intermediate)  -  Tuning: E A D G  -  No capo
 Tab: acobjoe (Ultimate-Guitar)   |   P = pop/pull, S = slap/slide as marked
 
 [Intro]  (0:18)
@@ -667,7 +681,7 @@ D|---7-7-77---7-7---------7-7-7-----7-----|
 A|-----------------6-77-------------------|
 E|-55-5-5---55-5-5------55-5-5-5---5----5-|`,
 
-  "Eleanor Rigby (Bass)": `Hero Jr. (cover)  -  Track: Electric Bass (finger)  -  q = 130  -  4/4
+  "Eleanor Rigby": `Hero Jr. (cover)  -  Track: Electric Bass (finger)  -  q = 130  -  4/4
 Tuning: standard 4-string bass (E A D G)
 Legend: numbers = fret;  a D-note stacked over an A-note = double-stop;  x8 bars = steady 8ths.
 Note: pitches/strings are transcribed from the score; rhythm is simplified for reading.
@@ -991,7 +1005,7 @@ E|-0---------------|-----------------|
 
 [m181-194: tacet - rest to the final barline]`,
 
-  "Eleanor Rigby": `The Beatles  ·  Capo off  ·  key of Em
+  "Eleanor Rigby (Chords)": `The Beatles  ·  Capo off  ·  key of Em
 
 [Intro]
 C                          Em
@@ -2519,7 +2533,7 @@ G|----------------|----------------|------------------|----------------|
 D|----------------|----------------|-------4----------|----------------|
 A|-----4-1----1-2-|-4-------4-----4|-3-2-------2-1----|----1-2-4-2-1---|
 E|-2-------2-4----|-----4-------4--|---------------4-2|-2-4----------4-|`,
-  "Jester (BF)": `[Verse 1]
+  "Jester (Chords)": `[Verse 1]
 F#m
 Like a jester at the ball
 {{Lord, I live to entertain}}
@@ -3100,7 +3114,7 @@ F   E    (Boo!)
 Thank you, thank you people... I'm glad you liked the show
           E
 Good night and God bless`,
-  "Nutshell": `[Intro]
+  "Nutshell (Chords)": `[Intro]
 E G D
 C        E   G D x5
 
@@ -3140,7 +3154,7 @@ C        E   G D x2
 C
 
 (fade out)`,
-  "Nutshell (Tabs)": `[Intro]
+  "Nutshell": `[Intro]
   (before Layne starts singing)
 Gb|------------------------------------------------5--4---------------|
 Db|----------7--5--------------------------7--5----------5------------|
@@ -3183,7 +3197,7 @@ And Yet I Find, Yet I Find, Repeating In My Head  (Riff C)
 If I Can't Be My Own, I'd Feel Better Dead  (Riff C)
 Oooooooooooooooh, Ooooooooooooooooooooooh  (Riff A)
 Ooooooooooooooh, Oooooooooooooooooooooooh  (Riff C)`,
-  "Let The Band Play (Tab)": `Tuning: E A D G  |  Key: F  |  No capo
+  "Let The Band Play": `Tuning: E A D G  |  Key: F  |  No capo
 
 [A — Intro / Verse riff]
 G|------------------------------|
@@ -3859,7 +3873,111 @@ const BANTER = {
 };
 
 
-let state={setIdx:0,view:"list",songSetIdx:0,songIdx:0,wakeLock:null,notesOpen:false};
+let state={setIdx:0,view:"list",songSetIdx:0,songIdx:0,wakeLock:null,notesOpen:false,editList:false};
+
+/* ---- arrangement persistence (survives reloads; it's a PWA) ----
+   The hardcoded SHOW is the default. User moves/reorders are saved to
+   localStorage and re-applied on load. Songs added to the code later
+   (missing from the saved arrangement) are appended so nothing is lost. */
+const DEFAULT_SETS=SHOW.sets.map(s=>({name:s.name,songs:s.songs.map(x=>({...x}))}));
+const ARRANGE_KEY="eod_arrangement";
+function saveArrangement(){
+  try{const sets={};SHOW.sets.forEach(s=>{sets[s.name]=s.songs;});
+    localStorage.setItem(ARRANGE_KEY,JSON.stringify({v:1,sets}));}catch(e){}
+}
+function loadArrangement(){
+  let saved=null;
+  try{saved=JSON.parse(localStorage.getItem(ARRANGE_KEY)||"null");}catch(e){}
+  if(!saved||!saved.sets)return;
+  const seen=new Set();
+  SHOW.sets.forEach(s=>{
+    const arr=saved.sets[s.name];
+    if(Array.isArray(arr))s.songs=arr.filter(x=>x&&typeof x.t==="string").map(x=>({...x}));
+    s.songs.forEach(x=>seen.add(x.t));
+  });
+  DEFAULT_SETS.forEach((d,i)=>d.songs.forEach(x=>{
+    if(!seen.has(x.t)){SHOW.sets[i].songs.push({...x});seen.add(x.t);}
+  }));
+}
+function resetArrangement(){
+  if(!confirm("Reset every set to the default order? Your custom moves and ordering will be cleared."))return;
+  try{localStorage.removeItem(ARRANGE_KEY);}catch(e){}
+  SHOW.sets.forEach((s,i)=>{s.songs=DEFAULT_SETS[i].songs.map(x=>({...x}));});
+  render();
+}
+function moveSongToSet(fromIdx,songIdx,toIdx){
+  const from=SHOW.sets[fromIdx];
+  if(!from||songIdx<0||songIdx>=from.songs.length)return;
+  const [song]=from.songs.splice(songIdx,1);
+  SHOW.sets[toIdx].songs.push(song);
+  saveArrangement();
+  render();
+}
+
+/* ---- pointer-based drag: reorder within a set, or drop onto a set tab
+        to move a song to another set (works on touch + mouse) ---- */
+let drag=null;
+function clearTabTargets(){
+  setTabsEl.querySelectorAll(".set-tab.drop-target").forEach(t=>t.classList.remove("drop-target"));
+}
+function tabIndexAt(x,y){
+  const tabs=[...setTabsEl.querySelectorAll(".set-tab")];
+  for(let i=0;i<tabs.length;i++){
+    const b=tabs[i].getBoundingClientRect();
+    if(x>=b.left&&x<=b.right&&y>=b.top&&y<=b.bottom)return i;
+  }
+  return -1;
+}
+function startDrag(e,row){
+  if(!state.editList)return;
+  e.preventDefault();e.stopPropagation();
+  const rows=$("songRows");
+  drag={row,rows,id:e.pointerId,overSet:null};
+  row.classList.add("dragging");
+  try{row.setPointerCapture(e.pointerId);}catch(_){}
+  document.addEventListener("pointermove",onDragMove);
+  document.addEventListener("pointerup",endDrag);
+  document.addEventListener("pointercancel",endDrag);
+}
+function onDragMove(e){
+  if(!drag)return;
+  const x=e.clientX, y=e.clientY;
+  // over a different set tab? -> mark as a cross-set move, don't reorder rows
+  const ti=tabIndexAt(x,y);
+  clearTabTargets();
+  if(ti>=0&&ti!==state.setIdx){
+    drag.overSet=ti;
+    setTabsEl.querySelectorAll(".set-tab")[ti].classList.add("drop-target");
+    drag.row.classList.add("to-move");
+    return;
+  }
+  drag.overSet=null;
+  drag.row.classList.remove("to-move");
+  const others=[...drag.rows.querySelectorAll(".song-row")].filter(r=>r!==drag.row);
+  let ref=null;
+  for(const r of others){const box=r.getBoundingClientRect();if(y<box.top+box.height/2){ref=r;break;}}
+  if(ref)drag.rows.insertBefore(drag.row,ref);
+  else drag.rows.appendChild(drag.row);
+}
+function endDrag(e){
+  if(!drag)return;
+  const d=drag;drag=null;
+  document.removeEventListener("pointermove",onDragMove);
+  document.removeEventListener("pointerup",endDrag);
+  document.removeEventListener("pointercancel",endDrag);
+  d.row.classList.remove("dragging","to-move");
+  clearTabTargets();
+  if(d.overSet!=null&&d.overSet!==state.setIdx){
+    // cross-set move: splice from original index (set.songs untouched during drag)
+    moveSongToSet(state.setIdx,+d.row.dataset.idx,d.overSet);
+    return;
+  }
+  const order=[...d.rows.querySelectorAll(".song-row")].map(r=>+r.dataset.idx);
+  const set=SHOW.sets[state.setIdx];
+  const changed=order.some((v,i)=>v!==i);
+  if(changed){set.songs=order.map(i=>set.songs[i]);saveArrangement();}
+  renderList();
+}
 const $=(id)=>document.getElementById(id);
 const setTabsEl=$("setTabs"), listView=$("listView"), songView=$("songView");
 
@@ -3899,21 +4017,36 @@ function renderTabs(){
 
 function renderList(){
   const set=SHOW.sets[state.setIdx], isEb=set.tuningKey==="eb";
-  listView.innerHTML='<div class="set-header '+(isEb?"eb":"")+'"><h2>'+set.name+'</h2><span class="tuning-chip">'+set.tuning+'</span></div><div id="songRows"></div>';
+  listView.classList.toggle("editing",!!state.editList);
+  const tools='<div class="list-tools">'
+    +'<button id="editToggle" class="list-tool-btn'+(state.editList?' active':'')+'">'+(state.editList?'Done':'Reorder')+'</button>'
+    +(state.editList?'<button id="resetOrder" class="list-tool-btn">Reset</button>':'')
+    +'</div>';
+  const hint=state.editList?'<div class="edit-hint">Drag <span>&#9776;</span> to reorder — or drop a song onto a set tab above to move it there.</div>':'';
+  listView.innerHTML='<div class="set-header '+(isEb?"eb":"")+'"><h2>'+esc(set.name)+'</h2><span class="tuning-chip">'+esc(set.tuning)+'</span>'+tools+'</div>'+hint+'<div id="songRows"></div>';
   const rows=$("songRows");
   set.songs.forEach((song,i)=>{
     const row=document.createElement("div");
     row.className="song-row";
+    row.dataset.idx=i;
     const b=[];
     if(song.original)b.push('<span class="badge">ORIGINAL</span>');
     if(song.repeat)b.push('<span class="badge repeat">REPEAT x'+(song.repeat+1)+'</span>');
     if(song.tuningFlag)b.push('<span class="badge tuning-flag">Eb SONG</span>');
     const lb=getBody(song.t);
     if(!lb||!lb.trim())b.push('<span class="badge empty">NO CHART</span>');
-    row.innerHTML='<div class="num">'+String(i+1).padStart(2,"0")+'</div><div class="title">'+esc(song.t)+b.join("")+'</div><div class="meta">'+(song.key?esc(song.key):"")+'</div>';
-    row.addEventListener("click",()=>openSong(state.setIdx,i));
+    row.innerHTML='<div class="grip" aria-hidden="true">&#9776;</div>'
+      +'<div class="num">'+String(i+1).padStart(2,"0")+'</div>'
+      +'<div class="title">'+esc(song.t)+b.join("")+'</div>'
+      +'<div class="meta">'+(song.key?esc(song.key):"")+'</div>';
+    row.addEventListener("click",()=>{if(state.editList)return;openSong(state.setIdx,i);});
+    row.querySelector(".grip").addEventListener("pointerdown",(e)=>startDrag(e,row));
     rows.appendChild(row);
   });
+  const et=$("editToggle");
+  if(et)et.addEventListener("click",()=>{state.editList=!state.editList;renderList();});
+  const ro=$("resetOrder");
+  if(ro)ro.addEventListener("click",resetArrangement);
 }
 
 function renderSong(){
@@ -4121,6 +4254,7 @@ $("btnRequest").addEventListener("click",()=>{
 
 function esc(s){return String(s).replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
+loadArrangement();
 render();
 
 /* Header gig info: next upcoming show, pulled live from the band site's
