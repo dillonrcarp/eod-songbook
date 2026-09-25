@@ -155,42 +155,58 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
    ============================================================ */
 
 const SHOW = {
-  date:"2026-06-24",
-  venue:"Working Set (2 Sets)",
+  date:"2026-09-26",
+  venue:"Main Street Fall Festival + Eagles Lodge 928 (Portland)",
   sets:[
-    {name:"Set 1",tuning:"Standard",tuningKey:"std",songs:[
-      {t:"Saving Grace",original:true},
-      {t:"Superstition"},{t:"Pride and Joy"},
-      {t:"Seven Nation Army"},
-      {t:"Take the Money and Run"},{t:"Wind Cries Mary"},
-      {t:"A Little Less Conversation"},
-      {t:"Gravity"},{t:"Purple Haze"},
-      {t:"I'm Older but I'm Not Grown",original:true},
-      {t:"Joker"},{t:"Old Love"},
-      {t:"Mary Jane's Last Dance"},
-      {t:"Breathe"},
-      {t:"Time"},{t:"All Summer Long"},
-      {t:"Sweet Home Alabama"},{t:"Yellow Ledbetter"},
-      {t:"Voodoo Child"}
-    ]},
-    {name:"Set 2",tuning:"Standard",tuningKey:"std",songs:[
-      {t:"Never Been Happier",original:true},
-      {t:"Hey Joe"},{t:"Crossroads"},
-      {t:"Feel Like Makin' Love"},
-      {t:"Red House"},
-      {t:"Biting My Tongue",original:true},
-      {t:"Rock'n Me"},
-      {t:"Wildfire",original:true},
+    {name:"Main St",tuning:"Standard",tuningKey:"std",songs:[
       {t:"How You Wanna Be",original:true},
-      {t:"American Girl"},{t:"Gimme Three Steps"},
-      {t:"Sunshine of Your Love"},
-      {t:"Creep"},
-      {t:"Take Me Away",original:true},
-      {t:"Bring It On Home"},
+      {t:"American Girl"},{t:"Seven Nation Army"},{t:"Gimme Three Steps"},
+      {t:"Saving Grace",original:true},
+      {t:"Rock'n Me"},
       {t:"Sunflower Eyes",original:true},
-      {t:"Deuce"},{t:"Gold on the Ceiling"},{t:"Twist and Shout"}
+      {t:"Creep"},
+      {t:"Never Been Happier",original:true,tuningFlag:true},
+      {t:"Sunshine of Your Love"},
+      {t:"Wildfire",original:true,tuningFlag:true},
+      {t:"Superstition"},{t:"Crossroads"},
+      {t:"Take Me Away",original:true},
+      {t:"Old Love"},{t:"Yellow Ledbetter"},
+      {t:"Biting My Tongue",original:true},
+      {t:"All Summer Long"},{t:"Sweet Home Alabama"},
+      {t:"I'm Older but I'm Not Grown",original:true}
+    ]},
+    {name:"Eagles 1",tuning:"Standard",tuningKey:"std",songs:[
+      {t:"How You Wanna Be",original:true},
+      {t:"Born Under a Bad Sign"},{t:"American Girl"},{t:"Cocaine and Whiskey"},
+      {t:"Seven Nation Army"},{t:"Gold on the Ceiling"},{t:"Deuce"},
+      {t:"Red House"},{t:"Gimme Three Steps"},{t:"Rock'n Me"},
+      {t:"Creep"},{t:"Sunshine of Your Love"},
+      {t:"Wildfire",original:true,tuningFlag:true}
+    ]},
+    {name:"Eagles 2",tuning:"Eb / Half-Step Down",tuningKey:"eb",songs:[
+      {t:"Pride and Joy"},{t:"Superstition"},{t:"Little Wing"},
+      {t:"Saving Grace",original:true},
+      {t:"When I Come Around"},{t:"Brain Stew"},{t:"Simple Man"},
+      {t:"In Bloom"},{t:"Voodoo Child"}
+    ]},
+    {name:"Eagles 2b",tuning:"Standard (retune)",tuningKey:"std",songs:[
+      {t:"Take the Money and Run"},{t:"Yellow Ledbetter"},{t:"Hey Joe"},
+      {t:"Bring It On Home"},{t:"Wind Cries Mary"},{t:"Old Love"},
+      {t:"Wild Thing",key:"A"},
+      {t:"Mary Jane's Last Dance"},{t:"Breathe"},{t:"Time"},{t:"Purple Haze"},
+      {t:"I'm Older but I'm Not Grown",original:true},
+      {t:"Gravity"},{t:"Foxy Lady"}
+    ]},
+    {name:"Eagles 3",tuning:"Standard",tuningKey:"std",songs:[
+      {t:"All Summer Long"},{t:"Sweet Home Alabama"},{t:"Feel Like Makin' Love"},
+      {t:"Joker"},
+      {t:"Biting My Tongue",original:true},
+      {t:"Summertime Voodoo"},
+      {t:"Take Me Away",original:true},
+      {t:"Ohio"},{t:"Twist and Shout"},{t:"Big Balls"}
     ]},
     {name:"Extras",tuning:"Various",tuningKey:"std",songs:[
+      {t:"A Little Less Conversation"},
       {t:"Interstate Love Song"},{t:"Slow Dancing in a Burning Room"},
       {t:"Possum Kingdom"},{t:"Tennessee Whiskey"},{t:"Jester (Chords)"},
       {t:"Nutshell (Chords)"},{t:"Nutshell"},{t:"Let The Band Play"},
@@ -198,7 +214,7 @@ const SHOW = {
       {t:"Wagon Wheel"},
       {t:"Comfortably Numb"},{t:"Drive"},{t:"Beaches in Tennessee"},{t:"Long Way to the Top"},
       {t:"Moby Dick / Rock and Roll"},
-      {t:"Simple Man"},{t:"Set You Free"},
+      {t:"Set You Free"},
       {t:"The Jack"},{t:"Fire"},{t:"Let Them Talk"},
       {t:"Maggie's Farm"},
       {t:"Killing In The Name"},
@@ -210,20 +226,22 @@ const SHOW = {
       {t:"Welcome Home"},
       {t:"Slow Ride"},
       {t:"Let Me Sleep",original:true},
-      {t:"Born Under a Bad Sign"},{t:"In Bloom"},
-      {t:"When I Come Around"},{t:"Brain Stew"},{t:"Summertime Voodoo"},
       {t:"When The Levee Breaks"},
       {t:"Sober"},{t:"Schism"},
       {t:"The Less I Know The Better"},
       {t:"Folsom Prison Blues"},
-      {t:"Hell Is Empty",original:true},
-      {t:"Ohio"},{t:"Little Wing"},{t:"Big Balls"}
+      {t:"Hell Is Empty",original:true}
     ]}
   ]
 };
 
 const BODIES = {
   "Breathe": `(chart coming soon)`,
+  "Cocaine and Whiskey": `(chart coming soon)`,
+  "Wild Thing": `(chart coming soon)
+
+Key of A`,
+  "Foxy Lady": `(chart coming soon)`,
   "Start the Show": `[Verse riff]
 G|-----------------|-----------------|
 D|-----------------|-----------------|
