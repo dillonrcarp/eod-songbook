@@ -90,6 +90,8 @@ button.notes-btn.active{color:var(--yellow);border-color:rgba(255,206,24,0.4);}
 .song-body .section{color:var(--teal);font-size:0.8em;letter-spacing:0.18em;text-transform:uppercase;margin:5px 0 1px;padding-bottom:1px;border-bottom:1px solid var(--line);}
 .chord-markers{display:block;line-height:1;margin:2px 0 0;}
 .chord-chip{display:inline-block;font-family:var(--mono);font-size:0.72em;color:var(--yellow);letter-spacing:0.1em;padding:1px 4px;border:1px solid rgba(255,206,24,0.3);border-radius:2px;margin-right:4px;}
+.song-inner .cols{display:flex;align-items:flex-start;gap:3em;}
+.song-inner .cols>.col{flex:none;}
 .song-body .hl{background:var(--text);color:var(--bg);border-radius:2px;padding:0 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone;}
 .song-body .hl2{background:var(--teal);color:var(--bg);border-radius:2px;padding:0 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone;}
 .song-body .empty{color:var(--text-dim);font-style:italic;padding:40px 0;text-align:center;font-family:var(--body);font-size:14px;letter-spacing:0.05em;}
@@ -862,21 +864,21 @@ G|-------------------------------------|
 D|-------------------------------------|     (x2)
 A|-------------------------3-3-3-1-----|
 E|-3-3-3-3-3-3-3-3-1-1-1-1-------------|`,
-  "Deuce": `[Intro/Pre-Verse/Solo]
-G|---------------------------|                       Get up and get your grandma outta here
-D|---------------------------|                       Pick up old jim is workin hard this year
-A|-------333-5-333-3p5-3-----| 4x                    and baby do the things he says to do
-E|-5-5-5-----------------5-3-|                       Baby, if you’re feeling good
+  "Deuce": `   [Intro/Pre-Verse/Solo]
+G|---------------------------|
+D|---------------------------|
+A|-------333-5-333-3p5-3-----| 4x
+E|-5-5-5-----------------5-3-| 
 
 
 [Verse]
-G|---------------|---------------------------|       and baby, if you’re feeling nice
-D|---------------|---------------------------|       You know your man is workin’ hard
-A|------3~-5~-3~-|-------333-5-333-3p5-3-----| x2    He’s worth a deuce
-E|--5~~----------|-5-5-5-----------------5-3-|       Honey don’t push your man behind his years
-
-G|------------------|                                and baby stop cryin all your tears
-D|------------------|                                baby do the things he says to do (do it!)
+G|---------------|---------------------------|    
+D|---------------|---------------------------|   
+A|------3~-5~-3~-|-------333-5-333-3p5-3-----| x2
+E|--5~~----------|-5-5-5-----------------5-3-|    
+  
+G|------------------|
+D|------------------|
 A|------3~-5~-3~----|
 E|--5~~----------5\\-|
 
@@ -884,7 +886,19 @@ E|--5~~----------5\\-|
 G|--------------------------------------|
 D|--------------------------------------|
 A|-3~~345--------3~~345-----------------|
-E|--------345-0---------345-0-1~~-3-3-3-|`,
+E|--------345-0---------345-0-1~~-3-3-3-|
+
+[Lyrics]
+Get up and get your grandma outta here
+Pick up old jim is workin hard this year
+and baby do the things he says to do
+Baby, if you’re feeling good
+and baby, if you’re feeling nice
+You know your man is workin’ hard
+He’s worth a deuce
+Honey don’t push your man behind his years
+and baby stop cryin all your tears
+baby do the things he says to do (do it!)`,
   "How You Wanna Be": `
 [Intro/Chorus/Solo]
 A   G   D   D/C
@@ -896,28 +910,46 @@ A G
   "Red House": `[Intro]
 Bb Ab Bb Bb Eb Eb Bb Bb F Eb Bb |Bb F|
 [Verse]
-Bb                              Eb                        Bb    Bb
-There's a Red House over yonder That's where my baby stays
-                                                               Bb   Bb
-There's a Red House over yonder, baby That's where my baby stays
-       F                            Eb                                Bb     |Bb  F |
-Well, I ain't been home to see my baby, in ninety nine and one half days.
 Bb
-Wait a minute something's wrong here The key won't unlock the door.
-Bb                               Eb                                            Bb   Bb
-Wait a minute something's wrong, Lord, have mercy, this key won't unlock this door, (something's goin' on here.)
-F                               Eb                         Bb
-I have a bad bad feeling that my baby don't live here no more.
-                                F
-   That's all right, I still got my guitar   Look out now . . .
+There's a Red House over yonder
+Eb                        Bb    Bb 
+That's where my baby stays
+There's a Red House over yonder, baby
+                         Bb   Bb 
+That's where my baby stays
+       F                            Eb 
+Well, I ain't been home to see my baby,
+                              Bb     |Bb  F |
+in ninety nine and one half days.
+Bb 
+Wait a minute something's wrong here
+The key won't unlock the door.
+Bb 
+Wait a minute something's wrong,
+Eb                                            Bb   Bb 
+Lord, have mercy, this key won't unlock this door,
+(something's goin' on here.)
+F 
+I have a bad bad feeling
+       Eb                         Bb 
+that my baby don't live here no more.
+                                F 
+   That's all right, I still got my guitar
+   Look out now . . .
 [Solo:] Bb major 12 bar blues…
 [Outro]
-Bb                                            Eb                         Bb    Bb
-Well I might as well uh, go on back down yonder way back 'cross yonder hill
-                                                                      Bb
-I might as well go back over yonder way back over yonder 'cross the hill, (That's where I came from.)
-            F                          Eb(hard stop)           Bb D Eb E F, E Bb
-'Cause if my baby don't love me no more, I know her sister will!`,
+Bb                                            Eb 
+Well I might as well uh, go on back down yonder
+                         Bb    Bb 
+way back 'cross yonder hill
+I might as well go back over yonder
+                                  Bb
+way back over yonder 'cross the hill,
+(That's where I came from.)
+            F                          Eb (hard stop)
+'Cause if my baby don't love me no more,
+                      Bb D Eb E F, E Bb
+I know her sister will!`,
   "Gimme Three Steps": `[Intro]
 (Rest for 16 counts)
 G-----------------|-2-2-------2------|-----------4p2---|
@@ -958,26 +990,40 @@ A-----0h2-----0h2-|-----0h2-----3-2-|-0---0----0------|-/9---9--------0|
 E-----------------|-----------------|---0---0----2----|----------------|`,
   "Creep": `[Intro]
 G B C C   (V1 plain / V2 white / V3 teal)
-                           G                              B                            C                         C
-1 When you were here before, couldn't look you in the eyes  1 You're just like an angel, your skin makes me cry
-{{2 I don't care if it hurts, I wanna have control 2 I want a perfect body, I want a perfect soul}}
-[[3 Whatever makes you happy, whatever you want 3 You're so very special, I wish I was special]]
-                          G                      B                       C                          C
-1 You float like a feather in a beautiful world    1 I wish I was special, you're so very special
-{{2 I want you to notice when I'm not around 2 You're so very special, I wish I was special}}
-[[3 But I'm a creep, I'm a weirdo 3 What the hell am I doing here? I don't belong here]]
+                           G                              B
+1 When you were here before, couldn't look you in the eyes
+{{2 I don't care if it hurts, I wanna have control}}
+[[3 Whatever makes you happy, whatever you want]]
+                           C                         C
+1 You're just like an angel, your skin makes me cry
+{{2 I want a perfect body, I want a perfect soul}}
+[[3 You're so very special, I wish I was special]]
+                          G                      B
+1 You float like a feather in a beautiful world
+{{2 I want you to notice when I'm not around}}
+[[3 But I'm a creep, I'm a weirdo]]
+                      C                          C
+1 I wish I was special, you're so very special
+{{2 You're so very special, I wish I was special}}
+[[3 What the hell am I doing here? I don't belong here]]
 
 [Chorus (Form: I V C V C B V C)]
-                G            B                                C
-But I'm a creep, I'm a weirdo  What the hell am I doing here? 
+                G            B
+But I'm a creep, I'm a weirdo
+                               C
+What the hell am I doing here? 
                     C
 I don't belong here
 
 [Bridge]
-                G                     B   C                      C
-Oooh, oooh, she's running out the door... She's running out, she run, run, run...
-G            B C            C
-Ruuuuuuuun...  Ruuuuuuuuuuun...
+                G                     B
+Oooh, oooh, she's running out the door...
+C                      C
+She's running out, she run, run, run...
+G            B
+Ruuuuuuuun...
+C            C
+Ruuuuuuuuuuun...
 
 [End Lick]
 G|----------|
@@ -1109,23 +1155,42 @@ Yeah (Yeah), yeah (Yeah), yeah, yeah, yeah, yeah
 
 [Outro]
 C Am Em G (4x)`,
-  "Sunshine of Your Love": `Intro                                  Riff 1/Verse/Solo
-|-7-7-5-7-------------------------|    |---------------------------------|
-|-----------7---6---5-----3-------|    |-----------7---6---5-----3-------|
-|-----------------------5-----5---|    |-5-5-3-5---------------5-----5---|
-|---------------------------------|    |---------------------------------|
+  "Sunshine of Your Love": `
+[Intro]
+|-7-7-5-7-------------------------|
+|-----------7---6---5-----3-------|
+|-----------------------5-----5---|
+|---------------------------------|
 
-Riff 2/Verse/Solo                      Riff 3/Chorus
-|---------------------------------|    |---------------------------------|
-|-5-5-3-5-------------------------|    |---------------------------------|
-|-----------5---4---3-----1-------|    |-----------------3---------------|
-|-----------------------3-----3---|    |-5--55-------------------3-------|
+[Riff 1/Verse/Solo]
+|---------------------------------|
+|-----------7---6---5-----3-------|
+|-5-5-3-5---------------5-----5---|
+|---------------------------------|
 
-Riff 4/Chorus                          Outro
-|---------------------------------|    |---------------------------------|
-|---------------------------------|    |---------------------------------|
-|-----------------------------3-4-|    |---------------------------------|
-|-5--55--55--55--55-5-5-5-5-5-----|    |-5--55--55--55--55--55--55--55---|`,
+[Riff 2/Verse/Solo]
+|---------------------------------|
+|-5-5-3-5-------------------------|
+|-----------5---4---3-----1-------|
+|-----------------------3-----3---|
+
+[Riff 3/Chorus]
+|---------------------------------|
+|---------------------------------|
+|-----------------3---------------|
+|-5--55-------------------3-------|
+
+[Riff 4/Chorus]
+|---------------------------------|
+|---------------------------------|
+|-----------------------------3-4-|
+|-5--55--55--55--55-5-5-5-5-5-----|
+
+[Outro]
+|---------------------------------|
+|---------------------------------|
+|---------------------------------|
+|-5--55--55--55--55--55--55--55---|`,
   "Saving Grace": `12 bar in B`,
   "Crossroads": `G|----2----2----0--------|-----2----2------------|
 D|-----------------------|-----------------------|
@@ -1452,31 +1517,31 @@ E--------------1-------|
  
 `,
   "Yellow Ledbetter": `
-  E               B                A                          E         
+  E               B                A                          E
    Onna ceilin, onna porsche a letta sah. Letta sen uh wanna leave it again
-E                    B                       A                       
+E                    B                       A
   Once I saw her on a beesh uh weather san
-                       E                                                
+                       E
   An onna san I wanna leave it again, yeah
-E                     B                                                                  
+E                     B
   Onna weelan onna wiss ih onna wayeeah
-            A                                                                                  
+            A
   Anneh call lanneh sah nanah wah wanna san
-            E                                                                                 
+            E
   Nanna call ow agayeh
-E                      B                       A                           
+E                      B                       A
   And the reason oughtta leave her calm, I know
-                                  E                                              
+                                  E
   I said I don't wanna wait on the box or the bag
 
 [Chorus]
-        E            B                    A                                                              
+        E            B                    A
 Oh yeah, can you see them  Out on the porch
-                     E           E                                                                                                                                                                          
+                     E           E
 Yeah but they don't wave. I see them
-               B                                                                                      
-'Round the front way, yeah 
-        A                              E                                                    
+               B
+'Round the front way, yeah
+        A                              E
 And I know and I know I don't want to stay
 
 Make me cry
@@ -1484,12 +1549,12 @@ Make me cry
 E B A E
 E B
 
-    A                             E                                     
+    A                             E
 I see. I don't know, there's something else
-                     B                                                                               
+                     B
 I wanna drum it all away. Oh, I said I don't, I don't wanna wait
 E
-  on the box or the bag  
+  on the box or the bag
 
 Chorus
 `,
@@ -1800,35 +1865,64 @@ A|----------------|----------------|
 E|0---------------|------------3-2-|`,
   "Mary Jane's Last Dance": `[Intro]
 Am   G   Dsus2   Am   (x4)
+
 [Verse 1 + 2 (V1 plain / V2 white)]
-Am                G                  Dsus2                 Am
-She grew up in an Indiana town Had a good-lookin' mama who never was around
-{{Well, she moved down here at the age of eighteen She blew the boys away, was more than they'd seen}}
-Am                   G                             Dsus2              Am
-But she grew up tall and she grew up right With them Indiana boys on an Indiana night
-{{I was introduced and we both started groovin' She said, "I dig you baby but I got to keep movin'"}}
+Am                G
+She grew up in an Indiana town
+{{Well, she moved down here at the age of eighteen}}
+      Dsus2                 Am
+Had a good-lookin' mama who never was around
+{{She blew the boys away, was more than they'd seen}}
+Am                   G
+But she grew up tall and she grew up right
+{{I was introduced and we both started groovin'}}
+        Dsus2              Am
+With them Indiana boys on an Indiana night
+{{She said, "I dig you baby but I got to keep movin'"}}
+
 Am   G   Dsus2   Am   (x2) w/harmonica
+
 [Chorus]
-Em7                       Em7                         A
-Last dance with Mary Jane One more time to kill the pain
-Em7                               Em7                   A    G
-I feel summer creepin' in and I'm Tired of this town again
+Em7
+Last dance with Mary Jane
+Em7                         A
+One more time to kill the pain
+Em7
+I feel summer creepin' in and I'm
+Em7                   A    G
+Tired of this town again
+
 [Verse 3 + 4 (V3 plain / V4 white)]
-Am                G                    Dsus2                Am
-Well, I don't know, but I've been told You never slow down, you never grow old
-{{There's pigeons down on Market Square She's standin' in her underwear}}
-Am                        G                       Dsus2            Am
-I'm tired of screwing up, I'm tired of going down Tired of myself, tired of this town
-{{Lookin' down from a hotel room Nightfall will be comin' soon}}
-Am        G           Dsus2              Am
-Oh my my, oh hell yes Honey, put on that party dress
-{{Oh my my, oh hell yes You got to put on that party dress}}
-Am              G               Dsus2                      Am
-Buy me a drink, sing me a song, Take me as I come 'cause I can't stay long
-{{It was too cold to cry when I woke up alone I hit my last number and walked to the road}}
+Am                G
+Well, I don't know, but I've been told
+{{There's pigeons down on Market Square}}
+Dsus2                Am
+You never slow down, you never grow old
+{{She's standin' in her underwear}}
+Am                        G
+I'm tired of screwing up, I'm tired of going down
+{{Lookin' down from a hotel room}}
+Dsus2            Am
+Tired of myself, tired of this town
+{{Nightfall will be comin' soon}}
+Am        G
+Oh my my, oh hell yes
+{{Oh my my, oh hell yes}}
+Dsus2              Am
+Honey, put on that party dress
+{{You got to put on that party dress}}
+Am              G
+Buy me a drink, sing me a song,
+{{It was too cold to cry when I woke up alone}}
+Dsus2                      Am
+Take me as I come 'cause I can't stay long
+{{I hit my last number and walked to the road}}
+
 [Chorus (repeat)]
+
 [Solo]
 Am   G   Dsus2   Am   (x4)
+
 [Outro]
 Am   G   Dsus2   Am
 (Play over and over till out, with solo guitar and harmonica)`,
@@ -1949,18 +2043,26 @@ D#||----------------------------------------------------------------------------
   "Sweet Home Alabama": `[Intro] D C G  x4
 [Verse 1 + 2]
 (V1 plain / V2 highlighted)
-D     C            G         D          C              G
-  Big wheels keep on turning   Carry me home to see my kin
-{{  In Birmingham they love the Gov'nor, boo-hoo-hoo (F C D)   Now we all did what we could do}}
-D         C               G          D               C          G
-  Singing songs about the south land   I miss 'ole' 'bamy once again and I think it's a sin
-{{  Now watergate does not bother me   Does your conscience bother you (tell the truth!)}}
+D     C            G
+  Big wheels keep on turning
+{{  In Birmingham they love the Gov'nor, boo-hoo-hoo (F C D)}}
+D          C              G
+  Carry me home to see my kin
+{{  Now we all did what we could do}}
+D         C               G
+  Singing songs about the south land
+{{  Now watergate does not bother me}}
+D               C          G
+  I miss 'ole' 'bamy once again and I think it's a sin
+{{  Does your conscience bother you (tell the truth!)}}
 
 [Interlude] D C G x2
 
 [Chorus]
-D         C     G    D          C             G   D         C       G     D          C              G
-  Sweet home Alabama, where the skies are so blue   Sweet home Alabama, Lord I'm coming home to you
+D         C     G    D          C             G
+  Sweet home Alabama, where the skies are so blue
+D         C       G     D          C              G
+  Sweet home Alabama, Lord I'm coming home to you
 
 [Solo]
 F C
@@ -1971,8 +2073,10 @@ D C G
 (the highlighted lines from Verse 1 + 2 above)
 
 [Chorus]
-D         C     G    D          C             G   D         C       G     D          C              G
-  Sweet home Alabama, where the skies are so blue   Sweet home Alabama, Lord I'm coming home to you
+D         C     G    D          C             G
+  Sweet home Alabama, where the skies are so blue
+D         C       G     D          C              G
+  Sweet home Alabama, Lord I'm coming home to you
 (Here I come, Alabama)
 
 [Solo] D C G`,
@@ -2483,14 +2587,22 @@ E|---------|----------|`,
 |---77----444-55-66--------------------------------------|
 |-----4567-----------------------------------------------|x4`,
   "Big Balls": `[Verse 1/2/3 (V1 plain / V2 white / V3 cyan)]
-          E                        C           E                    C
-Well, I'm upper upper class high society God's gift to ballroom notoriety
-{{And my balls are always bouncing And my ballroom always full}}
-[[Some balls are held for charity And some for fancy dress]]
-      E                             C
-And I always fill my ballrooms The event is never small
-{{And everybody comes and comes again If your name is on the guest list}}
-[[But when they're held for pleasure They're the balls that I like best]]
+          E                        C
+Well, I'm upper upper class high society
+{{And my balls are always bouncing}}
+[[Some balls are held for charity]]
+      E                    C
+God's gift to ballroom notoriety
+{{And my ballroom always full}}
+[[And some for fancy dress]]
+      E
+And I always fill my ballrooms
+{{And everybody comes and comes again}}
+[[But when they're held for pleasure]]
+     C
+The event is never small
+{{If your name is on the guest list}}
+[[They're the balls that I like best]]
     D
 The social pages say I've got
 {{No one can take you higher}}
@@ -2513,12 +2625,18 @@ They're such big balls | And they're dirty big balls
 (But we've got the biggest balls of them all)
 
 [Outro]
-E                          C#m                         E
-(We got big balls) ... (We got big balls) And I'm just itching to tell you about them
- C#m                                               E
-Oh, we have such wonderful fun  (Dirty big balls) Seafood cocktail  (He got big balls)
- C#m                            C       D    A    B
-Crabs  (She got big balls) Crayfish...  (But we've got the biggest balls of them all)`,
+E                          C#m
+(We got big balls) ... (We got big balls)
+             E
+And I'm just itching to tell you about them
+ C#m
+Oh, we have such wonderful fun  (Dirty big balls)
+ E
+Seafood cocktail  (He got big balls)
+ C#m
+Crabs  (She got big balls)
+     C       D    A    B
+Crayfish...  (But we've got the biggest balls of them all)`,
   "The Jack": `[Intro]
 B  A  B  A
 B  A  E
@@ -2864,28 +2982,44 @@ A|--------------------------------------|
 E|5--5-5-5--7-7-7--7-7-7--7-7-7---------|
        T      T      T      T`,
   "All Summer Long": `[Verse 1 + 2 (V1 plain / V2 white)]
-       D  C                   G                       D                  C               G
-It was 1989, my thoughts were short, my hair was long Caught somewhere between a boy and man
-{{Splashin' through the sandbar, talkin' by the campfire It's the simple things in life like when and where}}
-D        C             G                          D             C        G
-She was 17 and she was far from in between It was summertime in Northern Michigan
-{{We didn't have no internet, but man, I never will forget The way the moonlight shined upon her hair}}
+       D  C                   G
+It was 1989, my thoughts were short, my hair was long
+{{Splashin' through the sandbar, talkin' by the campfire}}
+D                  C               G
+Caught somewhere between a boy and man
+{{It's the simple things in life like when and where}}
+D        C             G
+She was 17 and she was far from in between
+{{We didn't have no internet, but man, I never will forget}}
+       D             C        G
+It was summertime in Northern Michigan
+{{The way the moonlight shined upon her hair}}
 [Instrumental]
 D  C  G    x2
 [Chorus]
             D                C                  G
 And we were tryin' different things and we were smokin' funny things
-       D               C                    G             D              C           G
-Makin' love out by the lake to our favorite songs Sippin' whisky out the bottle, not thinkin' 'bout tomorrow
-        D             C        G            D  C  G         D             C        G
-Singin' Sweet Home Alabama all summer long          Singin' Sweet Home Alabama all summer long
+       D               C                    G
+Makin' love out by the lake to our favorite songs
+        D              C           G
+Sippin' whisky out the bottle, not thinkin' 'bout tomorrow
+        D             C        G            D  C  G
+Singin' Sweet Home Alabama all summer long
+        D             C        G
+Singin' Sweet Home Alabama all summer long
 [Verse 3 + 4 (V3 plain / V4 white)]
-         D                C                  G                                  D             C             G
-Catchin' walleye from the dock, watchin' the waves roll off the rocks She'll forever hold a spot inside my soul
-{{Now nothin' seems as strange as when the leaves began to change Or how we thought those days would never end}}
-      D             C                G                         D                 C                  G
-We'd blister in the sun, we couldn't wait for night to come To hit that sand and play some rock and roll
-{{Sometimes I hear that song and I'll start to sing along And think man, I'd love to see that girl again}}
+         D                C                  G
+Catchin' walleye from the dock, watchin' the waves roll off the rocks
+{{Now nothin' seems as strange as when the leaves began to change}}
+          D             C             G
+She'll forever hold a spot inside my soul
+{{Or how we thought those days would never end}}
+      D             C                G
+We'd blister in the sun, we couldn't wait for night to come
+{{Sometimes I hear that song and I'll start to sing along}}
+   D                 C                  G
+To hit that sand and play some rock and roll
+{{And think man, I'd love to see that girl again}}
 [Outro]
 D  C  G`,
   "A Little Less Conversation": `[Intro] (x3)
@@ -2986,44 +3120,66 @@ A|-5--3-----3-----|
 E|-------0-----3--|
 `,
   "Biting My Tongue": `[Verse 1 + 2]
-                     F#m                     D                        Bm                      F#m
-I used to measure my worth in what strangers thought Fed on validation like it could be bought
-{{You dressed your critiques up as "just being kind" But your kindness was acid in a valentine}}
-                         F#m                        D               Bm                                      F#m
-You called me "too much," said I should shrink a bit  But I'm a wildfire now, you can choke on the smoke of it
-{{Tuned out the noise and keep myself small But then I found my voice and watched the cards fall}}
+                     F#m                     D
+I used to measure my worth in what strangers thought
+{{You dressed your critiques up as "just being kind"}}
+                 Bm                      F#m
+Fed on validation like it could be bought
+{{But your kindness was acid in a valentine}}
+                         F#m                        D
+You called me "too much," said I should shrink a bit
+{{Tuned out the noise and keep myself small}}
+              Bm                                      F#m
+But I'm a wildfire now, you can choke on the smoke of it
+{{But then I found my voice and watched the cards fall}}
 
 [Pre-Chorus]
 D                      E
-You wanted quiet, you wanted me small You put me in a cage like I was nothing at all
-{{You wanted quiet, you wanted control But my voice got louder the more you stole}}
+You wanted quiet, you wanted me small
+{{You wanted quiet, you wanted control}}
+You put me in a cage like I was nothing at all
+{{But my voice got louder the more you stole}}
 
 [Chorus]
-              F#m                                   E
-I'm done with biting my tongue until it bleeds Done handing out apologies I don't mean
-                     Bm                                  F#m                             E
-I'm not your project, not your pretty little fix I'm the truth you tried to bury, coming up for a breath
+              F#m
+I'm done with biting my tongue until it bleeds
+     E
+Done handing out apologies I don't mean
+                     Bm
+I'm not your project, not your pretty little fix
+        F#m                             E
+I'm the truth you tried to bury, coming up for a breath
             D                            E
-I'm finally crawling out from under your thumb I'm done biting my tongue
+I'm finally crawling out from under your thumb
+I'm done biting my tongue
 
 [Solo]
 F#m  E  B  F#m  E
 
 [Bridge]
-F#                                           E
-Let the beat in my chest fall back into sync All the doors will open when I finally think
-D                                       E         F#
-For myself, by myself, and it's crystal clear Freedom hits different when you've faced your fears
+F#
+Let the beat in my chest fall back into sync
+E
+All the doors will open when I finally think
+D                                       E
+For myself, by myself, and it's crystal clear
+    F#
+Freedom hits different when you've faced your fears
 
 [Final Chorus - Loud]
-F#m                                      E
-No more biting my tongue until it bleeds No more shrinking my heart to meet your needs
-       Bm                                        F#m                             E
-I'm not your project, not your pretty little fix I was the truth you tried to bury, and I'll never forget
+F#m
+No more biting my tongue until it bleeds
+E
+No more shrinking my heart to meet your needs
+       Bm
+I'm not your project, not your pretty little fix
+F#m                             E
+I was the truth you tried to bury, and I'll never forget
 F#m                                        E
 I was caught by your ego (I was paralyzed) crushed by the weight (of all your lies) [it]
 D                               E
-Yeah, now you're going to see what I've finally become No more biting my tongue
+Yeah, now you're going to see what I've finally become
+No more biting my tongue
 `,
   "Seven Nation Army": `[Verse Riff]
 G|-------------------|
@@ -3493,6 +3649,7 @@ function renderSong(){
   }
   // body
   const body=getBody(song.t), bodyEl=$("songBody");
+  state.curBody=body&&body.trim()?body:null;
   if(body&&body.trim()){
     bodyEl.innerHTML='<div id="songInner" class="song-inner">'+fmt(body)+'</div>';
   }else{
@@ -3547,8 +3704,171 @@ function peekNext(){
   if(state.songSetIdx+1<SHOW.sets.length)return SHOW.sets[state.songSetIdx+1].songs[0];
   return null;
 }
-const FIT={MIN:11,MAX:20,REF:16};
+const FIT={MIN:13,MAX:20,REF:16};
+/* ---- auto-layout ----
+   Each chart is written once, one idea per line. On every screen the app
+   tries a few arrangements (as written, paired lyric lines, tab rows side by
+   side, 2 columns of sections) and keeps the one that gives the largest text
+   on one page. Floor FIT.MIN (13px, Dillon's minimum readable size on the
+   fold); if nothing fits at the floor, the fewest pages at the floor wins
+   (the pedal already pages through long charts). Any error falls back to
+   legacyFit(). */
+// ONE_PAGE_FLOOR: a chart that fits on one page at >=12.5px stays one page rather than
+// forcing a page turn for a few pixels (4% under the 13px floor, not visible)
+const LAYOUT={MIN_GAIN:0.5,PAIR_WIDTHS:[70,90,110],ONE_PAGE_FLOOR:12.5};
+const CHORD_TOK=/^\|?[A-G][#b]?(m|maj7|m7|7|sus2|sus4|dim|aug|add9|5|6|9)?\d?(\/[A-G][#b]?)?\|?,?$/;
+const isHeaderL=(l)=>/^\s*\[(.+?)\]\s*$/.test(l)&&!/^\s*\[\[/.test(l);
+const isHlL=(l)=>/^\{\{.*\}\}$/.test(l)||/^\[\[.*\]\]$/.test(l);
+const isTabL=(l)=>/^\s*[EADGBe]?\|/.test(l);
+const isBracketL=(l)=>/^\s*\[/.test(l)&&!/^\s*\[\[/.test(l);
+function isChordL(l){
+  const t=l.replace(/\([^)]*\)/g," ").split(/\s+/).filter((x)=>x&&x!=="|");
+  if(!t.length)return false;
+  let g=0;for(const x of t)if(CHORD_TOK.test(x)||/^(x\d+|\d+x|N\.C\.)$/i.test(x))g++;
+  return g/t.length>=0.6;
+}
+function lyricUnits(lines){
+  const out=[];let k=0;
+  while(k<lines.length){
+    let l=lines[k];
+    if(!l.trim()||isBracketL(l)||isHlL(l)||isTabL(l)){out.push({b:l});k++;continue;}
+    let c=null;
+    if(isChordL(l)){
+      const n=lines[k+1];
+      if(n!==undefined&&n.trim()&&!isBracketL(n)&&!isHlL(n)&&!isChordL(n)&&!isTabL(n)){c=l;k++;l=lines[k];}
+      else{out.push({b:l});k++;continue;}
+    }
+    k++;const h=[];
+    while(k<lines.length&&isHlL(lines[k])){h.push(lines[k]);k++;}
+    // a chordless spoken aside "(...)" belongs to the end of the line before it,
+    // so later pairs stay on the song's phrases
+    const prev=out[out.length-1];
+    if(!c&&!h.length&&/^\s*\(.*\)\s*$/.test(l)&&prev&&prev.l!==undefined&&!prev.h.length){
+      prev.l=prev.l.replace(/\s+$/,"")+" "+l.trim();continue;
+    }
+    out.push({c,l,h});
+  }
+  return out;
+}
+// join consecutive lyric lines (and their highlighted alternates) when the result fits maxw;
+// the second line's chords shift by the first line's length so they stay over the same words
+function pairLines(text,maxw){
+  const it=lyricUnits(text.split("\n"));const res=[];let i=0;
+  while(i<it.length){
+    const a=it[i],b=it[i+1];
+    if(a.l!==undefined&&b&&b.l!==undefined&&a.h.length===b.h.length&&a.h.every((x,j)=>x.slice(0,2)===b.h[j].slice(0,2))){
+      const ca=(a.c||"").replace(/\s+$/,""),cb=b.c||"";
+      const la=cb?a.l.replace(/\s+$/,"").padEnd(ca.length):a.l.replace(/\s+$/,"");
+      const ln=cb?la+" "+b.l:la+" "+b.l.trim();
+      const hs=a.h.map((x,j)=>x.slice(0,2)+x.slice(2,-2)+" "+b.h[j].slice(2,-2)+x.slice(-2));
+      if(ln.length<=maxw&&hs.every((x)=>x.length<=maxw)){
+        const c=cb?(ca.padEnd(la.length+1)+cb).replace(/\s+$/,""):(ca||null);
+        res.push({c,l:ln,h:hs});i+=2;continue;
+      }
+      // couplet too wide: keep both lines as written so later pairs stay on the phrase
+      res.push(a,b);i+=2;continue;
+    }
+    res.push(a);i++;
+  }
+  const L=[];
+  for(const u of res){if(u.b!==undefined)L.push(u.b);else{if(u.c)L.push(u.c);L.push(u.l);L.push(...u.h);}}
+  return L.join("\n");
+}
+// put consecutive tab systems of the same section side by side; each keeps its
+// own string letters and any trailing note (x2, 4x), padded so rows stay aligned
+function sideTabs(text){
+  const L=text.split("\n"),items=[];let i=0;
+  while(i<L.length){
+    if(isTabL(L[i])){const s=[];while(i<L.length&&isTabL(L[i])){s.push(L[i].replace(/\s+$/,""));i++;}items.push({s});}
+    else{items.push({line:L[i]});i++;}
+  }
+  const res=[];
+  for(let k=0;k<items.length;k++){
+    const a=items[k];
+    if(a.s&&a.s.length>=2){
+      let j=k+1;while(j<items.length&&items[j].line!==undefined&&!items[j].line.trim())j++;
+      const b=items[j];
+      if(b&&b.s&&b.s.length===a.s.length){
+        const w=Math.max(...a.s.map((r)=>r.length));
+        res.push({s:a.s.map((r,x)=>r.padEnd(w)+"   "+b.s[x].trim())});k=j;continue;
+      }
+    }
+    res.push(a);
+  }
+  return res.map((x)=>x.s?x.s.join("\n"):x.line).join("\n");
+}
+// drop blank lines right before a section header (headers carry their own spacing)
+function tighten(text){return text.replace(/\n\s*\n(\s*\[(?!\[)[^\n]*\]\s*(?=\n|$))/g,"\n$1");}
+// split at section headers into two balanced columns (never splits a section)
+function cols2(text){
+  const L=text.replace(/\n+$/,"").split("\n"),secs=[];let cur=[];
+  for(const l of L){if(isHeaderL(l)&&cur.some((x)=>x.trim())){secs.push(cur);cur=[];}cur.push(l);}
+  if(cur.length)secs.push(cur);
+  const S=secs.map((s)=>{s=s.slice();while(s.length&&!s[s.length-1].trim())s.pop();while(s.length&&!s[0].trim())s.shift();return s;}).filter((s)=>s.length);
+  if(S.length<2)return null;
+  const n=S.map((s)=>s.length+1),tot=n.reduce((a,b)=>a+b,0);
+  let best=null,acc=0;
+  for(let k=1;k<S.length;k++){acc+=n[k-1];const m=Math.max(acc,tot-acc);if(!best||m<best.m)best={m,k};}
+  const j=(a)=>a.map((s)=>s.join("\n")).join("\n\n");
+  return [j(S.slice(0,best.k)),j(S.slice(best.k))];
+}
+function layoutVariants(text){
+  const v=[],seen=new Set();
+  const add=(name,cols)=>{if(!cols)return;const key=cols.join("\u0000");if(seen.has(key))return;seen.add(key);v.push({name,cols});};
+  for(const [pre,t] of [["",text],["tight ",tighten(text)]]){
+    add(pre+"as-written",[t]);
+    for(const w of LAYOUT.PAIR_WIDTHS)add(pre+"pair"+w,[pairLines(t,w)]);
+    const st=sideTabs(t);
+    add(pre+"side-tabs",[st]);
+    add(pre+"side-tabs+pair90",[pairLines(st,90)]);
+    add(pre+"2-col",cols2(t));
+    add(pre+"2-col+side-tabs",cols2(st));
+  }
+  return v;
+}
+function renderLayout(inner,cols){
+  inner.innerHTML=cols.length===1?fmt(cols[0]):'<div class="cols">'+cols.map((c)=>'<div class="col">'+fmt(c)+'</div>').join("")+'</div>';
+}
+function layoutBeats(a,b){ // true if layout score a beats b
+  if(a.tier!==b.tier)return a.tier>b.tier;
+  if(a.tier===1)return a.pages<b.pages-0.05;
+  return a.font>b.font+LAYOUT.MIN_GAIN;
+}
+function smartFit(){
+  const box=$("songBody"),inner=$("songInner");
+  if(!inner||!state.curBody)return false;
+  const cs=getComputedStyle(box);
+  const aW=box.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)-16;
+  const aH=box.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+  if(aW<=0||aH<=0)return false;
+  let best=null;
+  for(const v of layoutVariants(state.curBody)){
+    renderLayout(inner,v.cols);
+    inner.style.fontSize=FIT.REF+"px";inner.style.display="inline-block";inner.style.whiteSpace="pre";
+    const w=inner.offsetWidth,h=inner.offsetHeight;
+    inner.style.display="";inner.style.whiteSpace="";
+    if(!w||!h)continue;
+    const fw=FIT.REF*aW/w,fh=FIT.REF*aH/h,one=Math.min(fw,fh);
+    let s;
+    if(one>=LAYOUT.ONE_PAGE_FLOOR)s={tier:2,font:Math.min(FIT.MAX,one)};
+    else if(fw>=FIT.MIN)s={tier:1,font:FIT.MIN,pages:h*(FIT.MIN/FIT.REF)/aH};
+    else s={tier:0,font:fw};
+    s.v=v;
+    if(!best||layoutBeats(s,best))best=s;
+  }
+  if(!best)return false;
+  renderLayout(inner,best.v.cols);
+  inner.dataset.layout=best.v.name;
+  let fs=best.font;inner.style.fontSize=fs.toFixed(2)+"px";
+  const floor=best.tier===0?fs:(best.tier===2?LAYOUT.ONE_PAGE_FLOOR:FIT.MIN);let g=0;
+  while(fs>floor&&box.scrollHeight>box.clientHeight&&g++<24){fs=Math.max(floor,fs-0.5);inner.style.fontSize=fs.toFixed(2)+"px";}
+  return true;
+}
 function autoFit(){
+  try{if(smartFit())return;}catch(e){console.warn("[Songbook] auto-layout failed, using legacy fit",e);}
+  legacyFit();
+}
+function legacyFit(){
   const box=$("songBody"), inner=$("songInner");
   if(!inner)return;
   const cs=getComputedStyle(box);
