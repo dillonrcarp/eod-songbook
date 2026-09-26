@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<title>Songbook Size Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0a; --bg-elev:#141414; --line:#2a2a2a;
+  --text:#e8e6df; --text-dim:#8a8680;
+  --teal:#68c9ce; --yellow:#ffce18; --red:#cf2927;
+  --display:"Bebas Neue","Arial Narrow",sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  --body:"Inter",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);padding:12px 18px 60px;}
+h1{font-family:var(--display);font-size:32px;letter-spacing:.04em;color:var(--teal);}
+.info{font-family:var(--mono);font-size:12px;color:var(--text-dim);line-height:1.6;margin:6px 0 14px;}
+.info b{color:var(--yellow);font-weight:500;}
+.how{font-size:14px;line-height:1.5;margin-bottom:14px;}
+.row{border:1px solid var(--line);border-radius:4px;padding:8px 12px 10px;margin-bottom:10px;cursor:pointer;}
+.row.picked{border-color:var(--yellow);background:rgba(255,206,24,.06);}
+.size{font-family:var(--display);font-size:22px;letter-spacing:.06em;color:var(--teal);margin-bottom:4px;}
+.row.picked .size{color:var(--yellow);}
+pre{font-family:var(--mono);line-height:1.3;white-space:pre;overflow:hidden;}
+.hl{background:var(--text);color:var(--bg);border-radius:2px;padding:0 3px;}
+.sec{color:var(--teal);letter-spacing:.18em;font-size:.8em;}
+#result{position:fixed;left:0;right:0;bottom:0;padding:12px 18px;background:var(--bg-elev);border-top:1px solid var(--line);font-family:var(--mono);font-size:14px;color:var(--yellow);}
+</style>
+</head>
+<body>
+<h1>Songbook Size Test</h1>
+<div class="info" id="info"></div>
+<div class="how">Put the phone where it sits during a show, unfolded. Scroll down and <b>tap the smallest size you'd trust mid-song</b>, reading it at a glance without leaning in. Then tell Claude the size shown at the bottom, plus the screen line above.</div>
+<div id="rows"></div>
+<div id="result">Nothing picked yet</div>
+<script>
+const SAMPLE=`<span class="sec">CHORUS</span>
+              F#m                                   E
+I'm done with biting my tongue until it bleeds Done handing out apologies I don't mean
+<span class="hl">You wanted quiet, you wanted control But my voice got louder</span>
+G|---------------------------------|---------------------------------|
+D|---------------------------------|---------------------------------|
+A|---------------------------------|-3-------------3---3-5---5---5---|
+E|-3---------------1---1-----------|---------------------------------|`;
+const rows=document.getElementById("rows");
+for(const px of [9,10,11,12,13,14,15,16,18,20,22]){
+  const r=document.createElement("div"); r.className="row";
+  r.innerHTML='<div class="size">'+px+'px</div><pre style="font-size:'+px+'px">'+SAMPLE+'</pre>';
+  r.addEventListener("click",()=>{document.querySelectorAll(".row").forEach(x=>x.classList.remove("picked"));r.classList.add("picked");
+    document.getElementById("result").textContent="Picked: "+px+"px   ·   "+scr();});
+  rows.appendChild(r);
+}
+function scr(){return "screen "+innerWidth+"x"+innerHeight+" @"+devicePixelRatio+"x"+(matchMedia("(display-mode: standalone)").matches?" (app)":" (browser)");}
+function info(){document.getElementById("info").innerHTML="Your screen: <b>"+innerWidth+" × "+innerHeight+"</b> CSS px · pixel ratio <b>"+devicePixelRatio+"</b> · physical "+screen.width+"×"+screen.height+"<br>Note: in a browser tab the address bar takes some height; the installed app gets a little more.";}
+info(); addEventListener("resize",info);
+</script>
+</body>
+</html>
