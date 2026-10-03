@@ -3937,12 +3937,22 @@ document.addEventListener("keydown",(e)=>{
     if(e.key==="Enter"&&state.view==="list"){openSong(state.setIdx,0);e.preventDefault();}
     return;
   }
-  switch(e.key){
-    case "ArrowRight":case "PageDown":case " ":goNext();e.preventDefault();break;
-    case "ArrowLeft":case "PageUp":goPrev();e.preventDefault();break;
-    case "Home":case "Escape":backToList();e.preventDefault();break;
-  }
+  // page-turner pedals are Bluetooth keyboards; accept every mode that sends
+  // keys (L/R arrows, U/D arrows, PgUp/PgDn) plus the older iPadOS key names
+  // ("UIKeyInputRightArrow") and keyCodes, so the pedal works whatever its mode
+  const k=e.key,c=e.keyCode;
+  if(/^(ArrowRight|Right|UIKeyInputRightArrow|ArrowDown|Down|UIKeyInputDownArrow|PageDown|UIKeyInputPageDown| |Spacebar)$/.test(k)||[39,40,34,32].includes(c)){goNext();e.preventDefault();return;}
+  if(/^(ArrowLeft|Left|UIKeyInputLeftArrow|ArrowUp|Up|UIKeyInputUpArrow|PageUp|UIKeyInputPageUp)$/.test(k)||[37,38,33].includes(c)){goPrev();e.preventDefault();return;}
+  if(k==="Home"||k==="Escape"||k==="UIKeyInputEscape"){backToList();e.preventDefault();return;}
+  if(!/^(Shift|Control|Alt|Meta|CapsLock|Tab|Unidentified)$/.test(k))keyToast(k,c);
 });
+// shows a key the app doesn't use, so a pedal in the wrong mode is visible
+function keyToast(k,c){
+  let t=$("keyToast");
+  if(!t){t=document.createElement("div");t.id="keyToast";t.style.cssText="position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:99;padding:6px 12px;border-radius:6px;background:#333;color:#fff;font:13px/1.3 var(--mono,monospace);pointer-events:none";document.body.appendChild(t);}
+  t.textContent="Key not used: "+(k===" "?"Space":k)+" ("+c+")";t.style.display="block";
+  clearTimeout(keyToast.tm);keyToast.tm=setTimeout(()=>{t.style.display="none";},2500);
+}
 $("tapLeft").addEventListener("click",goPrev);
 $("tapRight").addEventListener("click",goNext);
 let tsX=0,tsY=0;
