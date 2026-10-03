@@ -3926,6 +3926,7 @@ function goPrev(){
 function backToList(){state.setIdx=state.songSetIdx;state.view="list";render();}
 
 function render(){
+  setTimeout(grabKeys,0); // keep pedal keys flowing on the song view
   renderTabs();
   $("setTabs").classList.toggle("hidden",state.view==="song");
   if(state.view==="list"){listView.classList.add("active");songView.classList.remove("active");renderList();}
@@ -3981,8 +3982,24 @@ if(/[?&]debug/.test(location.search)){
   show("debug on - press a pedal");
   document.addEventListener("keydown",(e)=>show("keydown key="+JSON.stringify(e.key)+" code="+e.code+" keyCode="+e.keyCode),true);
   for(const ev of ["pointerdown","pointerup","touchstart","touchend","wheel","click"])
-    document.addEventListener(ev,(e)=>show(ev+(e.pointerType?" type="+e.pointerType:"")+(e.clientX!==undefined?" x="+Math.round(e.clientX)+" y="+Math.round(e.clientY):"")+(e.deltaY?" dY="+Math.round(e.deltaY):"")),{capture:true,passive:true});
+    document.addEventListener(ev,(e)=>show(ev+" focus="+(document.activeElement&&(document.activeElement.id||document.activeElement.tagName))+(e.pointerType?" type="+e.pointerType:"")+(e.clientX!==undefined?" x="+Math.round(e.clientX)+" y="+Math.round(e.clientY):"")+(e.deltaY?" dY="+Math.round(e.deltaY):"")),{capture:true,passive:true});
 }
+// iPadOS only delivers hardware-key presses (page-turner pedals are Bluetooth
+// keyboards) to a web page when a text field has focus, so keep an invisible
+// one focused on the song view. inputmode=none = no on-screen keyboard;
+// 16px font = no focus zoom. Typed characters are discarded.
+const keySink=document.createElement("textarea");
+keySink.id="keySink";keySink.setAttribute("inputmode","none");keySink.setAttribute("aria-hidden","true");
+keySink.setAttribute("autocomplete","off");keySink.setAttribute("autocorrect","off");keySink.setAttribute("autocapitalize","off");keySink.spellcheck=false;
+keySink.style.cssText="position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;font-size:16px;border:0;padding:0;resize:none;pointer-events:none";
+document.body.appendChild(keySink);
+keySink.addEventListener("input",()=>{keySink.value="";});
+function grabKeys(){
+  if(state.view!=="song"){if(document.activeElement===keySink)keySink.blur();return;}
+  if(document.activeElement!==keySink){try{keySink.focus({preventScroll:true});}catch(e){keySink.focus();}}
+}
+document.addEventListener("pointerup",()=>setTimeout(grabKeys,0));
+document.addEventListener("touchend",()=>setTimeout(grabKeys,0),{passive:true});
 $("btnPrev").addEventListener("click",goPrev);
 $("btnNext").addEventListener("click",goNext);
 $("btnNotes").addEventListener("click",()=>{state.notesOpen=!state.notesOpen;renderSong();});
