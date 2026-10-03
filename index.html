@@ -2099,7 +2099,6 @@ G A F G
 [Break]
 C  A  x4
 
-Form: Verse - Chorus - Solo - Verse - Chorus
 
 [Outro]
 C A x 5
@@ -3710,7 +3709,9 @@ const LAYOUT={MIN_GAIN:0.5,PAIR_WIDTHS:[70,90,110],ONE_PAGE_FLOOR:12.5};
 const CHORD_TOK=/^\|?[A-G][#b]?(m|maj7|m7|7|sus2|sus4|dim|aug|add9|5|6|9)?\d?(\/[A-G][#b]?)?\|?,?$/;
 const isHeaderL=(l)=>/^\s*\[(.+?)\]\s*$/.test(l)&&!/^\s*\[\[/.test(l);
 const isHlL=(l)=>/^\{\{.*\}\}$/.test(l)||/^\[\[.*\]\]$/.test(l);
-const isTabL=(l)=>/^\s*[EADGBe]?\|/.test(l);
+// tab string line: "E|--", "|--", or a note name with no pipe ("G----", "Gb---", "F#|", "G |");
+// the no-pipe form needs 6+ dashes so a lyric starting "A-" isn't taken for tab
+const isTabL=(l)=>/^\s*[EADGBe]?\|/.test(l)||(/^\s*[A-Ga-g][b#]?\s?[|-]/.test(l)&&(l.match(/-/g)||[]).length>=6);
 const isBracketL=(l)=>/^\s*\[/.test(l)&&!/^\s*\[\[/.test(l);
 function isChordL(l){
   const t=l.replace(/\([^)]*\)/g," ").split(/\s+/).filter((x)=>x&&x!=="|");
