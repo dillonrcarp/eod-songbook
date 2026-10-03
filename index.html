@@ -3991,15 +3991,19 @@ if(/[?&]debug/.test(location.search)){
 const keySink=document.createElement("textarea");
 keySink.id="keySink";keySink.setAttribute("inputmode","none");keySink.setAttribute("aria-hidden","true");
 keySink.setAttribute("autocomplete","off");keySink.setAttribute("autocorrect","off");keySink.setAttribute("autocapitalize","off");keySink.spellcheck=false;
-keySink.style.cssText="position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;font-size:16px;border:0;padding:0;resize:none;pointer-events:none";
+keySink.style.cssText="position:fixed;left:0;top:0;width:1px;height:1px;opacity:0.01;font-size:16px;border:0;padding:0;resize:none;pointer-events:none";
 document.body.appendChild(keySink);
 keySink.addEventListener("input",()=>{keySink.value="";});
 function grabKeys(){
   if(state.view!=="song"){if(document.activeElement===keySink)keySink.blur();return;}
   if(document.activeElement!==keySink){try{keySink.focus({preventScroll:true});}catch(e){keySink.focus();}}
 }
-document.addEventListener("pointerup",()=>setTimeout(grabKeys,0));
-document.addEventListener("touchend",()=>setTimeout(grabKeys,0),{passive:true});
+// iOS only honours focus() inside the tap's own handler (not in a setTimeout),
+// so focus synchronously; the bubbling click runs after a song row's own
+// click handler has switched to the song view, so opening a song arms it too
+document.addEventListener("touchend",grabKeys,{passive:true});
+document.addEventListener("pointerup",grabKeys);
+document.addEventListener("click",grabKeys);
 $("btnPrev").addEventListener("click",goPrev);
 $("btnNext").addEventListener("click",goNext);
 $("btnNotes").addEventListener("click",()=>{state.notesOpen=!state.notesOpen;renderSong();});
